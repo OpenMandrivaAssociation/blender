@@ -1,5 +1,5 @@
-%define testver		243
-%define	relver		243
+%define testver		244
+%define	relver		244
 %define name		blender
 %define truename	blender
 
@@ -22,8 +22,8 @@
 %endif
 
 Name:		%{name}
-Version:	2.43
-Release:	%mkrel 4
+Version:	2.44
+Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -45,13 +45,13 @@ Patch8:		blender-2.41-yafray-64.patch
 Patch9:		blender-2.42-yafray-ncpus.patch
 Patch10:	blender-2.42-O3opt.patch
 Patch11:	blender-2.42a-morethreads.patch
-Patch13:	blender-2.43-python25.patch
-Patch14:	blender-2.43-alut.patch
-Patch15:	blender-2.43-64bit_politically_correct.patch
+Patch13:	blender-2.44-python25.patch
+Patch14:	blender-2.44-alut.patch
 Patch16:	blender-2.43-rc3-avclose.patch
-Patch17:	blender-2.43-changelog.patch
+Patch17:	blender-2.44-changelog.patch
 Patch18:	blender-2.43-yafray_zero_threads.patch
 Patch19:	blender-2.43-maxthreads.patch
+Patch20:	blender-2.44-force-python24.patch
 URL:		http://www.blender.org/
 License:	GPL
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -77,6 +77,7 @@ BuildRequires:	mesaglu-devel
 BuildRequires:	MesaGLU-devel
 %endif
 BuildRequires:	oggvorbis-devel
+#BuildRequires:	ode-devel
 BuildRequires:	openssl-devel
 BuildRequires:	png-devel
 BuildRequires:	python-devel >= 2.4
@@ -119,11 +120,12 @@ This version is build with debug enabled.
 #%patch11 -p1 -b .morethreads
 %if %{mdkversion} >= 200710
 %patch13 -p1 -b .python
+%else
+%patch20 -p1 -b .python24
 %endif
 %if %{mdkversion} >= 200700
 %patch14 -p1 -b .alut
 %endif
-%patch15 -p1 -b .softcomment
 %patch16 -p1 -b .imgbro
 %patch17 -p1 -b .chglog
 %patch18 -p1 -b .zero_threads
@@ -149,8 +151,10 @@ WITH_BF_FFMPEG = 'true'
 %else
 WITH_BF_FFMPEG = 'false'
 %endif
+WITH_BF_VERSE = 'true'
 WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
+#WITH_BF_ODE = 'true'
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
 BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
 BF_BUILDDIR = './builddir'
@@ -170,8 +174,10 @@ WITH_BF_FFMPEG = 'true'
 %else
 WITH_BF_FFMPEG = 'false'
 %endif
+WITH_BF_VERSE = 'true'
 WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
+#WITH_BF_ODE = 'true'
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
 BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
 BF_BUILDDIR = './builddir'
@@ -279,7 +285,7 @@ cat > %{buildroot}%{_menudir}/%{name} <<EOF
 	mimetypes="application/x-blender"
 EOF
 cat > %{buildroot}%{_menudir}/%{name}fs <<EOF
-?package(%{name}): command="%{_bindir}/%{name}" \
+?package(%{name}): command="%{_bindir}/%{name} -W" \
 	needs="X11" \
 	icon="%{name}.png" \
 	section="Multimedia/Graphics" \
@@ -306,7 +312,7 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=Blender
-Comment=%{summary}
+Comment=The free open source 3D content creation suite
 Exec=%{_bindir}/%{name} -w %f
 Icon=%{name}
 Terminal=false
@@ -319,8 +325,8 @@ EOF
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}fs.desktop << EOF
 [Desktop Entry]
 Name=Blender (FullScreen)
-Comment=%{summary}
-Exec=%{_bindir}/%{name} %f
+Comment=The free open source 3D content creation suite
+Exec=%{_bindir}/%{name} -W %f
 Icon=%{name}
 Terminal=false
 Type=Application
@@ -332,7 +338,7 @@ EOF
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}nodri.desktop << EOF
 [Desktop Entry]
 Name=Blender (DRI disabled)
-Comment=%{summary} (with DRI disabled)
+Comment=The free open source 3D content creation suite (with DRI disabled)
 Exec=%{_bindir}/%{name}nodri -w %f
 Icon=%{name}nodri
 Terminal=false
