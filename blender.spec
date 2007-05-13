@@ -23,7 +23,7 @@
 
 Name:		%{name}
 Version:	2.43
-Release:	%mkrel 3
+Release:	%mkrel 4
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -51,6 +51,7 @@ Patch15:	blender-2.43-64bit_politically_correct.patch
 Patch16:	blender-2.43-rc3-avclose.patch
 Patch17:	blender-2.43-changelog.patch
 Patch18:	blender-2.43-yafray_zero_threads.patch
+Patch19:	blender-2.43-maxthreads.patch
 URL:		http://www.blender.org/
 License:	GPL
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -126,6 +127,7 @@ This version is build with debug enabled.
 %patch16 -p1 -b .imgbro
 %patch17 -p1 -b .chglog
 %patch18 -p1 -b .zero_threads
+%patch19 -p1 -b .maxthreads
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
@@ -399,5 +401,4 @@ rm -rf %{buildroot}
 %{_miconsdir}/%{name}nodri.png
 %{_liconsdir}/%{name}nodri.png
 %{_iconsdir}/%{name}nodri.png
-
 
