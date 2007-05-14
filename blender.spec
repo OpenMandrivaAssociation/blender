@@ -23,7 +23,7 @@
 
 Name:		%{name}
 Version:	2.44
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -52,6 +52,7 @@ Patch17:	blender-2.44-changelog.patch
 Patch18:	blender-2.43-yafray_zero_threads.patch
 Patch19:	blender-2.43-maxthreads.patch
 Patch20:	blender-2.44-force-python24.patch
+Patch21:	blender-2.44-boxpack2d-missed.patch
 URL:		http://www.blender.org/
 License:	GPL
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -130,6 +131,7 @@ This version is build with debug enabled.
 %patch17 -p1 -b .chglog
 %patch18 -p1 -b .zero_threads
 %patch19 -p1 -b .maxthreads
+%patch21 -p1
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
