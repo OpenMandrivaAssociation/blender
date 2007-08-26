@@ -24,7 +24,7 @@
 
 Name:		%{name}
 Version:	2.44
-Release:	3.%{svnsnapshot}.%mkrel 2
+Release:	4.%{svnsnapshot}.%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}-%{svnsnapshot}-stable.tar.bz2
@@ -62,13 +62,25 @@ BuildRequires:	scons
 BuildRequires:	openal-devel >= 0.0.6-9mdk
 BuildRequires:	OpenEXR-devel
 BuildRequires:	esound-devel
+%if %{mdkversion} >= 200700 || "%{mdvver}" == "mlcd4"
 BuildRequires:  freealut-devel
+%endif
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
+BuildRequires:	ffmpeg-devel >= 0.4.9-1.pre1
+%endif
+%if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
 BuildRequires:	ffmpeg-devel >= 0.4.9-3.pre1.7407.10
+%endif
 BuildRequires:	ftgl-devel
 BuildRequires:	gettext-devel
 BuildRequires:	jpeg-devel
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 BuildRequires:	mesaglu-devel
+%else
+BuildRequires:	MesaGLU-devel
+%endif
 BuildRequires:	oggvorbis-devel
+#BuildRequires:	ode-devel
 BuildRequires:	openssl-devel
 BuildRequires:	png-devel
 BuildRequires:	python-devel >= 2.4
@@ -108,8 +120,15 @@ This version is build with debug enabled.
 %patch8 -p1 -b .yafray64
 %patch9 -p1 -b .ncpus
 %patch10 -p1 -b .O3opt
+#%patch11 -p1 -b .morethreads
+%if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
 %patch13 -p1 -b .python
+%else
+%patch20 -p1 -b .python24
+%endif
+%if %{mdkversion} >= 200700 || "%{mdvver}" =="mlcd4"
 %patch14 -p1 -b .alut
+%endif
 %patch16 -p1 -b .imgbro
 %patch17 -p1 -b .chglog
 %patch18 -p1 -b .zero_threads
@@ -132,7 +151,11 @@ mv bin/.blender/locale/pt_br bin/.blender/locale/pt_BR
 
 cat > user-config.py <<EOF
 BF_GETTEXT_LIBPATH = '\${BF_GETTEXT}/%{_lib}'
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 WITH_BF_FFMPEG = 'true'
+%else
+WITH_BF_FFMPEG = 'false'
+%endif
 WITH_BF_VERSE = 'true'
 WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
@@ -142,16 +165,20 @@ BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -ffast-math -funsigned-char -fno-strict-aliasing".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -ffast-math -funsigned-char -fno-strict-aliasing".split()
-REL_CFLAGS  = "-O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE".split()
-REL_CCFLAGS = "-O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing".split()
+REL_CFLAGS  = "-O3".split()
+REL_CCFLAGS = "-O3".split()
 %endif
 EOF
 
 cat > user-config.py.sse <<EOF
 BF_GETTEXT_LIBPATH = '\${BF_GETTEXT}/%{_lib}'
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 WITH_BF_FFMPEG = 'true'
+%else
+WITH_BF_FFMPEG = 'false'
+%endif
 WITH_BF_VERSE = 'true'
 WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
@@ -161,10 +188,10 @@ BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing".split()
-REL_CFLAGS  = "-O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE".split()
-REL_CCFLAGS = "-O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing".split()
+REL_CFLAGS  = "-O3".split()
+REL_CCFLAGS = "-O3".split()
 %endif
 EOF
 
@@ -258,7 +285,9 @@ cat > %{buildroot}%{_menudir}/%{name} <<EOF
 	section="Multimedia/Graphics" \
 	title="Blender" \
 	longtitle="A fully functional 3D modeling/rendering/animation package" \
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 	xdg="true" \
+%endif
 	mimetypes="application/x-blender"
 EOF
 cat > %{buildroot}%{_menudir}/%{name}fs <<EOF
@@ -267,7 +296,9 @@ cat > %{buildroot}%{_menudir}/%{name}fs <<EOF
 	icon="%{name}.png" \
 	section="Multimedia/Graphics" \
 	title="Blender (FullScreen)" \
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 	xdg="true" \
+%endif
 	longtitle="A fully functional 3D modeling/rendering/animation package (in FullScreen mode)"
 EOF
 cat > %{buildroot}%{_menudir}/%{name}nodri <<EOF
@@ -276,10 +307,13 @@ cat > %{buildroot}%{_menudir}/%{name}nodri <<EOF
 	icon="%{name}nodri.png" \
 	section="Multimedia/Graphics" \
 	title="Blender (No DRI)" \
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 	xdg="true" \
+%endif
 	longtitle="A fully functional 3D modeling/rendering/animation package (with DRI disabled)"
 EOF
 
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
@@ -317,6 +351,7 @@ Terminal=false
 Type=Application
 Categories=X-MandrivaLinux-Multimedia-Graphics;Graphics/Photography/3DGraphics;Graphics;Viewer;
 EOF
+%endif
 
 # icons
 install -m644 %{SOURCE11} -D %{buildroot}%{_miconsdir}/%{name}.png
@@ -335,18 +370,24 @@ rm -rf %{buildroot}
 
 %post
 %{update_menus}
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %{update_desktop_database} 
+%endif
 
 %postun
 %{clean_menus}
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %{clean_desktop_database} 
+%endif
 
 %files
 %defattr(-,root,root)
 %doc ChangeLog README doc/*.txt test%{testver}
 %{_bindir}/*
 %{_menudir}/*
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %{_datadir}/applications/*
+%endif
 %{_datadir}/locale/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
@@ -374,211 +415,4 @@ rm -rf %{buildroot}
 %{_liconsdir}/%{name}nodri.png
 %{_iconsdir}/%{name}nodri.png
 
-
-%changelog
-* Sat Aug 04 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.44-3.20070724.2mdv2007.1
-- Added patch for blender bug 6811.
-- Added verse binaries.
-
-* Sat Jul 21 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.44-3.20070721.1mdv2007.1
-- Branch stable 2.44 of 20070721.
-- Updated Patch17.
-
-* Mon May 14 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.44-2mdv2008.0
-+ Revision: 26720
-- Added Patch21, for missed boxpack2d.py script (still needed by
-  some other scripts).
-
-* Sun May 13 2007 Giuseppe Ghibò <ghibo@mandriva.com> 1mdv2008.0-current
-+ Revision: 26582
-- Release: 2.44.
-- Removed Patch15, now 64bit is officially supported.
-- Enabled Verse.
-
-* Sun May 13 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-4mdv2008.0
-+ Revision: 26575
-- Fixed Patch18 for zero threads (bug #30137).
-- Added Patch19 to allow 16 threads.
-
-
-* Wed Mar 14 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-3mdv2007.1
-+ Revision: 143270
-- Rebuilt against latest ffmpeg.
-- Ensure Building with against ffmpeg containing the img_convert in the API.
-- Added Patch18 to avoid yafray rendering with 0 threads.
-
-* Sat Feb 17 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-1mdv2007.1
-+ Revision: 122138
-- Enabled smp for building.
-- Rebuilt Patch7.
-- Removed Patch12, merged upstream.
-- Updated Source0.
-- Removed old Sources from tree.
-- 2.43 final.
-- Added Patch17 for fixing ChangeLog.
-- Readded Patch16.
-- Added InitialPreference in .desktop files.
-- 2.43-20070214 (>RC3).
-- use %%{name} macro to allow future build with version in name.
-
-* Thu Feb 08 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-0.20070207.2mdv2007.1
-+ Revision: 117805
-- Added Patch16 for fixing segfault in Image Browser.
-
-* Wed Feb 07 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-0.20070207.1mdv2007.1
-+ Revision: 117069
-- 2.43-20070707 (RC3).
-
-* Sun Jan 28 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-0.20070128.1mdv2007.1
-+ Revision: 114624
-- release cvs 20070128 (>2.43RC2).
-- call executable with -w (bug #26454).
-- fixed blenderplayer position to correctly save the runtime.
-
-* Fri Jan 19 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-0.20070119.1mdv2007.1
-+ Revision: 110976
-- Release 20070119 from CVS.
-- Added Patch15 for 64bit warning.
-
-* Fri Jan 19 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-0.20070118.1mdv2007.1
-+ Revision: 110554
-- Release 20070118 from CVS.
-- Removed Patch15 (no longer needed).
-
-* Sun Jan 07 2007 Giuseppe Ghibò <ghibo@mandriva.com> 2.43-0.20070101.2mdv2007.1
-+ Revision: 105281
-- modified string size in Patch12 to 16 to preserve the ABI.
-- conditional BuildRequires for freealut-devel.
-- Release 20070101 from CVS (RC1).
-- Rebuilt Patch2.
-- Rebuilt Patch12.
-- Added freealut to Buildrequires (from Jan Ciger).
-- Reworked Patch13 and Patch14 (from Jan Ciger) and apply
-  only for 2007.1 (since python-config command was
-  not available into python 2.4 package).
-- Added Patch15 for fixing buffer overflow over stronger
-  optimization flags.
-
-* Wed Aug 23 2006 Giuseppe Ghibò <ghibo@mandriva.com> 2.42a-3mdv2007.0
-+ Revision: 57087
-- Fixed buffer overflow of bug #24583.
-
-* Thu Aug 10 2006 Giuseppe Ghibò <ghibo@mandriva.com> 2.42a-2mdv2007.0
-+ Revision: 54796
-- Added Patch11 for to allow more threads.
-
-  + Olivier Blin <oblin@mandriva.com>
-    - fix typo in wrapper script, when upgrading from a previous version
-
-* Sun Jul 30 2006 Giuseppe Ghibò <ghibo@mandriva.com> 2.42a-1mdv2007.0
-+ Revision: 42619
-- Release 2.42a.
-
-* Tue Jul 25 2006 Giuseppe Ghibò <ghibo@mandriva.com> 2.42-2mdv2007.0
-+ Revision: 41974
-- changed ffmpeg-devel BuildRequires to 0.4.9-1.pre1.
-- added OpenEXR-devel to BuildRequires
-- added version into ffmpeg-devel BuildRequires and
-  conditional switch (for MDV2006, since older ffmpeg, the
-  ffmpeg support will be disabled).
-- set mode 644 for internal .py scripts.
-- use %%update_desktop_database instead of %%clean_desktop_database
-  in %%post.
-- xdg menus.
-- fixes to wrapper.
-- disabled -ftree-vectorize from CFLAGS, CXXFLAGS as it doesn't give
-  improvements in rendering time.
-- clean CFLAGS, CXXFLAGS.
-- correctly copy user-config.py.std to user-config.py
-- fixed install path of blender.sse.
-- fixed cp of blender.sse.
-- added blender-2.42-buildfix.patch.
-- Added Patch10 for fixing problems with -O3 optimization
-- Added Patch9 for fixing problem with SMP and yafray.
-- Improved regexp for blendernodri (thanks to blino).
-- Readapted Patch2,3.
-- Removed Patch4,6  (merged upstream).
-- fix applying Patch9
-- fix minimal number of cpus/threads when called yafray.
-- Better patch for x86-64
-- added patch for correctly searching yafray plugin
-- Added Requires: libtiff (dinamically loaded).
-- Added Patch5 for loading libtiff.so.3 instead of libtiff.so (avoid
-  installation of libtiff devel package).
-- Added Patch6 for fixing a missed header.
-- Added Patch7 for fixing an unitialized variable.
-- [$VER: 2.41-5mdv]
-- Force calling yafray trough library and not trough XML file (Patch3) as
-  XML doesn't work anymore with yafray > 0.07, and anyway plugin it's better.
-- Added yafray in Requires.
-- Quote \$@ in wrapper.
-- Added blendernodri wrapper to avoid blender's UI flashing problems
-  with some card under DRI (e.g. Matrox).
-- Updated svg2obj python script to 0.47.
-
-  + Helio Chissini de Castro <helio@mandriva.com>
-    - Fixed the mess did on svn versus regular upload. We should take more care in
-      further operations.
-      * Seg Mai 22 2006 Giuseppe Ghib?\195?\178 <ghibo@mandriva.com> 2.41-3mdk
-    - Stronger optimization with %%optflags (thanks to Pixel).
-    - python-devel >= 2.4 in BuildRequires.
-    - New wrapper. Blender plugins usually deal with a lot of tmp/inplace writing.
-      So now user get their own .blender env created.
-    - Fixed locale translations.
-    - Fixed pt_BR potfile naming
-    - New upstream release
-    - Finally we have blender internationalized, ann compiling in x86_64
-    - Physics engine ODE isn't compiling at this moment
-    - blenderplayer was reenabled, so game on again :-)
-    - Still fixing my mess
-    - Fix my mess
-
-  + Andreas Hasenack <andreas@mandriva.com>
-    - renamed mdv to packages because mdv is too generic and it's hosting only packages anyway
-
-* Fri Apr 14 2006 Giuseppe Ghib� <ghibo@mandriva.com> 2.40-2mdk
-- Added tiff-devel to BuildRequires.
-
-* Wed Dec 28 2005 Olivier Blin <oblin@mandriva.com> 2.40-1mdk
-- New release 2.40
-
-* Thu Aug 04 2005 Gustavo Pichorim Boiko <boiko@mandriva.com> 2.37a-1mdk
-- Updated to version 2.37a
-- Added blenderplayer (the standalone game player)
-- Added some default python scripts for importing and exporting
-- Added localization files to the package. They were put into the main package
-  because blender doesn't automatically choose the language in the interface.
-
-* Fri Jun 03 2005 Olivier Blin <oblin@mandriva.com> 2.37-1mdk
-- 2.37 : http://www.blender3d.org/cms/Blender_2_37.496.0.html
-
-* Fri Dec 24 2004 Lenny Cartier <lenny@mandrakesoft.com> 2.36-1mdk
-- 2.36
-
-* Sun Dec 05 2004 Michael Scherer <misc@mandrake.org> 2.35-2mdk
-- Rebuild for new python
-
-* Tue Nov 16 2004 Olivier Blin <blino@mandrake.org> 2.35-1mdk
-- 2.35 : http://www.blender3d.org/cms/Blender_2_35.482.0.html
-
-* Sat Aug 07 2004 Olivier Blin <blino@mandrake.org> 2.34-1mdk
-- 2.34 : http://www.blender3d.org/cms/Blender_2_34.319.0.html
-- remove gcc/libstdc++ patches (fixed upstream)
-- fix doc files list
-
-* Thu Jun 24 2004 Olivier Blin <blino@mandrake.org> 2.33a-1mdk
-- 2.33a (yeah, game engine is back)
-- rediff Patch1
-- more gcc 3.4 template fixes (Patch2)
-- switch to scons build system
-
-* Thu Jun 17 2004 Olivier Blin <blino@mandrake.org> 2.32-2mdk
-- rebuilt for new libstdc++
-- Added Patch0 to fix build with new libstdc++
-- Added Patch1 to fix build with gcc 3.4
-
-* Sat Apr 03 2004 Per �yvind Karlsen <peroyvind@linux-mandrake.com> 2.32-1mdk
-- 2.32
-- fix buildrequires (lib64..)
-- don't bzip2 icons in src.rpm
 
