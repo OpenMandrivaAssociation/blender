@@ -2,7 +2,7 @@
 %define	relver		245
 %define name		blender
 %define truename	blender
-%define svnsnapshot	20070910
+%define svnsnapshot	20070912
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
@@ -24,7 +24,7 @@
 
 Name:		%{name}
 Version:	2.44
-Release:	5.%{svnsnapshot}.%mkrel 2
+Release:	6.%{svnsnapshot}.%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}-%{svnsnapshot}-stable.tar.bz2
