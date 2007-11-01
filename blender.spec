@@ -23,7 +23,7 @@
 
 Name:		%{name}
 Version:	2.45
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -55,6 +55,16 @@ Patch20:	blender-2.44-force-python24.patch
 Patch21:	blender-2.44-boxpack2d-missed.patch
 Patch22:	blender-2.44-bug6811.patch
 Patch23:	blender-2.44-more-than-six-subsurf.patch
+Patch24:	blender-2.45-import-dxf-logpath.patch
+Patch25:	blender-2.45-r12026.patch
+Patch26:	blender-2.45-r12027.patch
+Patch27:	blender-2.45-r12031.patch
+Patch28:	blender-2.45-r12033.patch
+Patch29:	blender-2.45-r12051.patch
+Patch30:	blender-2.45-r12055.patch
+Patch31:	blender-2.45-r12056.patch
+Patch32:	blender-2.45-r12077.patch
+Patch33:	blender-2.45-r12127.patch
 URL:		http://www.blender.org/
 License:	GPL
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -136,6 +146,16 @@ This version is build with debug enabled.
 %patch21 -p1
 %patch22 -p1 -b .bug6811
 %patch23 -p1 -b .subsurf
+%patch24 -p1 -b .dxflogpath
+%patch25 -p1 -b .12026
+%patch26 -p1 -b .12027
+%patch27 -p1 -b .12031
+%patch28 -p1 -b .12033
+%patch29 -p1 -b .12051
+%patch30 -p1 -b .12055
+%patch31 -p1 -b .12056
+%patch32 -p1 -b .12077
+%patch33 -p1 -b .12127
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
