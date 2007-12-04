@@ -97,7 +97,7 @@ BuildRequires:	python-devel >= 2.4
 BuildRequires:	SDL-devel
 BuildRequires:	smpeg-devel
 BuildRequires:	%{mklibname tiff 3}-devel
-BuildRequires:	XFree86-devel
+BuildRequires:	X11-devel
 BuildRequires:	zlib-devel
 Requires:	python-imaging >= 1.1.4
 Requires:	yafray
