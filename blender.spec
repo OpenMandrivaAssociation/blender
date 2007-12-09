@@ -23,7 +23,7 @@
 
 Name:		%{name}
 Version:	2.45
-Release:	%mkrel 4
+Release:	%mkrel 5
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -66,7 +66,7 @@ Patch31:	blender-2.45-r12056.patch
 Patch32:	blender-2.45-r12077.patch
 Patch33:	blender-2.45-r12127.patch
 URL:		http://www.blender.org/
-License:	GPL
+License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	scons
 BuildRequires:	openal-devel >= 0.0.6-9mdk
@@ -298,42 +298,6 @@ install -pD -m 644 release/plugins/texture/*.so %{buildroot}%{_libdir}/%{name}/p
 find %{buildroot}%{_libdir}/%{name}/scripts -type f -name '*.py' -exec chmod 644 '{}' \;
 
 # menu
-mkdir -p %{buildroot}%{_menudir}
-cat > %{buildroot}%{_menudir}/%{name} <<EOF
-?package(%{name}): command="%{_bindir}/%{name} -w" \
-	needs="X11" \
-	icon="%{name}.png" \
-	section="Multimedia/Graphics" \
-	title="Blender" \
-	longtitle="A fully functional 3D modeling/rendering/animation package" \
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
-	xdg="true" \
-%endif
-	mimetypes="application/x-blender"
-EOF
-cat > %{buildroot}%{_menudir}/%{name}fs <<EOF
-?package(%{name}): command="%{_bindir}/%{name} -W" \
-	needs="X11" \
-	icon="%{name}.png" \
-	section="Multimedia/Graphics" \
-	title="Blender (FullScreen)" \
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
-	xdg="true" \
-%endif
-	longtitle="A fully functional 3D modeling/rendering/animation package (in FullScreen mode)"
-EOF
-cat > %{buildroot}%{_menudir}/%{name}nodri <<EOF
-?package(%{name}): command="%{_bindir}/%{name}nodri -w" \
-	needs="X11" \
-	icon="%{name}nodri.png" \
-	section="Multimedia/Graphics" \
-	title="Blender (No DRI)" \
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
-	xdg="true" \
-%endif
-	longtitle="A fully functional 3D modeling/rendering/animation package (with DRI disabled)"
-EOF
-
 %if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
@@ -344,7 +308,7 @@ Exec=%{_bindir}/%{name} -w %f
 Icon=%{name}
 Terminal=false
 Type=Application
-Categories=X-MandrivaLinux-Multimedia-Graphics;Graphics/Photography/3DGraphics;Graphics;Viewer;
+Categories=3DGraphics;Graphics;Viewer;
 MimeType=application/x-blender;
 InitialPreference=11
 EOF
@@ -357,7 +321,7 @@ Exec=%{_bindir}/%{name} -W %f
 Icon=%{name}
 Terminal=false
 Type=Application
-Categories=X-MandrivaLinux-Multimedia-Graphics;Graphics/Photography/3DGraphics;Graphics;Viewer;
+Categories=3DGraphics;Graphics;Viewer;
 MimeType=application/x-blender;
 InitialPreference=10
 EOF
@@ -370,7 +334,7 @@ Exec=%{_bindir}/%{name}nodri -w %f
 Icon=%{name}nodri
 Terminal=false
 Type=Application
-Categories=X-MandrivaLinux-Multimedia-Graphics;Graphics/Photography/3DGraphics;Graphics;Viewer;
+Categories=Graphics;Viewer;
 EOF
 %endif
 
@@ -405,7 +369,6 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc ChangeLog README doc/*.txt test%{testver}
 %{_bindir}/*
-%{_menudir}/*
 %if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %{_datadir}/applications/*
 %endif
@@ -435,5 +398,3 @@ rm -rf %{buildroot}
 %{_miconsdir}/%{name}nodri.png
 %{_liconsdir}/%{name}nodri.png
 %{_iconsdir}/%{name}nodri.png
-
-
