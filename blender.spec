@@ -334,7 +334,7 @@ Exec=%{_bindir}/%{name}nodri -w %f
 Icon=%{name}nodri
 Terminal=false
 Type=Application
-Categories=Graphics;Viewer;
+Categories=3DGraphics;Graphics;Viewer;
 EOF
 %endif
 
