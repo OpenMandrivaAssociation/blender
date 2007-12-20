@@ -67,6 +67,7 @@ Patch32:	blender-2.45-r12077.patch
 Patch33:	blender-2.45-r12127.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	scons
 BuildRequires:	openal-devel >= 0.0.6-9mdk
 BuildRequires:	OpenEXR-devel
