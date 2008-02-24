@@ -18,12 +18,12 @@
 %if %{use_smp}
 %define scons_smp --debug=time -j %(expr $(getconf _NPROCESSORS_ONLN) + 2)
 %else
-%define scons_smp ""
+%define scons_smp %nil
 %endif
 
 Name:		%{name}
 Version:	2.45
-Release:	%mkrel 5
+Release:	%mkrel 6
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -65,6 +65,7 @@ Patch30:	blender-2.45-r12055.patch
 Patch31:	blender-2.45-r12056.patch
 Patch32:	blender-2.45-r12077.patch
 Patch33:	blender-2.45-r12127.patch
+Patch34:	blender-2.45-deinterlace.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -156,6 +157,7 @@ This version is build with debug enabled.
 %patch31 -p1 -b .12056
 %patch32 -p1 -b .12077
 %patch33 -p1 -b .12127
+%patch34 -p1 -b .deinterlace
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
