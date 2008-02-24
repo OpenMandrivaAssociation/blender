@@ -36,7 +36,6 @@ Source14:	blendernodri-16x16.png
 Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
 Patch0:		blender-2.41-openal-fix.patch
-Patch1:		blender-2.42-buildfix.patch
 Patch2:		blender-2.43-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
 Patch5:		blender-2.41-libtiff.patch
@@ -44,7 +43,6 @@ Patch7:		blender-2.43-varuninitial.patch
 Patch8:		blender-2.41-yafray-64.patch
 Patch9:		blender-2.42-yafray-ncpus.patch
 Patch10:	blender-2.42-O3opt.patch
-Patch11:	blender-2.42a-morethreads.patch
 Patch13:	blender-2.44-python25.patch
 Patch14:	blender-2.44-alut.patch
 Patch16:	blender-2.43-rc3-avclose.patch
@@ -131,7 +129,6 @@ This version is build with debug enabled.
 %patch8 -p1 -b .yafray64
 %patch9 -p1 -b .ncpus
 %patch10 -p1 -b .O3opt
-#%patch11 -p1 -b .morethreads
 %if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
 %patch13 -p1 -b .python
 %else
