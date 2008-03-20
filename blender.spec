@@ -23,7 +23,7 @@
 
 Name:		%{name}
 Version:	2.45
-Release:	%mkrel 6
+Release:	%mkrel 7
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -64,6 +64,7 @@ Patch31:	blender-2.45-r12056.patch
 Patch32:	blender-2.45-r12077.patch
 Patch33:	blender-2.45-r12127.patch
 Patch34:	blender-2.45-deinterlace.patch
+Patch35:	blender-2.46-noglext.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -155,6 +156,7 @@ This version is build with debug enabled.
 %patch32 -p1 -b .12077
 %patch33 -p1 -b .12127
 %patch34 -p1 -b .deinterlace
+%patch35 -p1 -b .noglext
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
