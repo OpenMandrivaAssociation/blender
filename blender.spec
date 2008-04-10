@@ -2,6 +2,7 @@
 %define	relver		245
 %define name		blender
 %define truename	blender
+%define	svnsnapshot	20080410
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
@@ -15,18 +16,28 @@
 %{?_with_smp: %global use_smp 1}
 %{?_without_smp: %global use_smp 0}
 
+%define use_protector	1
+%{?_with_protector: %global use_protector 1}
+%{?_without_protector: %global use_protector 0}
+
 %if %{use_smp}
 %define scons_smp --debug=time -j %(expr $(getconf _NPROCESSORS_ONLN) + 2)
 %else
-%define scons_smp %nil
+%define scons_smp %{nil}
+%endif
+
+%if %{use_protector}
+%define protector_flags -fstack-protector -fstack-protector-all --param=ssp-buffer-size=1
+%else
+%define protector_flags %{nil}
 %endif
 
 Name:		%{name}
-Version:	2.45
-Release:	%mkrel 7
+Version:	2.46
+Release:	0.%{svnsnapshot}.%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
-Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
+Source0:	http://download.blender.org/source/blender-%{svnsnapshot}.tar.bz2
 Source1: 	blender-wrapper
 Source2:	http://download.blender.org/demo/test/test%{testver}.zip
 Source11:	blender-16x16.png
@@ -36,35 +47,27 @@ Source14:	blendernodri-16x16.png
 Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
 Patch0:		blender-2.41-openal-fix.patch
-Patch2:		blender-2.43-lib64.patch
+Patch1:		blender-2.46-libffmpeg-system.patch
+Patch2:		blender-2.46-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
-Patch5:		blender-2.41-libtiff.patch
+Patch4:		blender-2.46-libquicktime.patch
 Patch7:		blender-2.43-varuninitial.patch
-Patch8:		blender-2.41-yafray-64.patch
-Patch9:		blender-2.42-yafray-ncpus.patch
 Patch10:	blender-2.42-O3opt.patch
 Patch13:	blender-2.44-python25.patch
 Patch14:	blender-2.44-alut.patch
-Patch16:	blender-2.43-rc3-avclose.patch
 Patch17:	blender-2.44-changelog.patch
-Patch18:	blender-2.43-yafray_zero_threads.patch
-Patch19:	blender-2.43-maxthreads.patch
+Patch18:	blender-2.46-yafray_zero_threads.patch
+Patch19:	blender-2.46-maxthreads.patch
 Patch20:	blender-2.44-force-python24.patch
 Patch21:	blender-2.44-boxpack2d-missed.patch
-Patch22:	blender-2.44-bug6811.patch
+Patch22:	blender-2.46-bug6811.patch
 Patch23:	blender-2.44-more-than-six-subsurf.patch
 Patch24:	blender-2.45-import-dxf-logpath.patch
-Patch25:	blender-2.45-r12026.patch
-Patch26:	blender-2.45-r12027.patch
-Patch27:	blender-2.45-r12031.patch
-Patch28:	blender-2.45-r12033.patch
-Patch29:	blender-2.45-r12051.patch
-Patch30:	blender-2.45-r12055.patch
-Patch31:	blender-2.45-r12056.patch
-Patch32:	blender-2.45-r12077.patch
-Patch33:	blender-2.45-r12127.patch
-Patch34:	blender-2.45-deinterlace.patch
+Patch34:	blender-2.44-deinterlace.patch
+# BL#7113
 Patch35:	blender-2.46-noglext.patch
+# BL#8195
+Patch36:	blender-2.46-outliner_seq.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -83,6 +86,9 @@ BuildRequires:	ffmpeg-devel >= 0.4.9-3.pre1.7407.10
 %endif
 BuildRequires:	ftgl-devel
 BuildRequires:	gettext-devel
+%if %{mdkversion} >= 200800
+BuildRequires: libgomp-devel
+%endif
 BuildRequires:	jpeg-devel
 %if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 BuildRequires:	mesaglu-devel
@@ -119,16 +125,17 @@ This version is build with debug enabled.
 %endif
 
 %prep
-%setup -q -n %{truename}-%{version} -a 2
+%setup -q -n %{truename}-%{svnsnapshot} -a 2
 %patch0 -p1 -b .openal
+%if %{mdkversion} >= 200710
+%patch1 -p1 -b .ffmpeg
+%endif
 %if "%{_lib}" != "lib"
 %patch2 -p1 -b .lib64
 %endif
 %patch3 -p1 -b .yafray
-%patch5 -p1 -b .libtiff
+#%patch4 -p1 -b .quicktime
 %patch7 -p1 -b .varun
-%patch8 -p1 -b .yafray64
-%patch9 -p1 -b .ncpus
 %patch10 -p1 -b .O3opt
 %if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
 %patch13 -p1 -b .python
@@ -138,29 +145,19 @@ This version is build with debug enabled.
 %if %{mdkversion} >= 200700 || "%{mdvver}" =="mlcd4"
 %patch14 -p1 -b .alut
 %endif
-%patch16 -p1 -b .imgbro
 %patch17 -p1 -b .chglog
 %patch18 -p1 -b .zero_threads
 %patch19 -p1 -b .maxthreads
 %patch21 -p1
 %patch22 -p1 -b .bug6811
 %patch23 -p1 -b .subsurf
-%patch24 -p1 -b .dxflogpath
-%patch25 -p1 -b .12026
-%patch26 -p1 -b .12027
-%patch27 -p1 -b .12031
-%patch28 -p1 -b .12033
-%patch29 -p1 -b .12051
-%patch30 -p1 -b .12055
-%patch31 -p1 -b .12056
-%patch32 -p1 -b .12077
-%patch33 -p1 -b .12127
 %patch34 -p1 -b .deinterlace
 %patch35 -p1 -b .noglext
+%patch36 -p1 -b .outliner
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
-mv bin/.blender/locale/pt_br bin/.blender/locale/pt_BR
+#mv bin/.blender/locale/pt_br bin/.blender/locale/pt_BR
 
 %build
 %if %{build_debug}
@@ -183,12 +180,19 @@ WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
 #WITH_BF_ODE = 'true'
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
+%if %{mdkversion} <= 200610
 BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
+%else
+BF_OPENGL_LIBPATH = '%{_libdir}'
+%endif
+%if %{mdkversion} >= 200800
+WITH_BF_OPENMP = 'true'
+%endif
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %endif
@@ -206,12 +210,19 @@ WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
 #WITH_BF_ODE = 'true'
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
+%if %{mdkversion} <= 200610
 BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
+%else
+BF_OPENGL_LIBPATH = '%{_libdir}'
+%endif
+%if %{mdkversion} >= 200800
+WITH_BF_OPENMP = 'true'
+%endif
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %endif
@@ -287,7 +298,7 @@ cp -a ./installdir/.blender/locale  %{buildroot}%{_datadir}
 install -p -m 644 ./installdir/.blender/.Blanguages %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/.blender/.bfont.ttf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/VERSION %{buildroot}%{_libdir}/%{name}
-install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
+#install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/copyright.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/BlenderQuickStart.pdf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/blender.html %{buildroot}%{_libdir}/%{name}
@@ -349,6 +360,7 @@ install -m644 %{SOURCE16} -D %{buildroot}%{_liconsdir}/%{name}nodri.png
 
 %if %build_debug
 export DONT_STRIP=1
+export EXCLUDE_FROM_STRIP=".*"
 %endif
 
 %clean
@@ -389,7 +401,7 @@ rm -rf %{buildroot}
 %{_libdir}/%{name}/BlenderQuickStart.pdf
 %{_libdir}/%{name}/blender.html
 %{_libdir}/%{name}/copyright.txt
-%{_libdir}/%{name}/release_%{relver}.txt
+#%{_libdir}/%{name}/release_%{relver}.txt
 %{_libdir}/%{name}/scripts/*
 %{_libdir}/%{name}/plugins/sequence
 %{_libdir}/%{name}/plugins/texture
