@@ -2,7 +2,7 @@
 %define	relver		245
 %define name		blender
 %define truename	blender
-%define	svnsnapshot	20080410
+%define	svnsnapshot	20080414
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
