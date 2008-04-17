@@ -34,7 +34,7 @@
 
 Name:		%{name}
 Version:	2.46
-Release:	0.%{svnsnapshot}.%mkrel 1
+Release:	0.%{svnsnapshot}.%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{svnsnapshot}.tar.bz2
@@ -191,8 +191,8 @@ WITH_BF_OPENMP = 'true'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing -floop-optimize2 %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing -floop-optimize2 %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %endif
@@ -221,8 +221,8 @@ WITH_BF_OPENMP = 'true'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing -floop-optimize2 %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing -floop-optimize2 %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %endif
