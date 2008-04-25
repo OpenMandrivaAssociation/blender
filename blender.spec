@@ -240,8 +240,8 @@ BF_BULLET_LIB = 'bulletdynamics bulletcollision lbulletmath'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing -floop-optimize2 %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing -floop-optimize2 %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %endif
