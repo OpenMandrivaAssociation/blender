@@ -2,7 +2,7 @@
 %define	relver		245
 %define name		blender
 %define truename	blender
-%define	svnsnapshot	20080414
+%define	svnsnapshot	20080425
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
@@ -11,6 +11,10 @@
 %define build_fullopt 1
 %{?_with_fullopt: %{expand: %%global build_fullopt 1}}
 %{?_without_fullopt: %{expand: %%global build_fullopt 0}}
+
+%define build_systembullet 0
+%{?_with_systembullet: %{expand: %%global build_systembullet 1}}
+%{?_without_systembullet: %{expand: %%global build_systembullet 0}}
 
 %define use_smp		1
 %{?_with_smp: %global use_smp 1}
@@ -65,15 +69,19 @@ Patch23:	blender-2.44-more-than-six-subsurf.patch
 Patch24:	blender-2.45-import-dxf-logpath.patch
 Patch34:	blender-2.44-deinterlace.patch
 # BL#7113
-Patch35:	blender-2.46-noglext.patch
+Patch35:	blender-2.46-glext_undef.patch
 # BL#8195
 Patch36:	blender-2.46-outliner_seq.patch
+Patch37:	blender-2.46-arith-optz.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	scons
 BuildRequires:	openal-devel >= 0.0.6-9mdk
 BuildRequires:	OpenEXR-devel
+%if %{build_systembullet}
+BuildRequires:	bullet-devel
+%endif
 BuildRequires:	esound-devel
 %if %{mdkversion} >= 200700 || "%{mdvver}" == "mlcd4"
 BuildRequires:  freealut-devel
@@ -96,7 +104,6 @@ BuildRequires:	mesaglu-devel
 BuildRequires:	MesaGLU-devel
 %endif
 BuildRequires:	oggvorbis-devel
-#BuildRequires:	ode-devel
 BuildRequires:	openssl-devel
 BuildRequires:	png-devel
 BuildRequires:	python-devel >= 2.4
@@ -154,10 +161,10 @@ This version is build with debug enabled.
 %patch34 -p1 -b .deinterlace
 %patch35 -p1 -b .noglext
 %patch36 -p1 -b .outliner
+%patch37 -p1 -b .optz
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
-#mv bin/.blender/locale/pt_br bin/.blender/locale/pt_BR
 
 %build
 %if %{build_debug}
@@ -178,7 +185,6 @@ WITH_BF_FFMPEG = 'false'
 WITH_BF_VERSE = 'true'
 WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
-#WITH_BF_ODE = 'true'
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
 %if %{mdkversion} <= 200610
 BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
@@ -188,6 +194,12 @@ BF_OPENGL_LIBPATH = '%{_libdir}'
 %if %{mdkversion} >= 200800
 WITH_BF_OPENMP = 'true'
 %endif
+%if %{build_systembullet}
+BF_BULLET = '%{_prefix}'
+BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
+BF_BULLET_LIB = 'bulletdynamics bulletcollision lbulletmath'
+%endif
+#
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
@@ -208,7 +220,6 @@ WITH_BF_FFMPEG = 'false'
 WITH_BF_VERSE = 'true'
 WITH_BF_GAMEENGINE = 'true'
 WITH_BF_PLAYER = 'true'
-#WITH_BF_ODE = 'true'
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
 %if %{mdkversion} <= 200610
 BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
@@ -217,6 +228,11 @@ BF_OPENGL_LIBPATH = '%{_libdir}'
 %endif
 %if %{mdkversion} >= 200800
 WITH_BF_OPENMP = 'true'
+%endif
+%if %{build_systembullet}
+BF_BULLET = '%{_prefix}'
+BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
+BF_BULLET_LIB = 'bulletdynamics bulletcollision lbulletmath'
 %endif
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
