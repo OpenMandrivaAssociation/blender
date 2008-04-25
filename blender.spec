@@ -38,7 +38,7 @@
 
 Name:		%{name}
 Version:	2.46
-Release:	0.%{svnsnapshot}.%mkrel 2
+Release:	0.%{svnsnapshot}.%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{svnsnapshot}.tar.bz2
@@ -77,6 +77,9 @@ URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	scons
+%if %{mdkversion} >= 200810
+BuildRequires:	python-scons
+%endif
 BuildRequires:	openal-devel >= 0.0.6-9mdk
 BuildRequires:	OpenEXR-devel
 %if %{build_systembullet}
