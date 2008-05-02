@@ -2,7 +2,7 @@
 %define	relver		245
 %define name		blender
 %define truename	blender
-%define	svnsnapshot	20080425
+%define	svnsnapshot	20080502
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
@@ -16,13 +16,33 @@
 %{?_with_systembullet: %{expand: %%global build_systembullet 1}}
 %{?_without_systembullet: %{expand: %%global build_systembullet 0}}
 
+%define build_systemffmpeg 1
+%{?_with_systemffmpeg: %{expand: %%global build_systemffmpeg 1}}
+%{?_without_systemffmpeg: %{expand: %%global build_systemffmpeg 0}}
+
+%define build_verse	1
+%{?_with_verse: %{expand: %%global build_verse 1}}
+%{?_without_verse: %{expand: %%global build_verse 0}}
+
+%define build_gameeng	1
+%{?_with_gameeng: %{expand: %%global build_gameeng 1}}
+%{?_without_gameeng: %{expand: %%global build_gameeng 0}}
+
+%define build_player	1
+%{?_with_player: %{expand: %%global build_player 1}}
+%{?_without_player: %{expand: %%global build_player 0}}
+
 %define use_smp		1
 %{?_with_smp: %global use_smp 1}
 %{?_without_smp: %global use_smp 0}
 
-%define use_protector	1
+%define use_protector	0
 %{?_with_protector: %global use_protector 1}
 %{?_without_protector: %global use_protector 0}
+
+%define no_protector	0
+%{?_with_noprotector: %global no_protector 1}
+%{?_without_noprotector: %global no_protector 0}
 
 %if %{use_smp}
 %define scons_smp --debug=time -j %(expr $(getconf _NPROCESSORS_ONLN) + 2)
@@ -34,6 +54,60 @@
 %define protector_flags -fstack-protector -fstack-protector-all --param=ssp-buffer-size=1
 %else
 %define protector_flags %{nil}
+%endif
+
+%if %{no_protector}
+%define protector_flags -fno-stack-protector
+%else
+%define protector_flags %{nil}
+%endif
+
+%if %{build_systemffmpeg}
+%define	ffmpeg_source '/usr'
+%if %{mdkversion} <= 200810
+%define ffmpeg_lib 'avformat avcodec avutil'
+%else
+%define ffmpeg_lib 'avformat avcodec swscale avutil'
+%endif
+%else
+%define ffmpeg_source '\#extern/ffmpeg'
+%define ffmpeg_lib ''
+%endif
+
+%if %{build_verse}
+%define verse_bool 'true'
+%else
+%define verse_bool 'false'
+%endif
+
+%if %{build_gameeng}
+%define gameeng_bool 'true'
+%else
+%define gameeng_bool 'false'
+%endif
+
+%if %{build_player}
+%define player_bool 'true'
+%else
+%define player_bool 'false'
+%endif
+
+%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
+%define ffmpeg_bool 'true'
+%else
+%define ffmpeg_bool 'false'
+%endif
+
+%if %{mdkversion} <= 200610
+%define opengl_libpath	'%{_prefix}/X11R6/%{_lib}'
+%else
+%define	opengl_libpath	'%{_libdir}'
+%endif
+
+%if %{mdkversion} >= 200800
+%define openmp_bool 'true'
+%else
+%define openmp_bool 'false'
 %endif
 
 Name:		%{name}
@@ -73,6 +147,8 @@ Patch35:	blender-2.46-glext_undef.patch
 # BL#8195
 Patch36:	blender-2.46-outliner_seq.patch
 Patch37:	blender-2.46-arith-optz.patch
+Patch38:	blender-2.46-ffmpeg-new.patch
+Patch39:	blender-2.46-scons-new.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -89,7 +165,7 @@ BuildRequires:	esound-devel
 %if %{mdkversion} >= 200700 || "%{mdvver}" == "mlcd4"
 BuildRequires:  freealut-devel
 %endif
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
+%if %{mdkversion} >= 200610
 BuildRequires:	ffmpeg-devel >= 0.4.9-1.pre1
 %endif
 %if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
@@ -165,6 +241,10 @@ This version is build with debug enabled.
 %patch35 -p1 -b .noglext
 %patch36 -p1 -b .outliner
 %patch37 -p1 -b .optz
+%if %{mdkversion} >= 200900
+%patch38 -p1 -b .ffmpegnew
+%endif
+%patch39 -p1 -b .sconsnew
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
@@ -174,33 +254,25 @@ sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
 %define debug_flags -g
 %define scons_debug BF_DEBUG=1
 %else
-%define debug_flags ""
+%define debug_flags %{nil}
 %define scons_debug BF_DEBUG=0
 %endif
 
 cat > user-config.py <<EOF
 BF_GETTEXT_LIBPATH = '\${BF_GETTEXT}/%{_lib}'
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
-WITH_BF_FFMPEG = 'true'
-%else
-WITH_BF_FFMPEG = 'false'
-%endif
-WITH_BF_VERSE = 'true'
-WITH_BF_GAMEENGINE = 'true'
-WITH_BF_PLAYER = 'true'
+WITH_BF_FFMPEG = %{ffmpeg_bool}
+BF_FFMPEG = %{ffmpeg_source}
+BF_FFMPEG_LIB = %{ffmpeg_lib}
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
-%if %{mdkversion} <= 200610
-BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
-%else
-BF_OPENGL_LIBPATH = '%{_libdir}'
-%endif
-%if %{mdkversion} >= 200800
-WITH_BF_OPENMP = 'true'
-%endif
+WITH_BF_VERSE = %{verse_bool}
+WITH_BF_GAMEENGINE = %{gameeng_bool}
+WITH_BF_PLAYER = %{player_bool}
+BF_OPENGL_LIBPATH = %{opengl_libpath}
+WITH_BF_OPENMP = %{openmp_bool}
 %if %{build_systembullet}
 BF_BULLET = '%{_prefix}'
 BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
-BF_BULLET_LIB = 'bulletdynamics bulletcollision lbulletmath'
+BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 %endif
 #
 BF_BUILDDIR = './builddir'
@@ -215,27 +287,19 @@ EOF
 
 cat > user-config.py.sse <<EOF
 BF_GETTEXT_LIBPATH = '\${BF_GETTEXT}/%{_lib}'
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
-WITH_BF_FFMPEG = 'true'
-%else
-WITH_BF_FFMPEG = 'false'
-%endif
-WITH_BF_VERSE = 'true'
-WITH_BF_GAMEENGINE = 'true'
-WITH_BF_PLAYER = 'true'
+WITH_BF_FFMPEG = %{ffmpeg_bool}
+BF_FFMPEG = %{ffmpeg_source}
+BF_FFMPEG_LIB = %{ffmpeg_lib}
 BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
-%if %{mdkversion} <= 200610
-BF_OPENGL_LIBPATH = '%{_prefix}/X11R6/%{_lib}'
-%else
-BF_OPENGL_LIBPATH = '%{_libdir}'
-%endif
-%if %{mdkversion} >= 200800
-WITH_BF_OPENMP = 'true'
-%endif
+WITH_BF_VERSE = %{verse_bool}
+WITH_BF_GAMEENGINE = %{gameeng_bool}
+WITH_BF_PLAYER = %{player_bool}
+BF_OPENGL_LIBPATH = %{opengl_libpath}
+WITH_BF_OPENMP = %{openmp_bool}
 %if %{build_systembullet}
 BF_BULLET = '%{_prefix}'
 BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
-BF_BULLET_LIB = 'bulletdynamics bulletcollision lbulletmath'
+BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 %endif
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
@@ -301,9 +365,13 @@ install -d -m 755 \
 		%{buildroot}%{_libdir}/%{name} \
 		%{buildroot}%{_datadir}
 
-install -m 755 ./installdir/blenderplayer %{buildroot}%{_libdir}/%{name}/%{truename}player
+%if %{build_verse}
 install -m 755 ./installdir/verse %{buildroot}%{_libdir}/%{name}/verse
+%endif
+%if %{build_player}
+install -m 755 ./installdir/blenderplayer %{buildroot}%{_libdir}/%{name}/%{truename}player
 ln -s %{_libdir}/%{name}/%{truename}player %{buildroot}%{_bindir}/%{name}player
+%endif
 install -m 755 ./installdir/blender %{buildroot}%{_libdir}/%{name}/%{truename}
 %ifarch %{ix86}
 install -m 755 ./blender.sse %{buildroot}%{_libdir}/%{name}/%{truename}.sse
