@@ -1,8 +1,7 @@
-%define testver		244
-%define	relver		245
+%define testver		246
+%define	relver		246
 %define name		blender
 %define truename	blender
-%define	svnsnapshot	20080502
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
@@ -11,6 +10,10 @@
 %define build_fullopt 1
 %{?_with_fullopt: %{expand: %%global build_fullopt 1}}
 %{?_without_fullopt: %{expand: %%global build_fullopt 0}}
+
+%define build_profiling 0
+%{?_with_profiling: %{expand: %%global build_profiling 1}}
+%{?_without_profiling: %{expand: %%global build_profiling 0}}
 
 %define build_systembullet 0
 %{?_with_systembullet: %{expand: %%global build_systembullet 1}}
@@ -60,6 +63,12 @@
 %define protector_flags -fno-stack-protector
 %else
 %define protector_flags %{nil}
+%endif
+
+%if %{build_profiling}
+%define profiling_flags	-Wall -g -pg
+%else
+%define profiling_flags %{nil}
 %endif
 
 %if %{build_systemffmpeg}
@@ -112,10 +121,10 @@
 
 Name:		%{name}
 Version:	2.46
-Release:	0.%{svnsnapshot}.%mkrel 1
+Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
-Source0:	http://download.blender.org/source/blender-%{svnsnapshot}.tar.bz2
+Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
 Source1: 	blender-wrapper
 Source2:	http://download.blender.org/demo/test/test%{testver}.zip
 Source11:	blender-16x16.png
@@ -133,7 +142,7 @@ Patch7:		blender-2.43-varuninitial.patch
 Patch10:	blender-2.42-O3opt.patch
 Patch13:	blender-2.44-python25.patch
 Patch14:	blender-2.44-alut.patch
-Patch17:	blender-2.44-changelog.patch
+Patch17:	blender-2.46-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.46-maxthreads.patch
 Patch20:	blender-2.44-force-python24.patch
@@ -149,6 +158,8 @@ Patch36:	blender-2.46-outliner_seq.patch
 Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
+# BL#11750
+Patch40:	blender-2.46-sequencer-translate.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -206,12 +217,12 @@ build and manage complex environments. The renderer is versatile and
 extremely fast. All basic animation principles (curves and keys) are
 implemented.
 
-%if %build_debug
-This version is build with debug enabled.
+%if %{build_debug}
+This version is built with debug enabled.
 %endif
 
 %prep
-%setup -q -n %{truename}-%{svnsnapshot} -a 2
+%setup -q -n %{truename}-%{version} -a 2
 %patch0 -p1 -b .openal
 %if %{mdkversion} >= 200710
 %patch1 -p1 -b .ffmpeg
@@ -245,6 +256,7 @@ This version is build with debug enabled.
 %patch38 -p1 -b .ffmpegnew
 %endif
 %patch39 -p1 -b .sconsnew
+%patch40 -p1 -b .seqtrans
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
@@ -278,10 +290,14 @@ BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
+%endif
+%if %{build_profiling}
+BF_PROFILE = 'true'
+BF_PROFILE_FLAGS= "%{profiling_flags}".split();
 %endif
 EOF
 
@@ -304,10 +320,14 @@ BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 %debug_flags %profiling_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 %debug_flags %profiling_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
+%if %{build_profiling}
+BF_PROFILE = 'true'
+BF_PROFILE_FLAGS= "%{profiling_flags}".split();
+%endif
 %endif
 EOF
 
@@ -385,7 +405,7 @@ cp -a ./installdir/.blender/locale  %{buildroot}%{_datadir}
 install -p -m 644 ./installdir/.blender/.Blanguages %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/.blender/.bfont.ttf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/VERSION %{buildroot}%{_libdir}/%{name}
-#install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
+install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/copyright.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/BlenderQuickStart.pdf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/blender.html %{buildroot}%{_libdir}/%{name}
@@ -488,7 +508,7 @@ rm -rf %{buildroot}
 %{_libdir}/%{name}/BlenderQuickStart.pdf
 %{_libdir}/%{name}/blender.html
 %{_libdir}/%{name}/copyright.txt
-#%{_libdir}/%{name}/release_%{relver}.txt
+%{_libdir}/%{name}/release_%{relver}.txt
 %{_libdir}/%{name}/scripts/*
 %{_libdir}/%{name}/plugins/sequence
 %{_libdir}/%{name}/plugins/texture
