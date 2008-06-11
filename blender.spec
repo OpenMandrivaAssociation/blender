@@ -101,11 +101,7 @@
 %define player_bool 'false'
 %endif
 
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %define ffmpeg_bool 'true'
-%else
-%define ffmpeg_bool 'false'
-%endif
 
 %if %{mdkversion} <= 200610
 %define opengl_libpath	'%{_prefix}/X11R6/%{_lib}'
@@ -176,9 +172,7 @@ BuildRequires:	esound-devel
 %if %{mdkversion} >= 200700 || "%{mdvver}" == "mlcd4"
 BuildRequires:  freealut-devel
 %endif
-%if %{mdkversion} >= 200610
 BuildRequires:	ffmpeg-devel >= 0.4.9-1.pre1
-%endif
 %if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
 BuildRequires:	ffmpeg-devel >= 0.4.9-3.pre1.7407.10
 %endif
@@ -188,11 +182,7 @@ BuildRequires:	gettext-devel
 BuildRequires: libgomp-devel
 %endif
 BuildRequires:	jpeg-devel
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 BuildRequires:	mesaglu-devel
-%else
-BuildRequires:	MesaGLU-devel
-%endif
 BuildRequires:	oggvorbis-devel
 BuildRequires:	openssl-devel
 BuildRequires:	png-devel
@@ -417,7 +407,6 @@ install -pD -m 644 release/plugins/texture/*.so %{buildroot}%{_libdir}/%{name}/p
 find %{buildroot}%{_libdir}/%{name}/scripts -type f -name '*.py' -exec chmod 644 '{}' \;
 
 # menu
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
@@ -455,7 +444,6 @@ Terminal=false
 Type=Application
 Categories=3DGraphics;Graphics;Viewer;
 EOF
-%endif
 
 # icons
 install -m644 %{SOURCE11} -D %{buildroot}%{_miconsdir}/%{name}.png
@@ -475,23 +463,17 @@ rm -rf %{buildroot}
 
 %post
 %{update_menus}
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %{update_desktop_database} 
-%endif
 
 %postun
 %{clean_menus}
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %{clean_desktop_database} 
-%endif
 
 %files
 %defattr(-,root,root)
 %doc ChangeLog README doc/*.txt test%{testver}
 %{_bindir}/*
-%if %{mdkversion} >= 200610 || "%{mdvver}" == "mlcd4"
 %{_datadir}/applications/*
-%endif
 %{_datadir}/locale/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
