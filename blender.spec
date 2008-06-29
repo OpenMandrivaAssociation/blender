@@ -117,7 +117,7 @@
 
 Name:		%{name}
 Version:	2.46
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -173,7 +173,11 @@ BuildRequires:	scons
 BuildRequires:	python-scons
 %endif
 BuildRequires:	openal-devel >= 0.0.6-9mdk
+%if %{mdkversion} >= 200810
+BuildRequires:	OpenEXR-devel >= 1.6.1
+%else
 BuildRequires:	OpenEXR-devel
+%endif
 %if %{build_systembullet}
 BuildRequires:	bullet-devel
 %endif
