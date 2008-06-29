@@ -19,7 +19,7 @@
 %{?_with_systembullet: %{expand: %%global build_systembullet 1}}
 %{?_without_systembullet: %{expand: %%global build_systembullet 0}}
 
-%define build_systemffmpeg 1
+%define build_systemffmpeg 0
 %{?_with_systemffmpeg: %{expand: %%global build_systemffmpeg 1}}
 %{?_without_systemffmpeg: %{expand: %%global build_systemffmpeg 0}}
 
@@ -117,7 +117,7 @@
 
 Name:		%{name}
 Version:	2.46
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -156,6 +156,15 @@ Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
 # BL#11750
 Patch40:	blender-2.46-sequencer-translate.patch
+#
+Patch41:	blender-2.46-bug11745.patch
+Patch42:	blender-2.46-bug11758.patch
+Patch44:	blender-2.46-bug12106.patch
+Patch45:	blender-2.46-bug12473.patch
+Patch46:	blender-2.46-bug13311.patch
+Patch47:	blender-2.46-bug13649.patch
+Patch48:	blender-2.46-bug13666.patch
+#
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -242,11 +251,19 @@ This version is built with debug enabled.
 %patch35 -p1 -b .noglext
 %patch36 -p1 -b .outliner
 %patch37 -p1 -b .optz
-%if %{mdkversion} >= 200900
+%if %{mdkversion} >= 200900 && %{build_systemffmpeg}
 %patch38 -p1 -b .ffmpegnew
 %endif
 %patch39 -p1 -b .sconsnew
 %patch40 -p1 -b .seqtrans
+#
+%patch41 -p0 -b .bug11745
+%patch42 -p0 -b .bug11758
+%patch44 -p0 -b .bug12106
+%patch45 -p0 -b .bug12473
+%patch46 -p0 -b .bug13311
+%patch47 -p0 -b .bug13649
+%patch48 -p0 -b .bug13666
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
