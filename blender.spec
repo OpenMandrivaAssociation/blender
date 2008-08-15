@@ -1,5 +1,5 @@
 %define testver		246
-%define	relver		246
+%define	relver		247
 %define name		blender
 %define truename	blender
 
@@ -116,8 +116,8 @@
 %endif
 
 Name:		%{name}
-Version:	2.46
-Release:	%mkrel 3
+Version:	2.47
+Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -138,7 +138,7 @@ Patch7:		blender-2.43-varuninitial.patch
 Patch10:	blender-2.42-O3opt.patch
 Patch13:	blender-2.44-python25.patch
 Patch14:	blender-2.44-alut.patch
-Patch17:	blender-2.46-changelog.patch
+Patch17:	blender-2.47-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.46-maxthreads.patch
 Patch20:	blender-2.44-force-python24.patch
@@ -154,16 +154,6 @@ Patch36:	blender-2.46-outliner_seq.patch
 Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
-# BL#11750
-Patch40:	blender-2.46-sequencer-translate.patch
-#
-Patch41:	blender-2.46-bug11745.patch
-Patch42:	blender-2.46-bug11758.patch
-Patch44:	blender-2.46-bug12106.patch
-Patch45:	blender-2.46-bug12473.patch
-Patch46:	blender-2.46-bug13311.patch
-Patch47:	blender-2.46-bug13649.patch
-Patch48:	blender-2.46-bug13666.patch
 #
 URL:		http://www.blender.org/
 License:	GPLv2+
@@ -192,10 +182,11 @@ BuildRequires:	ffmpeg-devel >= 0.4.9-3.pre1.7407.10
 BuildRequires:	ftgl-devel
 BuildRequires:	gettext-devel
 %if %{mdkversion} >= 200800
-BuildRequires: libgomp-devel
+BuildRequires:	libgomp-devel
 %endif
 BuildRequires:	jpeg-devel
 BuildRequires:	mesaglu-devel
+BuildRequires:	glew-devel
 BuildRequires:	oggvorbis-devel
 BuildRequires:	openssl-devel
 BuildRequires:	png-devel
@@ -252,22 +243,13 @@ This version is built with debug enabled.
 %patch22 -p1 -b .bug6811
 %patch23 -p1 -b .subsurf
 %patch34 -p1 -b .deinterlace
-%patch35 -p1 -b .noglext
+#%patch35 -p1 -b .noglext
 %patch36 -p1 -b .outliner
 %patch37 -p1 -b .optz
 %if %{mdkversion} >= 200900 && %{build_systemffmpeg}
 %patch38 -p1 -b .ffmpegnew
 %endif
 %patch39 -p1 -b .sconsnew
-%patch40 -p1 -b .seqtrans
-#
-%patch41 -p0 -b .bug11745
-%patch42 -p0 -b .bug11758
-%patch44 -p0 -b .bug12106
-%patch45 -p0 -b .bug12473
-%patch46 -p0 -b .bug13311
-%patch47 -p0 -b .bug13649
-%patch48 -p0 -b .bug13666
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
@@ -301,8 +283,8 @@ BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 -march=nocona -msse -msse2 -msse3 -mmmx -mfpmath=sse %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 -march=nocona -msse -msse2 -msse3 -mmmx -mfpmath=sse %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %endif
@@ -394,7 +376,8 @@ EOF
 install -d -m 755 \
 		%{buildroot}%{_bindir} \
 		%{buildroot}%{_libdir}/%{name} \
-		%{buildroot}%{_datadir}
+		%{buildroot}%{_datadir}/ \
+		%{buildroot}%{_datadir}/mimelnk/application/
 
 %if %{build_verse}
 install -m 755 ./installdir/verse %{buildroot}%{_libdir}/%{name}/verse
@@ -428,8 +411,8 @@ install -pD -m 644 release/plugins/texture/*.so %{buildroot}%{_libdir}/%{name}/p
 find %{buildroot}%{_libdir}/%{name}/scripts -type f -name '*.py' -exec chmod 644 '{}' \;
 
 # menu
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
-cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}.desktop << EOF
+mkdir -p %{buildroot}%{_datadir}/applications
+cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=Blender
 Comment=The free open source 3D content creation suite
@@ -442,7 +425,7 @@ MimeType=application/x-blender;
 InitialPreference=11
 EOF
 
-cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}fs.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}fs.desktop << EOF
 [Desktop Entry]
 Name=Blender (FullScreen)
 Comment=The free open source 3D content creation suite
@@ -455,7 +438,7 @@ MimeType=application/x-blender;
 InitialPreference=10
 EOF
 
-cat > $RPM_BUILD_ROOT%{_datadir}/applications/mandriva-%{name}nodri.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}nodri.desktop << EOF
 [Desktop Entry]
 Name=Blender (DRI disabled)
 Comment=The free open source 3D content creation suite (with DRI disabled)
@@ -464,6 +447,17 @@ Icon=%{name}nodri
 Terminal=false
 Type=Application
 Categories=3DGraphics;Graphics;Viewer;
+EOF
+
+# mimelnk
+cat > %{buildroot}%{_datadir}/mimelnk/application/x-_blender.desktop <<EOF
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-blender
+Icon=blender
+Patterns=*.blend;*.BLEND;
+Comment=Blender 3d format
 EOF
 
 # icons
@@ -499,6 +493,7 @@ rm -rf %{buildroot}
 %doc ChangeLog README doc/*.txt test%{testver}
 %{_bindir}/*
 %{_datadir}/applications/*
+%{_datadir}/mimelnk/application/x-_blender.desktop
 %{_datadir}/locale/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
