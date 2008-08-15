@@ -186,7 +186,7 @@ BuildRequires:	libgomp-devel
 %endif
 BuildRequires:	jpeg-devel
 BuildRequires:	mesaglu-devel
-BuildRequires:	glew-devel
+#BuildRequires:	glew-devel
 BuildRequires:	oggvorbis-devel
 BuildRequires:	openssl-devel
 BuildRequires:	png-devel
