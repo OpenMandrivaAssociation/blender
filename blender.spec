@@ -117,7 +117,7 @@
 
 Name:		%{name}
 Version:	2.47
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -154,6 +154,8 @@ Patch36:	blender-2.46-outliner_seq.patch
 Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
+# From Fedora: fix CVE-2008-1103-1 - AdamW 2008/09 #44196
+Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
 #
 URL:		http://www.blender.org/
 License:	GPLv2+
@@ -250,6 +252,7 @@ This version is built with debug enabled.
 %patch38 -p1 -b .ffmpegnew
 %endif
 %patch39 -p1 -b .sconsnew
+%patch40 -p1 -b .cve200811031
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
