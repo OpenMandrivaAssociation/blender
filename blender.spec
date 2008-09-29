@@ -156,7 +156,9 @@ Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
 # From Fedora: fix CVE-2008-1103-1 - AdamW 2008/09 #44196
 Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
-#
+# Disable x264, xvid and mp3lame support in blender's ffmpeg: these
+# cannot be in the MDV repos for legal reasons - AdamW 2008/09
+Patch41:	blender-2.47-legal.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -253,6 +255,7 @@ This version is built with debug enabled.
 %endif
 %patch39 -p1 -b .sconsnew
 %patch40 -p1 -b .cve200811031
+%patch41 -p1 -b .legal
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
