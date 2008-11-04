@@ -1,5 +1,5 @@
-%define testver		246
-%define	relver		247
+%define testver		248
+%define	relver		248
 %define name		blender
 %define truename	blender
 
@@ -116,11 +116,11 @@
 %endif
 
 Name:		%{name}
-Version:	2.47
-Release:	%mkrel 2
+Version:	2.48a
+Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
-Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
+Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
 Source1: 	blender-wrapper
 Source2:	http://download.blender.org/demo/test/test%{testver}.zip
 Source11:	blender-16x16.png
@@ -130,14 +130,14 @@ Source14:	blendernodri-16x16.png
 Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
 Patch0:		blender-2.41-openal-fix.patch
-Patch1:		blender-2.46-libffmpeg-system.patch
+Patch1:		blender-2.48a-libffmpeg-system.patch
 Patch2:		blender-2.46-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
 Patch4:		blender-2.46-libquicktime.patch
-Patch7:		blender-2.43-varuninitial.patch
+#Patch7:		blender-2.43-varuninitial.patch
 Patch10:	blender-2.42-O3opt.patch
-Patch13:	blender-2.44-python25.patch
-Patch14:	blender-2.44-alut.patch
+Patch13:	blender-2.48a-python25.patch
+Patch14:	blender-2.48a-alut.patch
 Patch17:	blender-2.47-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.46-maxthreads.patch
@@ -149,8 +149,6 @@ Patch24:	blender-2.45-import-dxf-logpath.patch
 Patch34:	blender-2.44-deinterlace.patch
 # BL#7113
 Patch35:	blender-2.46-glext_undef.patch
-# BL#8195
-Patch36:	blender-2.46-outliner_seq.patch
 Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
@@ -158,7 +156,7 @@ Patch39:	blender-2.46-scons-new.patch
 Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
 # Disable x264, xvid and mp3lame support in blender's ffmpeg: these
 # cannot be in the MDV repos for legal reasons - AdamW 2008/09
-Patch41:	blender-2.47-legal.patch
+Patch41:	blender-2.48a-legal.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -234,7 +232,7 @@ This version is built with debug enabled.
 %endif
 %patch3 -p1 -b .yafray
 #%patch4 -p1 -b .quicktime
-%patch7 -p1 -b .varun
+#%patch7 -p1 -b .varun
 %patch10 -p1 -b .O3opt
 %if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
 %patch13 -p1 -b .python
@@ -252,7 +250,6 @@ This version is built with debug enabled.
 %patch23 -p1 -b .subsurf
 %patch34 -p1 -b .deinterlace
 #%patch35 -p1 -b .noglext
-%patch36 -p1 -b .outliner
 %patch37 -p1 -b .optz
 %if %{mdkversion} >= 200900 && %{build_systemffmpeg}
 %patch38 -p1 -b .ffmpegnew
