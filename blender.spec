@@ -47,6 +47,10 @@
 %{?_with_noprotector: %global no_protector 1}
 %{?_without_noprotector: %global no_protector 0}
 
+%define avoid_dunno_patent	1
+%{?_with_avoidpatent: %global avoid_dunno_patent 1}
+%{?_without_avoidpatent: %global avoid_dunno_patent 0}
+
 %if %{use_smp}
 %define scons_smp --debug=time -j %(expr $(getconf _NPROCESSORS_ONLN) + 2)
 %else
@@ -102,6 +106,7 @@
 %endif
 
 %define ffmpeg_bool 'true'
+%define redcode_bool 'false'
 
 %if %{mdkversion} <= 200610
 %define opengl_libpath	'%{_prefix}/X11R6/%{_lib}'
@@ -117,10 +122,10 @@
 
 Name:		%{name}
 Version:	2.48a
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
-Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
+Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
 Source1: 	blender-wrapper
 Source2:	http://download.blender.org/demo/test/test%{testver}.zip
 Source11:	blender-16x16.png
@@ -130,15 +135,14 @@ Source14:	blendernodri-16x16.png
 Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
 Patch0:		blender-2.41-openal-fix.patch
-Patch1:		blender-2.48a-libffmpeg-system.patch
+Patch1:		blender-2.48-libffmpeg-system.patch
 Patch2:		blender-2.46-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
 Patch4:		blender-2.46-libquicktime.patch
-#Patch7:		blender-2.43-varuninitial.patch
 Patch10:	blender-2.42-O3opt.patch
-Patch13:	blender-2.48a-python25.patch
-Patch14:	blender-2.48a-alut.patch
-Patch17:	blender-2.47-changelog.patch
+Patch13:	blender-2.48-python25.patch
+Patch14:	blender-2.48-alut.patch
+Patch17:	blender-2.48a-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.46-maxthreads.patch
 Patch20:	blender-2.44-force-python24.patch
@@ -147,8 +151,6 @@ Patch22:	blender-2.46-bug6811.patch
 Patch23:	blender-2.44-more-than-six-subsurf.patch
 Patch24:	blender-2.45-import-dxf-logpath.patch
 Patch34:	blender-2.44-deinterlace.patch
-# BL#7113
-Patch35:	blender-2.46-glext_undef.patch
 Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
@@ -174,11 +176,11 @@ BuildRequires:	OpenEXR-devel
 BuildRequires:	bullet-devel
 %endif
 BuildRequires:	esound-devel
-%if %{mdkversion} >= 200700 || "%{mdvver}" == "mlcd4"
+%if %{mdkversion} >= 200700
 BuildRequires:  freealut-devel
 %endif
 BuildRequires:	ffmpeg-devel >= 0.4.9-1.pre1
-%if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
+%if %{mdkversion} >= 200710
 BuildRequires:	ffmpeg-devel >= 0.4.9-3.pre1.7407.10
 %endif
 BuildRequires:	ftgl-devel
@@ -197,6 +199,7 @@ BuildRequires:	SDL-devel
 BuildRequires:	smpeg-devel
 BuildRequires:	%{mklibname tiff 3}-devel
 BuildRequires:	X11-devel
+BuildRequires:	yasm
 BuildRequires:	zlib-devel
 Requires:	python-imaging >= 1.1.4
 Requires:	yafray
@@ -232,14 +235,13 @@ This version is built with debug enabled.
 %endif
 %patch3 -p1 -b .yafray
 #%patch4 -p1 -b .quicktime
-#%patch7 -p1 -b .varun
 %patch10 -p1 -b .O3opt
-%if %{mdkversion} >= 200710 || "%{mdvver}" == "mlcd4"
+%if %{mdkversion} >= 200710
 %patch13 -p1 -b .python
 %else
 %patch20 -p1 -b .python24
 %endif
-%if %{mdkversion} >= 200700 || "%{mdvver}" =="mlcd4"
+%if %{mdkversion} >= 200700
 %patch14 -p1 -b .alut
 %endif
 %patch17 -p1 -b .chglog
@@ -249,14 +251,16 @@ This version is built with debug enabled.
 %patch22 -p1 -b .bug6811
 %patch23 -p1 -b .subsurf
 %patch34 -p1 -b .deinterlace
-#%patch35 -p1 -b .noglext
+#%patch36 -p1 -b .outliner
 %patch37 -p1 -b .optz
 %if %{mdkversion} >= 200900 && %{build_systemffmpeg}
 %patch38 -p1 -b .ffmpegnew
 %endif
 %patch39 -p1 -b .sconsnew
 %patch40 -p1 -b .cve200811031
+%if !%{build_systemffmpeg} && %{avoid_dunno_patent}
 %patch41 -p1 -b .legal
+%endif
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
@@ -281,6 +285,7 @@ WITH_BF_GAMEENGINE = %{gameeng_bool}
 WITH_BF_PLAYER = %{player_bool}
 BF_OPENGL_LIBPATH = %{opengl_libpath}
 WITH_BF_OPENMP = %{openmp_bool}
+WITH_BF_REDCODE = %{redcode_bool}
 %if %{build_systembullet}
 BF_BULLET = '%{_prefix}'
 BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
@@ -290,8 +295,8 @@ BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 -march=nocona -msse -msse2 -msse3 -mmmx -mfpmath=sse %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 -march=nocona -msse -msse2 -msse3 -mmmx -mfpmath=sse %{debug_flags} -ffast-math -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %endif
@@ -312,6 +317,7 @@ WITH_BF_GAMEENGINE = %{gameeng_bool}
 WITH_BF_PLAYER = %{player_bool}
 BF_OPENGL_LIBPATH = %{opengl_libpath}
 WITH_BF_OPENMP = %{openmp_bool}
+WITH_BF_REDCODE = %{redcode_bool}
 %if %{build_systembullet}
 BF_BULLET = '%{_prefix}'
 BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
@@ -320,8 +326,8 @@ BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 %debug_flags %profiling_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 %debug_flags %profiling_flags -ffast-math -msse -mfpmath=sse -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CCFLAGS  = "%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
 %if %{build_profiling}
