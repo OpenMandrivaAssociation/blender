@@ -2,6 +2,7 @@
 %define	relver		248
 %define name		blender
 %define truename	blender
+%define kde3altpath	/opt/kde3
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
@@ -390,6 +391,9 @@ install -d -m 755 \
 		%{buildroot}%{_bindir} \
 		%{buildroot}%{_libdir}/%{name} \
 		%{buildroot}%{_datadir}/ \
+%if %{mdkversion} >= 200900
+		%{buildroot}%{kde3altpath}/share/mimelnk/application/ \
+%endif
 		%{buildroot}%{_datadir}/mimelnk/application/
 
 %if %{build_verse}
@@ -473,6 +477,11 @@ Patterns=*.blend;*.BLEND;
 Comment=Blender 3d format
 EOF
 
+%if %{mdkversion} >= 200900
+cp -p %{buildroot}%{_datadir}/mimelnk/application/x-_blender.desktop \
+	%{buildroot}%{kde3altpath}/share/mimelnk/application/
+%endif
+
 # icons
 install -m644 %{SOURCE11} -D %{buildroot}%{_miconsdir}/%{name}.png
 install -m644 %{SOURCE12} -D %{buildroot}%{_iconsdir}/%{name}.png
@@ -507,6 +516,9 @@ rm -rf %{buildroot}
 %{_bindir}/*
 %{_datadir}/applications/*
 %{_datadir}/mimelnk/application/x-_blender.desktop
+%if %{mdkversion} >= 200900
+%{kde3altpath}/share/mimelnk/application/x-_blender.desktop
+%endif
 %{_datadir}/locale/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
