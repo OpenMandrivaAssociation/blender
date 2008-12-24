@@ -249,7 +249,7 @@ This version is built with debug enabled.
 %patch18 -p1 -b .zero_threads
 %patch19 -p1 -b .maxthreads
 %patch21 -p1
-%patch22 -p1 -b .bug6811
+%patch22 -p0 -b .bug6811
 %patch23 -p1 -b .subsurf
 %patch34 -p1 -b .deinterlace
 #%patch36 -p1 -b .outliner
