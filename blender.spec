@@ -236,7 +236,7 @@ This version is built with debug enabled.
 %endif
 %patch3 -p1 -b .yafray
 #%patch4 -p1 -b .quicktime
-%patch10 -p1 -b .O3opt
+%patch10 -p0 -b .O3opt
 %if %{mdkversion} >= 200710
 %patch13 -p1 -b .python
 %else
