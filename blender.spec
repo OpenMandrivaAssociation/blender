@@ -151,7 +151,7 @@ Patch21:	blender-2.44-boxpack2d-missed.patch
 Patch22:	blender-2.46-bug6811.patch
 Patch23:	blender-2.44-more-than-six-subsurf.patch
 Patch24:	blender-2.45-import-dxf-logpath.patch
-Patch34:	blender-2.44-deinterlace.patch
+Patch34:	blender-2.48a-deinterlace.patch
 Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
 Patch39:	blender-2.46-scons-new.patch
