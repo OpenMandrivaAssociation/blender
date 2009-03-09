@@ -123,7 +123,7 @@
 
 Name:		%{name}
 Version:	2.48a
-Release:	%mkrel 4
+Release:	%mkrel 5
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -161,6 +161,7 @@ Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
 # cannot be in the MDV repos for legal reasons - AdamW 2008/09
 Patch41:	blender-2.48a-legal.patch
 Patch42:	blender-2.48a-fix-str-fmt.patch
+Patch43:	blender-2.48a-CVE-2008-4863.diff
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -264,6 +265,7 @@ This version is built with debug enabled.
 %patch41 -p1 -b .legal
 %endif
 %patch42 -p0 -b .str
+%patch43 -p0 -b .CVE-2008-4863
 
 # Fix pt_BR
 sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
