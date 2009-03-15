@@ -123,7 +123,7 @@
 
 Name:		%{name}
 Version:	2.48a
-Release:	%mkrel 5
+Release:	%mkrel 6
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -219,9 +219,11 @@ build and manage complex environments. The renderer is versatile and
 extremely fast. All basic animation principles (curves and keys) are
 implemented.
 
+%if %{avoid_dunno_patent}
 Please note that the ability of Blender to export to h.264 and Xvid
 video formats, and MP3 audio format, has been disabled in this build
 due to patent issues.
+%endif
 
 %if %{build_debug}
 This version is built with debug enabled.
