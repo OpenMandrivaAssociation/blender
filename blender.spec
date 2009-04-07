@@ -123,7 +123,7 @@
 
 Name:		%{name}
 Version:	2.48a
-Release:	%mkrel 6
+Release:	%mkrel 7
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
