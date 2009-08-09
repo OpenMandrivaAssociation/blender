@@ -1,5 +1,5 @@
 %define testver		248
-%define	relver		248
+%define	relver		249
 %define name		blender
 %define truename	blender
 %define kde3altpath	/opt/kde3
@@ -123,7 +123,7 @@
 
 Name:		%{name}
 Version:	2.48a
-Release:	%mkrel 8
+Release:	%mkrel 9
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
