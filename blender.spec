@@ -200,7 +200,7 @@ BuildRequires:	png-devel
 BuildRequires:	python-devel >= 2.4
 BuildRequires:	SDL-devel
 BuildRequires:	smpeg-devel
-BuildRequires:	%{mklibname tiff 3}-devel
+BuildRequires:	tiff-devel
 BuildRequires:	X11-devel
 BuildRequires:	yasm
 BuildRequires:	zlib-devel
