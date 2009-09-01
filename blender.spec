@@ -1,4 +1,5 @@
 %define testver		248
+# what is relver? why don't we have that ./installdir/release_%{relver}.txt file anymore?
 %define	relver		249
 %define name		blender
 %define truename	blender
@@ -422,7 +423,7 @@ cp -a ./installdir/.blender/locale  %{buildroot}%{_datadir}
 install -p -m 644 ./installdir/.blender/.Blanguages %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/.blender/.bfont.ttf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/VERSION %{buildroot}%{_libdir}/%{name}
-install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
+#install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/copyright.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/BlenderQuickStart.pdf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 ./installdir/blender.html %{buildroot}%{_libdir}/%{name}
@@ -541,7 +542,7 @@ rm -rf %{buildroot}
 %{_libdir}/%{name}/BlenderQuickStart.pdf
 %{_libdir}/%{name}/blender.html
 %{_libdir}/%{name}/copyright.txt
-%{_libdir}/%{name}/release_%{relver}.txt
+#%{_libdir}/%{name}/release_%{relver}.txt
 %{_libdir}/%{name}/scripts/*
 %{_libdir}/%{name}/plugins/sequence
 %{_libdir}/%{name}/plugins/texture
