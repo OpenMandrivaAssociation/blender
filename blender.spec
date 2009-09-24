@@ -124,7 +124,7 @@
 
 Name:		%{name}
 Version:	2.48a
-Release:	%mkrel 9
+Release:	%mkrel 10
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -303,10 +303,17 @@ BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
 BF_BUILDDIR = './builddir'
 BF_INSTALLDIR = './installdir'
 %if %{build_fullopt}
+%ifarch %{ix86}
 CCFLAGS  = "%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 CXXFLAGS = "%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
 REL_CFLAGS  = "-O3".split()
 REL_CCFLAGS = "-O3".split()
+%else
+CCFLAGS  = "%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+CXXFLAGS = "%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
+REL_CFLAGS  = "-O3".split()
+REL_CCFLAGS = "-O3".split()
+%endif
 %endif
 %if %{build_profiling}
 BF_PROFILE = 'true'
