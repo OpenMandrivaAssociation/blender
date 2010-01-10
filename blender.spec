@@ -1,6 +1,6 @@
 %define testver		248
 # what is relver? why don't we have that ./installdir/release_%{relver}.txt file anymore?
-%define	relver		249
+%define	relver		250
 %define name		blender
 %define truename	blender
 %define kde3altpath	/opt/kde3
@@ -124,7 +124,7 @@
 
 Name:		%{name}
 Version:	2.48a
-Release:	%mkrel 10
+Release:	%mkrel 11
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
