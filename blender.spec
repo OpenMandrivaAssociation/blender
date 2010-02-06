@@ -2,7 +2,6 @@
 # what is relver? why don't we have that ./installdir/release_%{relver}.txt file anymore?
 %define	relver		251
 %define name		blender
-%define truename	blender
 %define kde3altpath	/opt/kde3
 
 %define build_debug     0
@@ -165,6 +164,7 @@ Patch42:	blender-2.49b-fix-str-fmt.patch
 Patch43:	blender-2.48a-CVE-2008-4863.diff
 Patch44:	blender-2.49b-build-static.patch
 Patch45:	blender-2.49b-cmake-link.patch
+Patch46:	blender-2.49b-fix-link-m.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -178,35 +178,23 @@ BuildRequires:	OpenEXR-devel
 %if %{build_systembullet}
 BuildRequires:	bullet-devel
 %endif
-BuildRequires:	esound-devel
-%if %{mdkversion} >= 200700
-BuildRequires:  freealut-devel
-%endif
-BuildRequires:	ffmpeg-devel >= 0.4.9-1.pre1
-%if %{mdkversion} >= 200710
 BuildRequires:	ffmpeg-devel >= 0.4.9-3.pre1.7407.10
-%endif
-BuildRequires:	ftgl-devel
-BuildRequires:	gettext-devel
-%if %{mdkversion} >= 200800
-BuildRequires:	libgomp-devel
-%endif
 BuildRequires:	jpeg-devel
+BuildRequires:	openjpeg-devel
 BuildRequires:	mesaglu-devel
-#BuildRequires:	glew-devel
+BuildRequires:	ilmbase-devel
 BuildRequires:	oggvorbis-devel
-BuildRequires:	openssl-devel
 BuildRequires:	png-devel
 BuildRequires:	python-devel >= 2.4
 BuildRequires:	SDL-devel
-BuildRequires:	smpeg-devel
+BuildRequires:	freetype2-devel
 BuildRequires:	tiff-devel
-BuildRequires:	X11-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxi-devel
 BuildRequires:	yasm
 BuildRequires:	zlib-devel
 Requires:	python-imaging >= 1.1.4
 Requires:	yafray
-Requires:	libtiff
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -230,7 +218,7 @@ This version is built with debug enabled.
 %endif
 
 %prep
-%setup -q -n %{truename}-%{version} -a 2
+%setup -q -n %{name}-%{version} -a 2
 #patch0 -p1 -b .openal
 %if %{mdkversion} >= 200710
 %patch1 -p1 -b .ffmpeg
@@ -270,6 +258,7 @@ This version is built with debug enabled.
 %patch43 -p0 -b .CVE-2008-4863
 %patch44 -p0 -b .static
 %patch45 -p0 -b .link
+%patch46 -p0 -b .link
 
 %build
 %if %{build_debug}
@@ -391,7 +380,7 @@ export CXXFLAGS="%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno
 	-DWITH_GAMEENGINE=ON \
 	-DWITH_BULLET=ON \
 	-DWITH_INTERNATIONAL=ON \
-	-DWITH_VERSE=OFF \
+	-DWITH_VERSE=ON \
 	-DWITH_ELBEEM=ON \
 	-DWITH_QUICKTIME=OFF \
 	-DWITH_OPENEXR=ON \
@@ -401,7 +390,7 @@ export CXXFLAGS="%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno
 	-DWITH_WEBPLUGIN=OFF
 %make
 cd ..
-mv build build_mmx
+mv build build_std
 
 # build sse version
 %ifarch %{ix86}
@@ -414,7 +403,7 @@ export CXXFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %pr
         -DWITH_GAMEENGINE=ON \
         -DWITH_BULLET=ON \
         -DWITH_INTERNATIONAL=ON \
-        -DWITH_VERSE=OFF \
+        -DWITH_VERSE=ON \
         -DWITH_ELBEEM=ON \
         -DWITH_QUICKTIME=OFF \
         -DWITH_OPENEXR=ON \
@@ -444,7 +433,6 @@ popd
 rm -rf %{buildroot}
 
 install -m 755 %{SOURCE1} blender-wrapper
-perl -pi -e 's@\$\{BLENDER_LIBDIR\}/%{truename}/@\$\{BLENDER_LIBDIR\}/%{name}/@g' blender-wrapper
 
 %ifarch %{ix86}
 cat >> blender-wrapper <<EOF 
@@ -453,14 +441,14 @@ if [ -e /proc/cpuinfo ]; then
 fi
 
 if [ "x\$SSE" == x ]; then
-	\${BLENDER_LIBDIR}/%{name}/%{truename} "\$@"
+	\${BLENDER_LIBDIR}/%{name}/%{name} "\$@"
 else
-	\${BLENDER_LIBDIR}/%{name}/%{truename}.sse "\$@"
+	\${BLENDER_LIBDIR}/%{name}/%{name}.sse "\$@"
 fi
 EOF
 %else
 cat >> blender-wrapper <<EOF
-\${BLENDER_LIBDIR}/%{name}/%{truename} "\$@"
+\${BLENDER_LIBDIR}/%{name}/%{name} "\$@"
 EOF
 %endif
 
@@ -468,35 +456,32 @@ install -d -m 755 \
 		%{buildroot}%{_bindir} \
 		%{buildroot}%{_libdir}/%{name} \
 		%{buildroot}%{_datadir}/ \
-%if %{mdkversion} >= 200900
-		%{buildroot}%{kde3altpath}/share/mimelnk/application/ \
-%endif
 		%{buildroot}%{_datadir}/mimelnk/application/
 
 %if %{build_verse}
-install -m 755 build/bin/verse %{buildroot}%{_libdir}/%{name}/verse
+install -m 755 build_std/bin/verse_server %{buildroot}%{_libdir}/%{name}/verse_server
 %endif
 %if %{build_player}
-install -m 755 build/bin/blenderplayer %{buildroot}%{_libdir}/%{name}/%{truename}player
-ln -s %{_libdir}/%{name}/%{truename}player %{buildroot}%{_bindir}/%{name}player
+install -m 755 build_std/bin/blenderplayer %{buildroot}%{_libdir}/%{name}/blenderplayer
+ln -s %{_libdir}/%{name}/%{name}player %{buildroot}%{_bindir}/%{name}player
 %endif
-install -m 755 build_mmx/bin/blender %{buildroot}%{_libdir}/%{name}/%{truename}
+install -m 755 build_std/bin/blender %{buildroot}%{_libdir}/%{name}/blender
 %ifarch %{ix86}
-install -m 755 build/bin/blender %{buildroot}%{_libdir}/%{name}/%{truename}.sse
+install -m 755 build/bin/blender %{buildroot}%{_libdir}/%{name}/blender.sse
 %endif
 install -m 755 blender-wrapper %{buildroot}%{_bindir}/%{name}
 sed -i "s,SPECDEFINED,%_libdir,g" %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/%{name}
 cp -p %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/%{name}nodri
 perl -pi -e 's@^\s*\$\{BLENDER_LIBDIR\}/%{name}/blender@LIBGL_ALWAYS_INDIRECT=1 \$\{BLENDER_LIBDIR\}/%{name}/blender@g' %{buildroot}%{_bindir}/%{name}nodri
-cp -a ./installdir/.blender/scripts %{buildroot}%{_libdir}/%{name}
-cp -a ./installdir/.blender/locale  %{buildroot}%{_datadir}
-install -p -m 644 ./installdir/.blender/.Blanguages %{buildroot}%{_libdir}/%{name}
-install -p -m 644 ./installdir/.blender/.bfont.ttf %{buildroot}%{_libdir}/%{name}
+cp -a build_std/bin/.blender/scripts %{buildroot}%{_libdir}/%{name}
+cp -a build_std/bin/.blender/locale  %{buildroot}%{_datadir}
+install -p -m 644 build_std/bin/.blender/.Blanguages %{buildroot}%{_libdir}/%{name}
+install -p -m 644 build_std/bin/.blender/.bfont.ttf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/VERSION %{buildroot}%{_libdir}/%{name}
 #install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
-install -p -m 644 ./installdir/copyright.txt %{buildroot}%{_libdir}/%{name}
-install -p -m 644 ./installdir/BlenderQuickStart.pdf %{buildroot}%{_libdir}/%{name}
-install -p -m 644 ./installdir/blender.html %{buildroot}%{_libdir}/%{name}
+install -p -m 644 release/text/copyright.txt %{buildroot}%{_libdir}/%{name}
+install -p -m 644 release/text/BlenderQuickStart.pdf %{buildroot}%{_libdir}/%{name}
+install -p -m 644 release/text/blender.html %{buildroot}%{_libdir}/%{name}
 install -p -m 644 source/blender/python/api2_2x/doc/*.py %{buildroot}%{_libdir}/%{name}/scripts
 install -d -m 755 %{buildroot}%{_libdir}/%{name}/plugins/sequence
 install -pD -m 644 release/plugins/sequence/*.so %{buildroot}%{_libdir}/%{name}/plugins/sequence
@@ -543,22 +528,6 @@ Type=Application
 Categories=3DGraphics;Graphics;Viewer;
 EOF
 
-# mimelnk
-cat > %{buildroot}%{_datadir}/mimelnk/application/x-_blender.desktop <<EOF
-[Desktop Entry]
-Encoding=UTF-8
-Type=MimeType
-MimeType=application/x-blender
-Icon=blender
-Patterns=*.blend;*.BLEND;
-Comment=Blender 3d format
-EOF
-
-%if %{mdkversion} >= 200900
-cp -p %{buildroot}%{_datadir}/mimelnk/application/x-_blender.desktop \
-	%{buildroot}%{kde3altpath}/share/mimelnk/application/
-%endif
-
 # icons
 install -m644 %{SOURCE11} -D %{buildroot}%{_miconsdir}/%{name}.png
 install -m644 %{SOURCE12} -D %{buildroot}%{_iconsdir}/%{name}.png
@@ -571,6 +540,8 @@ install -m644 %{SOURCE16} -D %{buildroot}%{_liconsdir}/%{name}nodri.png
 export DONT_STRIP=1
 export EXCLUDE_FROM_STRIP=".*"
 %endif
+
+%find_lang %name
 
 %clean
 rm -rf %{buildroot}
@@ -587,25 +558,20 @@ rm -rf %{buildroot}
 %{clean_desktop_database} 
 %endif
 
-%files
+%files -f %name.lang
 %defattr(-,root,root)
-%doc ChangeLog README doc/*.txt test%{testver}
+%doc README doc/*.txt test%{testver}
 %{_bindir}/*
 %{_datadir}/applications/*
-%{_datadir}/mimelnk/application/x-_blender.desktop
-%if %{mdkversion} >= 200900
-%{kde3altpath}/share/mimelnk/application/x-_blender.desktop
-%endif
-%{_datadir}/locale/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
 %dir %{_libdir}/%{name}/scripts
-%{_libdir}/%{name}/%{truename}
+%{_libdir}/%{name}/%{name}
 %ifarch %{ix86}
-%{_libdir}/%{name}/%{truename}.sse
+%{_libdir}/%{name}/%{name}.sse
 %endif
-%{_libdir}/%{name}/verse
-%{_libdir}/%{name}/%{truename}player
+%{_libdir}/%{name}/verse_server
+%{_libdir}/%{name}/blenderplayer
 %{_libdir}/%{name}/.bfont.ttf
 %{_libdir}/%{name}/.Blanguages
 %{_libdir}/%{name}/VERSION
