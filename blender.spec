@@ -138,7 +138,7 @@ Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
 Patch0:		blender-2.41-openal-fix.patch
 Patch1:		blender-2.49b-libffmpeg-system.patch
-Patch2:		blender-2.46-lib64.patch
+Patch2:		blender-2.49b-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
 Patch4:		blender-2.46-libquicktime.patch
 Patch10:	blender-2.49b-O3opt.patch
