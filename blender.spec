@@ -270,9 +270,6 @@ This version is built with debug enabled.
 #patch42 -p0 -b .str
 %patch43 -p0 -b .CVE-2008-4863
 
-# Fix pt_BR
-sed -i "s,pt_br,pt_BR,g" bin/.blender/.Blanguages
-
 %build
 %if %{build_debug}
 %define debug_flags -g
