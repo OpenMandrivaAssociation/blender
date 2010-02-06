@@ -368,7 +368,7 @@ popd
 # build mmx version
 %if %{build_fullopt}
 %ifarch %{ix86}
-export CFLAGS ="%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
+export CFLAGS="%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
 export CXXFLAGS="%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
 %else
 export CFLAGS="%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
@@ -395,7 +395,7 @@ mv build build_std
 # build sse version
 %ifarch %{ix86}
 %if %{build_fullopt}
-export CCFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
+export CFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
 export CXXFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
 %endif
 %cmake \
