@@ -161,15 +161,14 @@ Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
 # Disable x264, xvid and mp3lame support in blender's ffmpeg: these
 # cannot be in the MDV repos for legal reasons - AdamW 2008/09
 Patch41:	blender-2.49b-legal.patch
-Patch42:	blender-2.48a-fix-str-fmt.patch
+Patch42:	blender-2.49b-fix-str-fmt.patch
 Patch43:	blender-2.48a-CVE-2008-4863.diff
+Patch44:	blender-2.49b-build-static.patch
+Patch45:	blender-2.49b-cmake-link.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires:	scons
-%if %{mdkversion} >= 200810
-BuildRequires:	python-scons
-%endif
+BuildRequires:	cmake
 BuildRequires:	openal-devel >= 0.0.6-9mdk
 %if %{mdkversion} >= 200810
 BuildRequires:	OpenEXR-devel >= 1.6.1
@@ -267,10 +266,13 @@ This version is built with debug enabled.
 %if !%{build_systemffmpeg} && %{avoid_dunno_patent}
 %patch41 -p1 -b .legal
 %endif
-#patch42 -p0 -b .str
+%patch42 -p0 -b .str
 %patch43 -p0 -b .CVE-2008-4863
+%patch44 -p0 -b .static
+%patch45 -p0 -b .link
 
 %build
+%if 0
 %if %{build_debug}
 %define debug_flags -g
 %define scons_debug BF_DEBUG=1
@@ -278,6 +280,8 @@ This version is built with debug enabled.
 %define debug_flags %{nil}
 %define scons_debug BF_DEBUG=0
 %endif
+
+%define Werror_cflags %{nil}
 
 cat > user-config.py <<EOF
 BF_GETTEXT_LIBPATH = '\${BF_GETTEXT}/%{_lib}'
@@ -370,9 +374,69 @@ pushd release/plugins
    chmod +x bmake
    %make
 popd
+%endif
 
-find ./test%{testver} -type f -print0|xargs -0 chmod 644
-find ./test%{testver} -type d -print0|xargs -0 chmod 755 
+# build mmx version
+%if %{build_fullopt}
+%ifarch %{ix86}
+export CFLAGS ="%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
+export CXXFLAGS="%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
+%else
+export CFLAGS="%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
+export CXXFLAGS="%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}"
+%endif
+%endif
+%cmake \
+	-DWITH_PLAYER=ON \
+	-DWITH_GAMEENGINE=ON \
+	-DWITH_BULLET=ON \
+	-DWITH_INTERNATIONAL=ON \
+	-DWITH_VERSE=OFF \
+	-DWITH_ELBEEM=ON \
+	-DWITH_QUICKTIME=OFF \
+	-DWITH_OPENEXR=ON \
+	-DWITH_FFMPEG=ON \
+	-DWITH_OPENJPEG=ON \
+	-DWITH_OPENAL=ON \
+	-DWITH_WEBPLUGIN=OFF
+%make
+cd ..
+mv build build_mmx
+
+# build sse version
+%if %{build_fullopt}
+export CCFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
+export CXXFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
+%endif
+%cmake \
+        -DWITH_PLAYER=ON \
+        -DWITH_GAMEENGINE=ON \
+        -DWITH_BULLET=ON \
+        -DWITH_INTERNATIONAL=ON \
+        -DWITH_VERSE=OFF \
+        -DWITH_ELBEEM=ON \
+        -DWITH_QUICKTIME=OFF \
+        -DWITH_OPENEXR=ON \
+        -DWITH_FFMPEG=ON \
+        -DWITH_OPENJPEG=ON \
+        -DWITH_OPENAL=ON \
+        -DWITH_WEBPLUGIN=OFF
+%make
+cd ..
+
+# Build plugins
+pushd release/plugins
+   if [ -d ./include ]; then
+        rm -rf include
+   fi
+   ln -s ../../source/blender/blenpluginapi include
+   chmod +x bmake
+   %make
+popd
+
+
+#find ./test%{testver} -type f -print0|xargs -0 chmod 644
+#find ./test%{testver} -type d -print0|xargs -0 chmod 755 
 
 %install
 rm -rf %{buildroot}
@@ -408,15 +472,15 @@ install -d -m 755 \
 		%{buildroot}%{_datadir}/mimelnk/application/
 
 %if %{build_verse}
-install -m 755 ./installdir/verse %{buildroot}%{_libdir}/%{name}/verse
+install -m 755 build/bin/verse %{buildroot}%{_libdir}/%{name}/verse
 %endif
 %if %{build_player}
-install -m 755 ./installdir/blenderplayer %{buildroot}%{_libdir}/%{name}/%{truename}player
+install -m 755 build/bin/blenderplayer %{buildroot}%{_libdir}/%{name}/%{truename}player
 ln -s %{_libdir}/%{name}/%{truename}player %{buildroot}%{_bindir}/%{name}player
 %endif
-install -m 755 ./installdir/blender %{buildroot}%{_libdir}/%{name}/%{truename}
+install -m 755 build_mmx/bin/blender %{buildroot}%{_libdir}/%{name}/%{truename}
 %ifarch %{ix86}
-install -m 755 ./blender.sse %{buildroot}%{_libdir}/%{name}/%{truename}.sse
+install -m 755 build/bin/blender %{buildroot}%{_libdir}/%{name}/%{truename}.sse
 %endif
 install -m 755 blender-wrapper %{buildroot}%{_bindir}/%{name}
 sed -i "s,SPECDEFINED,%_libdir,g" %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/%{name}
