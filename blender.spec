@@ -146,7 +146,7 @@ Patch13:	blender-2.48-python25.patch
 Patch14:	blender-2.49b-alut.patch
 Patch17:	blender-2.48a-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
-Patch19:	blender-2.46-maxthreads.patch
+Patch19:	blender-2.49b-maxthreads.patch
 Patch20:	blender-2.44-force-python24.patch
 Patch21:	blender-2.44-boxpack2d-missed.patch
 Patch22:	blender-2.49b-bug6811.patch
