@@ -272,7 +272,6 @@ This version is built with debug enabled.
 %patch45 -p0 -b .link
 
 %build
-%if 0
 %if %{build_debug}
 %define debug_flags -g
 %define scons_debug BF_DEBUG=1
@@ -281,6 +280,7 @@ This version is built with debug enabled.
 %define scons_debug BF_DEBUG=0
 %endif
 
+%if 0
 %define Werror_cflags %{nil}
 
 cat > user-config.py <<EOF
@@ -404,6 +404,7 @@ cd ..
 mv build build_mmx
 
 # build sse version
+%ifarch %{ix86}
 %if %{build_fullopt}
 export CCFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
 export CXXFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
@@ -423,6 +424,7 @@ export CXXFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %pr
         -DWITH_WEBPLUGIN=OFF
 %make
 cd ..
+%endif
 
 # Build plugins
 pushd release/plugins
