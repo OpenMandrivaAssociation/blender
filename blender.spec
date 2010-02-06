@@ -1,8 +1,5 @@
 %define testver		249
-# what is relver? why don't we have that ./installdir/release_%{relver}.txt file anymore?
-%define	relver		251
 %define name		blender
-%define kde3altpath	/opt/kde3
 
 %define build_debug     0
 %{?_with_debug: %{expand: %%global build_debug 1}}
@@ -89,36 +86,30 @@
 %endif
 
 %if %{build_verse}
-%define verse_bool 'true'
+%define verse_bool 'ON'
 %else
-%define verse_bool 'false'
+%define verse_bool 'OFF'
 %endif
 
 %if %{build_gameeng}
-%define gameeng_bool 'true'
+%define gameeng_bool 'ON'
 %else
-%define gameeng_bool 'false'
+%define gameeng_bool 'OFF'
 %endif
 
 %if %{build_player}
-%define player_bool 'true'
+%define player_bool 'ON'
 %else
-%define player_bool 'false'
+%define player_bool 'OFF'
 %endif
 
-%define ffmpeg_bool 'true'
+%define ffmpeg_bool 'ON'
 %define redcode_bool 'false'
 
-%if %{mdkversion} <= 200610
-%define opengl_libpath	'%{_prefix}/X11R6/%{_lib}'
-%else
-%define	opengl_libpath	'%{_libdir}'
-%endif
-
 %if %{mdkversion} >= 200800
-%define openmp_bool 'true'
+%define openmp_bool 'ON'
 %else
-%define openmp_bool 'false'
+%define openmp_bool 'OFF'
 %endif
 
 Name:		%{name}
@@ -135,18 +126,13 @@ Source13:	blender-48x48.png
 Source14:	blendernodri-16x16.png
 Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
-Patch0:		blender-2.41-openal-fix.patch
 Patch1:		blender-2.49b-libffmpeg-system.patch
 Patch2:		blender-2.49b-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
 Patch4:		blender-2.46-libquicktime.patch
 Patch10:	blender-2.49b-O3opt.patch
-Patch13:	blender-2.48-python25.patch
-Patch14:	blender-2.49b-alut.patch
-Patch17:	blender-2.48a-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.49b-maxthreads.patch
-Patch20:	blender-2.44-force-python24.patch
 Patch21:	blender-2.44-boxpack2d-missed.patch
 Patch22:	blender-2.49b-bug6811.patch
 Patch23:	blender-2.44-more-than-six-subsurf.patch
@@ -154,7 +140,6 @@ Patch24:	blender-2.45-import-dxf-logpath.patch
 Patch34:	blender-2.48a-deinterlace.patch
 Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
-Patch39:	blender-2.46-scons-new.patch
 # From Fedora: fix CVE-2008-1103-1 - AdamW 2008/09 #44196
 Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
 # Disable x264, xvid and mp3lame support in blender's ffmpeg: these
@@ -219,7 +204,6 @@ This version is built with debug enabled.
 
 %prep
 %setup -q -n %{name}-%{version} -a 2
-#patch0 -p1 -b .openal
 %if %{mdkversion} >= 200710
 %patch1 -p1 -b .ffmpeg
 %endif
@@ -229,15 +213,6 @@ This version is built with debug enabled.
 %patch3 -p1 -b .yafray
 #%patch4 -p1 -b .quicktime
 %patch10 -p0 -b .O3opt
-%if %{mdkversion} >= 200710
-#patch13 -p1 -b .python
-%else
-%patch20 -p1 -b .python24
-%endif
-%if %{mdkversion} >= 200700
-%patch14 -p1 -b .alut
-%endif
-#patch17 -p1 -b .chglog
 %patch18 -p1 -b .zero_threads
 %patch19 -p1 -b .maxthreads
 %patch21 -p1
@@ -249,7 +224,6 @@ This version is built with debug enabled.
 %if %{mdkversion} >= 200900 && %{build_systemffmpeg}
 %patch38 -p1 -b .ffmpegnew
 %endif
-#patch39 -p1 -b .sconsnew
 %patch40 -p1 -b .cve200811031
 %if !%{build_systemffmpeg} && %{avoid_dunno_patent}
 %patch41 -p1 -b .legal
@@ -263,106 +237,8 @@ This version is built with debug enabled.
 %build
 %if %{build_debug}
 %define debug_flags -g
-%define scons_debug BF_DEBUG=1
 %else
 %define debug_flags %{nil}
-%define scons_debug BF_DEBUG=0
-%endif
-
-%if 0
-%define Werror_cflags %{nil}
-
-cat > user-config.py <<EOF
-BF_GETTEXT_LIBPATH = '\${BF_GETTEXT}/%{_lib}'
-WITH_BF_FFMPEG = %{ffmpeg_bool}
-BF_FFMPEG = %{ffmpeg_source}
-BF_FFMPEG_LIB = %{ffmpeg_lib}
-BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
-WITH_BF_VERSE = %{verse_bool}
-WITH_BF_GAMEENGINE = %{gameeng_bool}
-WITH_BF_PLAYER = %{player_bool}
-BF_OPENGL_LIBPATH = %{opengl_libpath}
-WITH_BF_OPENMP = %{openmp_bool}
-WITH_BF_REDCODE = %{redcode_bool}
-%if %{build_systembullet}
-BF_BULLET = '%{_prefix}'
-BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
-BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
-%endif
-#
-BF_BUILDDIR = './builddir'
-BF_INSTALLDIR = './installdir'
-%if %{build_fullopt}
-%ifarch %{ix86}
-CCFLAGS  = "%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 -ffast-math -mmmx -msse -msse2 -mfpmath=sse %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-REL_CFLAGS  = "-O3".split()
-REL_CCFLAGS = "-O3".split()
-%else
-CCFLAGS  = "%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-REL_CFLAGS  = "-O3".split()
-REL_CCFLAGS = "-O3".split()
-%endif
-%endif
-%if %{build_profiling}
-BF_PROFILE = 'true'
-BF_PROFILE_FLAGS= "%{profiling_flags}".split();
-%endif
-EOF
-
-cat > user-config.py.sse <<EOF
-BF_GETTEXT_LIBPATH = '\${BF_GETTEXT}/%{_lib}'
-WITH_BF_FFMPEG = %{ffmpeg_bool}
-BF_FFMPEG = %{ffmpeg_source}
-BF_FFMPEG_LIB = %{ffmpeg_lib}
-BF_FFMPEG_LIBPATH = '\${BF_FFMPEG}/%{_lib}'
-WITH_BF_VERSE = %{verse_bool}
-WITH_BF_GAMEENGINE = %{gameeng_bool}
-WITH_BF_PLAYER = %{player_bool}
-BF_OPENGL_LIBPATH = %{opengl_libpath}
-WITH_BF_OPENMP = %{openmp_bool}
-WITH_BF_REDCODE = %{redcode_bool}
-%if %{build_systembullet}
-BF_BULLET = '%{_prefix}'
-BF_BULLET_INC = '\${BF_BULLET}/include/bullet'
-BF_BULLET_LIB = 'bulletdynamics bulletcollision bulletmath'
-%endif
-BF_BUILDDIR = './builddir'
-BF_INSTALLDIR = './installdir'
-%if %{build_fullopt}
-CCFLAGS  = "%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-CXXFLAGS = "%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}".split()
-REL_CFLAGS  = "-O3".split()
-REL_CCFLAGS = "-O3".split()
-%if %{build_profiling}
-BF_PROFILE = 'true'
-BF_PROFILE_FLAGS= "%{profiling_flags}".split();
-%endif
-%endif
-EOF
-
-%ifarch %{ix86}
-cp -p user-config.py user-config.py.std
-cp -p user-config.py.sse user-config.py
-scons -c %scons_debug BF_QUIET=0
-scons %scons_debug %scons_smp BF_QUIET=0
-cp -p builddir/bin/blender blender.sse
-cp -p user-config.py.std user-config.py
-scons -c %scons_debug BF_QUIET=0
-%endif
-
-scons %scons_debug %scons_smp BF_QUIET=0
-
-# Build plugins
-pushd release/plugins
-   if [ -d ./include ]; then
-	rm -rf include
-   fi
-   ln -s ../../source/blender/blenpluginapi include
-   chmod +x bmake
-   %make
-popd
 %endif
 
 # build mmx version
@@ -376,17 +252,18 @@ export CXXFLAGS="%{optflags} -O3 -ffast-math %{debug_flags} -funsigned-char -fno
 %endif
 %endif
 %cmake \
-	-DWITH_PLAYER=ON \
-	-DWITH_GAMEENGINE=ON \
+	-DWITH_PLAYER=%{player_bool} \
+	-DWITH_GAMEENGINE=%{gameeng_bool} \
 	-DWITH_BULLET=ON \
 	-DWITH_INTERNATIONAL=ON \
-	-DWITH_VERSE=ON \
+	-DWITH_VERSE=%{verse_bool} \
 	-DWITH_ELBEEM=ON \
 	-DWITH_QUICKTIME=OFF \
 	-DWITH_OPENEXR=ON \
-	-DWITH_FFMPEG=ON \
+	-DWITH_FFMPEG=%{ffmpeg_bool} \
 	-DWITH_OPENJPEG=ON \
 	-DWITH_OPENAL=ON \
+	-DWITH_OPENMP=%{openmp_bool} \
 	-DWITH_WEBPLUGIN=OFF
 %make
 cd ..
@@ -399,17 +276,18 @@ export CFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %prof
 export CXXFLAGS="%{optflags} -O3 -ffast-math -msse -mfpmath=sse %debug_flags %profiling_flags -funsigned-char -fno-strict-aliasing %{protector_flags}"
 %endif
 %cmake \
-        -DWITH_PLAYER=ON \
-        -DWITH_GAMEENGINE=ON \
+        -DWITH_PLAYER=%{player_bool} \
+        -DWITH_GAMEENGINE=%{gameeng_bool} \
         -DWITH_BULLET=ON \
         -DWITH_INTERNATIONAL=ON \
-        -DWITH_VERSE=ON \
+        -DWITH_VERSE=%{verse_bool} \
         -DWITH_ELBEEM=ON \
         -DWITH_QUICKTIME=OFF \
         -DWITH_OPENEXR=ON \
-        -DWITH_FFMPEG=ON \
+        -DWITH_FFMPEG=%{ffmpeg_bool} \
         -DWITH_OPENJPEG=ON \
         -DWITH_OPENAL=ON \
+	-DWITH_OPENMP=%{openmp_bool} \
         -DWITH_WEBPLUGIN=OFF
 %make
 cd ..
@@ -478,7 +356,6 @@ cp -a build_std/bin/.blender/locale  %{buildroot}%{_datadir}
 install -p -m 644 build_std/bin/.blender/.Blanguages %{buildroot}%{_libdir}/%{name}
 install -p -m 644 build_std/bin/.blender/.bfont.ttf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/VERSION %{buildroot}%{_libdir}/%{name}
-#install -p -m 644 ./installdir/release_%{relver}.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/text/copyright.txt %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/text/BlenderQuickStart.pdf %{buildroot}%{_libdir}/%{name}
 install -p -m 644 release/text/blender.html %{buildroot}%{_libdir}/%{name}
@@ -578,7 +455,6 @@ rm -rf %{buildroot}
 %{_libdir}/%{name}/BlenderQuickStart.pdf
 %{_libdir}/%{name}/blender.html
 %{_libdir}/%{name}/copyright.txt
-#%{_libdir}/%{name}/release_%{relver}.txt
 %{_libdir}/%{name}/scripts/*
 %{_libdir}/%{name}/plugins/sequence
 %{_libdir}/%{name}/plugins/texture
