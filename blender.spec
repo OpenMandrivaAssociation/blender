@@ -141,7 +141,7 @@ Patch1:		blender-2.49b-libffmpeg-system.patch
 Patch2:		blender-2.46-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
 Patch4:		blender-2.46-libquicktime.patch
-Patch10:	blender-2.48a-O3opt.patch
+Patch10:	blender-2.49b-O3opt.patch
 Patch13:	blender-2.48-python25.patch
 Patch14:	blender-2.49b-alut.patch
 Patch17:	blender-2.48a-changelog.patch
