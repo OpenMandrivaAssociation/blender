@@ -173,6 +173,7 @@ BuildRequires:	libx11-devel
 BuildRequires:	libxi-devel
 BuildRequires:	yasm
 BuildRequires:	zlib-devel
+BuildRequires:	libgomp-devel
 Requires:	python-imaging >= 1.1.4
 Requires:	yafray
 
