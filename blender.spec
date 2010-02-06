@@ -129,8 +129,6 @@ Source16:	blendernodri-48x48.png
 Patch1:		blender-2.49b-libffmpeg-system.patch
 Patch2:		blender-2.49b-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
-Patch4:		blender-2.46-libquicktime.patch
-Patch10:	blender-2.49b-O3opt.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.49b-maxthreads.patch
 Patch21:	blender-2.44-boxpack2d-missed.patch
@@ -142,9 +140,6 @@ Patch37:	blender-2.46-arith-optz.patch
 Patch38:	blender-2.46-ffmpeg-new.patch
 # From Fedora: fix CVE-2008-1103-1 - AdamW 2008/09 #44196
 Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
-# Disable x264, xvid and mp3lame support in blender's ffmpeg: these
-# cannot be in the MDV repos for legal reasons - AdamW 2008/09
-Patch41:	blender-2.49b-legal.patch
 Patch42:	blender-2.49b-fix-str-fmt.patch
 Patch43:	blender-2.48a-CVE-2008-4863.diff
 Patch44:	blender-2.49b-build-static.patch
@@ -211,8 +206,6 @@ This version is built with debug enabled.
 %patch2 -p1 -b .lib64
 %endif
 %patch3 -p1 -b .yafray
-#%patch4 -p1 -b .quicktime
-%patch10 -p0 -b .O3opt
 %patch18 -p1 -b .zero_threads
 %patch19 -p1 -b .maxthreads
 %patch21 -p1
@@ -225,9 +218,6 @@ This version is built with debug enabled.
 %patch38 -p1 -b .ffmpegnew
 %endif
 %patch40 -p1 -b .cve200811031
-%if !%{build_systemffmpeg} && %{avoid_dunno_patent}
-%patch41 -p1 -b .legal
-%endif
 %patch42 -p0 -b .str
 %patch43 -p0 -b .CVE-2008-4863
 %patch44 -p0 -b .static
