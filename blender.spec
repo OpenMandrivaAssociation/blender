@@ -143,7 +143,7 @@ Patch3:		blender-2.42-forceyafrayplug.patch
 Patch4:		blender-2.46-libquicktime.patch
 Patch10:	blender-2.48a-O3opt.patch
 Patch13:	blender-2.48-python25.patch
-Patch14:	blender-2.40b-alut.patch
+Patch14:	blender-2.49b-alut.patch
 Patch17:	blender-2.48a-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.46-maxthreads.patch
