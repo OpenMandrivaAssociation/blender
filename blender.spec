@@ -1,4 +1,4 @@
-%define testver		248
+%define testver		249
 # what is relver? why don't we have that ./installdir/release_%{relver}.txt file anymore?
 %define	relver		251
 %define name		blender
@@ -123,11 +123,11 @@
 %endif
 
 Name:		%{name}
-Version:	2.48a
-Release:	%mkrel 12
+Version:	2.49b
+Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
-Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
+Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
 Source1: 	blender-wrapper
 Source2:	http://download.blender.org/demo/test/test%{testver}.zip
 Source11:	blender-16x16.png
@@ -137,19 +137,19 @@ Source14:	blendernodri-16x16.png
 Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
 Patch0:		blender-2.41-openal-fix.patch
-Patch1:		blender-2.48-libffmpeg-system.patch
+Patch1:		blender-2.49b-libffmpeg-system.patch
 Patch2:		blender-2.46-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
 Patch4:		blender-2.46-libquicktime.patch
 Patch10:	blender-2.48a-O3opt.patch
 Patch13:	blender-2.48-python25.patch
-Patch14:	blender-2.48-alut.patch
+Patch14:	blender-2.40b-alut.patch
 Patch17:	blender-2.48a-changelog.patch
 Patch18:	blender-2.46-yafray_zero_threads.patch
 Patch19:	blender-2.46-maxthreads.patch
 Patch20:	blender-2.44-force-python24.patch
 Patch21:	blender-2.44-boxpack2d-missed.patch
-Patch22:	blender-2.46-bug6811.patch
+Patch22:	blender-2.49b-bug6811.patch
 Patch23:	blender-2.44-more-than-six-subsurf.patch
 Patch24:	blender-2.45-import-dxf-logpath.patch
 Patch34:	blender-2.48a-deinterlace.patch
@@ -160,7 +160,7 @@ Patch39:	blender-2.46-scons-new.patch
 Patch40:	blender-2.46rc3-cve-2008-1103-1.patch
 # Disable x264, xvid and mp3lame support in blender's ffmpeg: these
 # cannot be in the MDV repos for legal reasons - AdamW 2008/09
-Patch41:	blender-2.48a-legal.patch
+Patch41:	blender-2.49b-legal.patch
 Patch42:	blender-2.48a-fix-str-fmt.patch
 Patch43:	blender-2.48a-CVE-2008-4863.diff
 URL:		http://www.blender.org/
@@ -232,7 +232,7 @@ This version is built with debug enabled.
 
 %prep
 %setup -q -n %{truename}-%{version} -a 2
-%patch0 -p1 -b .openal
+#patch0 -p1 -b .openal
 %if %{mdkversion} >= 200710
 %patch1 -p1 -b .ffmpeg
 %endif
@@ -243,14 +243,14 @@ This version is built with debug enabled.
 #%patch4 -p1 -b .quicktime
 %patch10 -p0 -b .O3opt
 %if %{mdkversion} >= 200710
-%patch13 -p1 -b .python
+#patch13 -p1 -b .python
 %else
 %patch20 -p1 -b .python24
 %endif
 %if %{mdkversion} >= 200700
 %patch14 -p1 -b .alut
 %endif
-%patch17 -p1 -b .chglog
+#patch17 -p1 -b .chglog
 %patch18 -p1 -b .zero_threads
 %patch19 -p1 -b .maxthreads
 %patch21 -p1
@@ -262,12 +262,12 @@ This version is built with debug enabled.
 %if %{mdkversion} >= 200900 && %{build_systemffmpeg}
 %patch38 -p1 -b .ffmpegnew
 %endif
-%patch39 -p1 -b .sconsnew
+#patch39 -p1 -b .sconsnew
 %patch40 -p1 -b .cve200811031
 %if !%{build_systemffmpeg} && %{avoid_dunno_patent}
 %patch41 -p1 -b .legal
 %endif
-%patch42 -p0 -b .str
+#patch42 -p0 -b .str
 %patch43 -p0 -b .CVE-2008-4863
 
 # Fix pt_BR
