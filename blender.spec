@@ -144,7 +144,7 @@
 
 Name:		%{name}
 Version:	2.49b
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -220,7 +220,11 @@ BuildRequires:	python-devel >= 2.4
 BuildRequires:	SDL-devel
 BuildRequires:	smpeg-devel
 BuildRequires:	subversion
+%if %{mdkversion} > 200910
+BuildRequires:	tiff-devel
+%else
 BuildRequires:	%{mklibname tiff 3}-devel
+%endif
 BuildRequires:	X11-devel
 BuildRequires:	yasm
 BuildRequires:  nasm
