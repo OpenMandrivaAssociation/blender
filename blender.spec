@@ -532,6 +532,8 @@ export DONT_STRIP=1
 export EXCLUDE_FROM_STRIP=".*"
 %endif
 
+%find_lang %name
+
 %clean
 rm -rf %{buildroot}
 
@@ -547,7 +549,7 @@ rm -rf %{buildroot}
 %{clean_desktop_database} 
 %endif
 
-%files
+%files -f %name.lang
 %defattr(-,root,root)
 %doc ChangeLog README doc/*.txt test%{testver}
 %{_bindir}/*
@@ -556,7 +558,6 @@ rm -rf %{buildroot}
 %if %{mdkversion} >= 200900
 %{kde3altpath}/share/mimelnk/application/x-_blender.desktop
 %endif
-%{_datadir}/locale/*
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
 %dir %{_libdir}/%{name}/scripts
