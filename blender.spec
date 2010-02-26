@@ -428,6 +428,7 @@ install -d -m 755 \
 		%{buildroot}%{_bindir} \
 		%{buildroot}%{_libdir}/%{name} \
 		%{buildroot}%{_datadir}/ \
+		%{buildroot}%{_datadir}/mime/packages/ \
 %if %{mdkversion} >= 200900
 		%{buildroot}%{kde3altpath}/share/mimelnk/application/ \
 %endif
@@ -504,6 +505,17 @@ Categories=3DGraphics;Graphics;Viewer;
 EOF
 
 # mimelnk
+cat > %{buildroot}%{_datadir}/mime/packages/blender.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+<mime-type type="application/x-blender">
+<comment xml:lang="en">Blender Scene</comment>
+<glob pattern="*.blend" />
+</mime-type>
+</mime-info>
+EOF
+
+%if %{mdkversion} < 200900
 cat > %{buildroot}%{_datadir}/mimelnk/application/x-_blender.desktop <<EOF
 [Desktop Entry]
 Encoding=UTF-8
@@ -513,10 +525,13 @@ Icon=blender
 Patterns=*.blend;*.BLEND;
 Comment=Blender 3d format
 EOF
+%endif
 
 %if %{mdkversion} >= 200900
+%if %{mdkversion} < 201000
 cp -p %{buildroot}%{_datadir}/mimelnk/application/x-_blender.desktop \
 	%{buildroot}%{kde3altpath}/share/mimelnk/application/
+%endif
 %endif
 
 # icons
@@ -540,12 +555,14 @@ rm -rf %{buildroot}
 %if %mdkversion < 200900
 %post
 %{update_menus}
+%{update_mime_database}
 %{update_desktop_database} 
 %endif
 
 %if %mdkversion < 200900
 %postun
 %{clean_menus}
+%{update_mime_database}
 %{clean_desktop_database} 
 %endif
 
@@ -554,9 +571,14 @@ rm -rf %{buildroot}
 %doc ChangeLog README doc/*.txt test%{testver}
 %{_bindir}/*
 %{_datadir}/applications/*
+%{_datadir}/mime/packages/blender.xml
+%if %{mdkversion} < 200900
 %{_datadir}/mimelnk/application/x-_blender.desktop
+%endif
 %if %{mdkversion} >= 200900
+%if %{mdkversion} < 201000
 %{kde3altpath}/share/mimelnk/application/x-_blender.desktop
+%endif
 %endif
 %dir %{_libdir}/%{name}
 %dir %{_libdir}/%{name}/plugins
