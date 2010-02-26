@@ -525,12 +525,17 @@ Icon=blender
 Patterns=*.blend;*.BLEND;
 Comment=Blender 3d format
 EOF
-%endif
-
-%if %{mdkversion} >= 200900
+%else
 %if %{mdkversion} < 201000
-cp -p %{buildroot}%{_datadir}/mimelnk/application/x-_blender.desktop \
-	%{buildroot}%{kde3altpath}/share/mimelnk/application/
+cat > %{buildroot}%{kde3altpath}/share/mimelnk/application/x-_blender.desktop <<EOF
+[Desktop Entry]
+Encoding=UTF-8
+Type=MimeType
+MimeType=application/x-blender
+Icon=blender
+Patterns=*.blend;*.BLEND;
+Comment=Blender 3d format
+EOF
 %endif
 %endif
 
@@ -574,8 +579,7 @@ rm -rf %{buildroot}
 %{_datadir}/mime/packages/blender.xml
 %if %{mdkversion} < 200900
 %{_datadir}/mimelnk/application/x-_blender.desktop
-%endif
-%if %{mdkversion} >= 200900
+%else
 %if %{mdkversion} < 201000
 %{kde3altpath}/share/mimelnk/application/x-_blender.desktop
 %endif
