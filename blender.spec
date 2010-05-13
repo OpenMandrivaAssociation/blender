@@ -144,7 +144,7 @@
 
 Name:		%{name}
 Version:	2.49b
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.bz2
@@ -156,6 +156,7 @@ Source13:	blender-48x48.png
 Source14:	blendernodri-16x16.png
 Source15:	blendernodri-32x32.png
 Source16:	blendernodri-48x48.png
+Source17:	http://upload.wikimedia.org/wikipedia/commons/6/65/Blender_logo.png
 Patch1:		blender-2.49-libffmpeg-system.patch
 Patch2:		blender-2.49-lib64.patch
 Patch3:		blender-2.42-forceyafrayplug.patch
@@ -232,6 +233,7 @@ BuildRequires:	zlib-devel
 %if %{mdkversion} >= 200900 && %{build_ogg}
 BuildRequires:	libtheora-devel
 %endif
+BuildRequires:	ImageMagick
 Requires:	python-imaging >= 1.1.4
 Requires:	libtiff
 %if %{mdkversion} >= 200900
@@ -547,6 +549,12 @@ install -m644 %{SOURCE14} -D %{buildroot}%{_miconsdir}/%{name}nodri.png
 install -m644 %{SOURCE15} -D %{buildroot}%{_iconsdir}/%{name}nodri.png
 install -m644 %{SOURCE16} -D %{buildroot}%{_liconsdir}/%{name}nodri.png
 
+# bigger size icons
+for i in 64x64 72x72 96x96 128x128 192x192 256x256; do
+	mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${i}
+	convert -resize ${i} %{SOURCE17} %{buildroot}%{_datadir}/icons/hicolor/${i}/%{name}.png
+done
+
 %if %build_debug
 export DONT_STRIP=1
 export EXCLUDE_FROM_STRIP=".*"
@@ -609,3 +617,9 @@ rm -rf %{buildroot}
 %{_miconsdir}/%{name}nodri.png
 %{_liconsdir}/%{name}nodri.png
 %{_iconsdir}/%{name}nodri.png
+%{_datadir}/icons/hicolor/64x64/%{name}.png
+%{_datadir}/icons/hicolor/72x72/%{name}.png
+%{_datadir}/icons/hicolor/96x96/%{name}.png
+%{_datadir}/icons/hicolor/128x128/%{name}.png
+%{_datadir}/icons/hicolor/192x192/%{name}.png
+%{_datadir}/icons/hicolor/256x256/%{name}.png
