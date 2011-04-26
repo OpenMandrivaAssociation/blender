@@ -1,6 +1,6 @@
 Name:		blender
 Version:	2.57
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
@@ -26,6 +26,7 @@ BuildRequires:	openal-devel
 BuildRequires:	libsamplerate-devel
 BuildRequires:	sndfile-devel
 BuildRequires:	tiff-devel
+BuildRequires:	python3-devel >= 3.2
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -48,7 +49,7 @@ implemented.
 %ifarch %{ix86}
 # build non-sse flavour
 %cmake -DWITH_INSTALL_PORTABLE=OFF -DWITH_PLAYER=ON \
-	-DWITH_PYTHON=OFF -DWITH_PYTHON_INSTALL=OFF \
+	-DWITH_PYTHON=ON -DWITH_PYTHON_INSTALL=OFF \
 	-DWITH_BUILTIN_GLEW=OFF \
 	-DWITH_CODEC_FFMPEG=ON -DWITH_CODEC_SNDFILE=ON \
 	-DWITH_RAYOPTIMIZATION=OFF
@@ -59,7 +60,7 @@ mv build non-sse
 
 #build sse flavour
 %cmake -DWITH_INSTALL_PORTABLE=OFF -DWITH_PLAYER=ON \
-	-DWITH_PYTHON=OFF -DWITH_PYTHON_INSTALL=OFF \
+	-DWITH_PYTHON=ON -DWITH_PYTHON_INSTALL=OFF \
 	-DWITH_BUILTIN_GLEW=OFF \
 	-DWITH_CODEC_FFMPEG=ON -DWITH_CODEC_SNDFILE=ON \
 	-DWITH_RAYOPTIMIZATION=ON
