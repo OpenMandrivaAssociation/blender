@@ -75,12 +75,12 @@ rm -rf %{buildroot}
 # Install hicolor icons.
 for i in 16x16 22x22 32x32 48x48 64x64 96x96 128x128 192x192 ; do
   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${i}/apps
-  install -pm 0644 release/freedesktop/icons/${i}/%{name}.png \
+  install -pm 0644 release/freedesktop/icons/${i}/apps/%{name}.png \
     %{buildroot}%{_datadir}/icons/hicolor/${i}/apps/%{name}.png
 done
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
-install -pm 0644 release/freedesktop/icons/scalable/%{name}.svg \
+install -pm 0644 release/freedesktop/icons/scalable/apps/%{name}.svg \
     %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %ifarch %{ix86}
