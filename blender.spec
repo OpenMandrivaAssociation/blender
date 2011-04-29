@@ -73,7 +73,7 @@ rm -rf %{buildroot}
 %makeinstall_std -C build
 
 # Install hicolor icons.
-for i in 16x16 22x22 32x32 48x48 64x64 96x96 128x128 192x192 ; do
+for i in 16x16 22x22 32x32 48x48 256x256 ; do
   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${i}/apps
   install -pm 0644 release/freedesktop/icons/${i}/apps/%{name}.png \
     %{buildroot}%{_datadir}/icons/hicolor/${i}/apps/%{name}.png
