@@ -1,6 +1,6 @@
 Name:		blender
 Version:	2.57b
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
@@ -114,14 +114,14 @@ rm -rf %{buildroot}
 
 %post
 if [ -x %{_gconftool_bin} ]; then
-   %{_gconftool_bin} --type boolean --set /desktop/gnome/thumbnailers/application@x-blender/enable true
-   %{_gconftool_bin} --type string --set /desktop/gnome/thumbnailers/application@x-blender/command "blender-thumbnailer.py %u %o"
+   %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --type boolean --set /desktop/gnome/thumbnailers/application@x-blender/enable true
+   %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --type string --set /desktop/gnome/thumbnailers/application@x-blender/command "blender-thumbnailer.py %u %o"
 fi
 
 %preun
 if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
-   %{_gconftool_bin} --unset /desktop/gnome/thumbnailers/application@x-blender/enable
-   %{_gconftool_bin} --unset /desktop/gnome/thumbnailers/application@x-blender/command
+   %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --unset /desktop/gnome/thumbnailers/application@x-blender/enable
+   %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults1 --unset /desktop/gnome/thumbnailers/application@x-blender/command
 fi
 
 %files -f %name.lang
