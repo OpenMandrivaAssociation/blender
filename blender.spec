@@ -131,5 +131,4 @@ fi
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
 %{_mandir}/man1/%{name}.1.*
-%{_datadir}/pixmaps/blender.*
 %{_iconsdir}/hicolor/*/apps/%{name}.*
