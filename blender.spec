@@ -1,12 +1,13 @@
 Name:		blender
 Version:	2.57b
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
 Patch0:		blender-2.57-localedir.patch
 Patch1:		blender-2.57-error-when-missing-sse.patch
 Patch2:		blender-2.57-static-lib.patch
+Patch3:		blender-2.57-CVE-2009-3850.patch
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -44,6 +45,7 @@ implemented.
 %patch0 -p0 -b .localedir
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
+%patch3 -p1 -b .cve
 
 %build
 %ifarch %{ix86}
