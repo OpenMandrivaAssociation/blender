@@ -1,6 +1,6 @@
 Name:		blender
 Version:	2.57b
-Release:	%mkrel 3
+Release:	%mkrel 4
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
@@ -123,7 +123,7 @@ fi
 %preun
 if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
    %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --unset /desktop/gnome/thumbnailers/application@x-blender/enable
-   %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults1 --unset /desktop/gnome/thumbnailers/application@x-blender/command
+   %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --unset /desktop/gnome/thumbnailers/application@x-blender/command
 fi
 
 %files -f %name.lang
