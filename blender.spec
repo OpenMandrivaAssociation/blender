@@ -18,13 +18,10 @@ Patch7:         blender-2.55-gcc46fix.patch
 Patch8:         blender-2.56-gcc46.patch
 # libOpenCOLLADA0 no longer provides libbuffer, libftoa and libUTF this patch fixes the build
 Patch9:         blender-2.57b-nobuffer_ftoa_utf_link.patch
-
-%if %mdvver < 201100
 # FIXME The following three patches revert blender to build with python 3.1
 Patch10:         blender-2.56-svn35386.patch
 Patch11:         blender-2.56-svn35395.patch
 Patch12:         blender-2.57b-PYC_INTERPRETER_ACTIVE.patch
-%endif
 
 URL:		http://www.blender.org/
 License:	GPLv2+
