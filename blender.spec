@@ -45,7 +45,7 @@ BuildRequires:	tiff-devel
 %if %mdvver >= 201100
 BuildRequires:	python3-devel >= 3.2
 %else
-BuildRequires:	python3.1-devel
+BuildRequires:	python3-devel
 %endif
 
 %description
