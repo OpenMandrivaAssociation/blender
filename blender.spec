@@ -1,13 +1,24 @@
 Name:		blender
 Version:	2.57b
-Release:	%mkrel 4
+Release:	%mkrel 5
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
+Source1:	ru.po
 Patch0:		blender-2.57-localedir.patch
 Patch1:		blender-2.57-error-when-missing-sse.patch
 Patch2:		blender-2.57-static-lib.patch
 Patch3:		blender-2.57-CVE-2009-3850.patch
+# Patch from SuSe
+Patch4:         blender-2.48-python64.patch
+Patch5:         blender-2.48-undefine-operation.patch
+# Patch submitted upstream - Blender Patches item #19234,
+Patch6:         blender-2.50-uninit-var.patch
+Patch7:         blender-2.55-gcc46fix.patch
+Patch8:         blender-2.56-gcc46.patch
+# libOpenCOLLADA0 no longer provides libbuffer, libftoa and libUTF this patch fixes the build
+Patch9:         blender-2.57b-nobuffer_ftoa_utf_link.patch
+
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -46,6 +57,15 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .cve
+%patch4 -p0
+%patch5 -p0
+%patch6 -p0
+%patch7 -p0
+%patch8 -p0
+%patch9 -p0
+
+rm -f po/ru.po
+cp -f %SOURCE1 po/ 
 
 %build
 %ifarch %{ix86}
@@ -54,7 +74,8 @@ implemented.
 	-DWITH_PYTHON=ON -DWITH_PYTHON_INSTALL=OFF \
 	-DWITH_BUILTIN_GLEW=OFF \
 	-DWITH_CODEC_FFMPEG=ON -DWITH_CODEC_SNDFILE=ON \
-	-DWITH_RAYOPTIMIZATION=OFF
+	-DWITH_RAYOPTIMIZATION=OFF \
+	-
 %make
 cd ..
 mv build non-sse
