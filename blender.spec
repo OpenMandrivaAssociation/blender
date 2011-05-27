@@ -19,6 +19,13 @@ Patch8:         blender-2.56-gcc46.patch
 # libOpenCOLLADA0 no longer provides libbuffer, libftoa and libUTF this patch fixes the build
 Patch9:         blender-2.57b-nobuffer_ftoa_utf_link.patch
 
+%if %mdvver < 201100
+# FIXME The following three patches revert blender to build with python 3.1
+Patch10:         blender-2.56-svn35386.patch
+Patch11:         blender-2.56-svn35395.patch
+Patch12:         blender-2.57b-PYC_INTERPRETER_ACTIVE.patch
+%endif
+
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -38,7 +45,11 @@ BuildRequires:	openal-devel
 BuildRequires:	libsamplerate-devel
 BuildRequires:	sndfile-devel
 BuildRequires:	tiff-devel
+%if %mdvver >= 201100
 BuildRequires:	python3-devel >= 3.2
+%else
+BuildRequires:	python3-devel >= 3.1
+%endif
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -63,6 +74,12 @@ implemented.
 %patch7 -p0
 %patch8 -p0
 %patch9 -p0
+
+%if %mdvver < 201100
+%patch10 -p0
+%patch11 -p0
+%patch12 -p0
+%endif
 
 rm -f po/ru.po
 cp -f %SOURCE1 po/ 
