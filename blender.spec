@@ -45,11 +45,7 @@ BuildRequires:	tiff-devel
 %if %mdvver >= 201100
 BuildRequires:	python3-devel >= 3.2
 %else
-%ifarch x86_64
-BuildRequires:	lib64python3.1-devel
-%else
-BuildRequires:	libpython3.1-devel
-%endif
+BuildRequires:	python3-devel >= 3.1
 %endif
 
 %description
