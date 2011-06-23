@@ -1,23 +1,19 @@
 Name:		blender
-Version:	2.57b
-Release:	%mkrel 5
+Version:	2.58
+Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
-Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
+Source0:	http://download.blender.org/source/blender-%{version}.tgz
 Source1:	ru.po
-Patch0:		blender-2.57-localedir.patch
+Patch0:		blender-2.58-localedir.patch
 Patch1:		blender-2.57-error-when-missing-sse.patch
-Patch2:		blender-2.57-static-lib.patch
-Patch3:		blender-2.57-CVE-2009-3850.patch
+Patch2:		blender-2.58-static-lib.patch
 # Patch from SuSe
 Patch4:         blender-2.48-python64.patch
 Patch5:         blender-2.48-undefine-operation.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:         blender-2.50-uninit-var.patch
 Patch7:         blender-2.55-gcc46fix.patch
-Patch8:         blender-2.56-gcc46.patch
-# libOpenCOLLADA0 no longer provides libbuffer, libftoa and libUTF this patch fixes the build
-Patch9:         blender-2.57b-nobuffer_ftoa_utf_link.patch
 # FIXME The following three patches revert blender to build with python 3.1
 Patch10:         blender-2.56-svn35386.patch
 Patch11:         blender-2.56-svn35395.patch
@@ -64,14 +60,11 @@ implemented.
 %patch0 -p0 -b .localedir
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
-%patch3 -p1 -b .cve
 %patch4 -p0
 %patch5 -p0
 %patch6 -p0
 %patch7 -p0
-%patch8 -p0
-%patch9 -p0
-
+#%patch8 -p0
 %if %mdvver < 201100
 %patch10 -p0
 %patch11 -p0
