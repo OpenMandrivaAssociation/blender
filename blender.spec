@@ -1,9 +1,9 @@
 Name:		blender
-Version:	2.58
+Version:	2.58a
 Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
-Source0:	http://download.blender.org/source/blender-%{version}.tgz
+Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
 Source1:	ru.po
 Patch0:		blender-2.58-localedir.patch
 Patch1:		blender-2.57-error-when-missing-sse.patch
@@ -64,7 +64,6 @@ implemented.
 %patch5 -p0
 %patch6 -p0
 %patch7 -p0
-#%patch8 -p0
 %if %mdvver < 201100
 %patch10 -p0
 %patch11 -p0
