@@ -40,6 +40,7 @@ BuildRequires:	sndfile-devel
 BuildRequires:	tiff-devel
 %if %mdvver >= 201100
 BuildRequires:	python3-devel >= 3.2
+Requires:	python3 >= 3.2
 %else
 BuildRequires:	python3-devel
 %endif
