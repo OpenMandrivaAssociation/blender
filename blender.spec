@@ -1,6 +1,6 @@
 Name:		blender
-Version:	2.58a
-Release:	%mkrel 2
+Version:	2.59
+Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
