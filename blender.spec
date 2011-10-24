@@ -1,15 +1,13 @@
 Name:		blender
-Version:	2.59
+Version:	2.60
 Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
-Source1:	ru.po
-Patch0:		blender-2.58-localedir.patch
-Patch1:		blender-2.57-error-when-missing-sse.patch
+Patch0:		blender-2.60-localedir.patch
+Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 # Patch from SuSe
-Patch4:         blender-2.48-python64.patch
 Patch5:         blender-2.48-undefine-operation.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:         blender-2.50-uninit-var.patch
@@ -61,18 +59,16 @@ implemented.
 %patch0 -p0 -b .localedir
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
-%patch4 -p0
 %patch5 -p0
 %patch6 -p0
 %patch7 -p0
-%if %mdvver < 201100
-%patch10 -p0
-%patch11 -p0
-%patch12 -p0
-%endif
 
-rm -f po/ru.po
-cp -f %SOURCE1 po/ 
+#Need to rediff if possible
+#if %mdvver < 201100
+#patch10 -p0
+#patch11 -p0
+#patch12 -p0
+#endif
 
 %build
 %ifarch %{ix86}
