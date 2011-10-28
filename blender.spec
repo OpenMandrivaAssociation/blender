@@ -1,5 +1,5 @@
 Name:		blender
-Version:	2.60
+Version:	2.60a
 Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
