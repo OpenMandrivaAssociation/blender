@@ -1,27 +1,26 @@
 Name:		blender
-Version:	2.60a
+Version:	2.61
 Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
-Patch0:		blender-2.60-localedir.patch
+Patch0:		blender-2.61-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 # Patch from SuSe
-Patch5:         blender-2.48-undefine-operation.patch
+Patch5:		blender-2.48-undefine-operation.patch
 # Patch submitted upstream - Blender Patches item #19234,
-Patch6:         blender-2.50-uninit-var.patch
-Patch7:         blender-2.55-gcc46fix.patch
+Patch6:		blender-2.50-uninit-var.patch
 # FIXME The following three patches revert blender to build with python 3.1
-Patch10:         blender-2.56-svn35386.patch
-Patch11:         blender-2.56-svn35395.patch
-Patch12:         blender-2.57b-PYC_INTERPRETER_ACTIVE.patch
+Patch10:	blender-2.56-svn35386.patch
+Patch11:	blender-2.56-svn35395.patch
+Patch12:	blender-2.57b-PYC_INTERPRETER_ACTIVE.patch
 
 URL:		http://www.blender.org/
 License:	GPLv2+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	cmake >= 2.8
-BuildRequires:	ffmpeg-devel
+BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	glew-devel
 BuildRequires:	OpenEXR-devel
 BuildRequires:	SDL-devel
@@ -56,12 +55,11 @@ implemented.
 
 %prep
 %setup -qn %{name}-%{version}
-%patch0 -p0 -b .localedir
+%patch0 -p1 -b .localedir
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch5 -p0
 %patch6 -p0
-%patch7 -p0
 
 #Need to rediff if possible
 #if %mdvver < 201100
@@ -109,13 +107,13 @@ install -pm 0644 release/freedesktop/icons/scalable/apps/%{name}.svg \
     %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %ifarch %{ix86}
-mv %buildroot%_bindir/%name %buildroot%_bindir/%name.sse
+mv %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/%{name}.sse
 
 #install non-sse flavour
 rm -fr build
 mv non-sse build
 %makeinstall_std -C build
-mv %buildroot%_bindir/%name %buildroot%_bindir/%name.nonsse
+mv %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/%{name}.nonsse
 
 # install wrapper
 cat >> %{buildroot}%{_bindir}/blender <<EOF 
@@ -132,7 +130,7 @@ EOF
 chmod 0755 %{buildroot}%{_bindir}/blender
 %endif
 
-%find_lang %name
+%find_lang %{name}
 
 %clean
 rm -rf %{buildroot}
@@ -149,7 +147,7 @@ if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
    %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --unset /desktop/gnome/thumbnailers/application@x-blender/command
 fi
 
-%files -f %name.lang
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc release/text/*
 %{_bindir}/*
