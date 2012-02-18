@@ -1,6 +1,6 @@
 Name:		blender
 Version:	2.62
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 License:	GPLv2+
