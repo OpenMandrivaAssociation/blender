@@ -1,8 +1,10 @@
 Name:		blender
-Version:	2.61
+Version:	2.62
 Release:	%mkrel 1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
+License:	GPLv2+
+URL:		http://www.blender.org/
 Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
 Patch0:		blender-2.61-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
@@ -15,10 +17,6 @@ Patch6:		blender-2.50-uninit-var.patch
 Patch10:	blender-2.56-svn35386.patch
 Patch11:	blender-2.56-svn35395.patch
 Patch12:	blender-2.57b-PYC_INTERPRETER_ACTIVE.patch
-
-URL:		http://www.blender.org/
-License:	GPLv2+
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	cmake >= 2.8
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	glew-devel
