@@ -1,5 +1,5 @@
 Name:		blender
-Version:	2.63
+Version:	2.63a
 Release:	1
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
