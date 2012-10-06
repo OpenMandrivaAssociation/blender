@@ -1,44 +1,49 @@
+%bcond_without	cycles
+
 Name:		blender
-Version:	2.63a
-Release:	1
+Version:	2.64
+Release:	2
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 License:	GPLv2+
 URL:		http://www.blender.org/
-Source0:	http://download.blender.org/source/blender-%{version}.tar.gz
-Patch0:		blender-2.63-localedir.patch
+Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
+Patch0:		blender-2.64-syspath.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
-# Patch from SuSe
-Patch5:		blender-2.48-undefine-operation.patch
+Patch3:		blender-2.64-openjpeg_stdbool.patch
+Patch4:		blender-2.64-sfmt.patch
+# Cycles build fails with undefined reference error as libs are build as shared
+Patch5:		blender-2.64-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
-Patch6:		blender-2.50-uninit-var.patch
-# FIXME The following three patches revert blender to build with python 3.1
-Patch10:	blender-2.56-svn35386.patch
-Patch11:	blender-2.56-svn35395.patch
-Patch12:	blender-2.57b-PYC_INTERPRETER_ACTIVE.patch
+Patch6:		blender-2.64-uninit-var.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	ffmpeg-devel >= 0.7
-BuildRequires:	glew-devel
-BuildRequires:	OpenEXR-devel
-BuildRequires:	SDL-devel
-BuildRequires:	libx11-devel
-BuildRequires:	libxi-devel
-BuildRequires:	freetype2-devel
+BuildRequires:	pkgconfig(glew)
+BuildRequires:	pkgconfig(fftw3)
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(OpenEXR)
+BuildRequires:	pkgconfig(openal)
+BuildRequires:	pkgconfig(samplerate)
+BuildRequires:	pkgconfig(sndfile)
+BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xi)
+BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	libgomp-devel
 BuildRequires:	jpeg-devel
-BuildRequires:	png-devel
 BuildRequires:	openjpeg-devel
-BuildRequires:	openal-devel
-BuildRequires:	libsamplerate-devel
-BuildRequires:	sndfile-devel
 BuildRequires:	tiff-devel
 BuildRequires:	boost-devel
-%if %mdvver >= 201100
+%if %{mdvver} >= 201100
 BuildRequires:	python3-devel >= 3.2 %{_lib}python3.2 >= 3.2
 Requires:	python3 >= 3.2
 %else
 BuildRequires:	python3-devel
+%endif
+%if %with cycles
+BuildRequires:	OpenImageIO-devel
+BuildRequires:	OpenColorIO-devel
 %endif
 
 %description
@@ -57,40 +62,53 @@ implemented.
 %patch0 -p1 -b .localedir
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
-%patch5 -p0
-%patch6 -p0
-
-#Need to rediff if possible
-#if %mdvver < 201100
-#patch10 -p0
-#patch11 -p0
-#patch12 -p0
-#endif
+%patch3 -p1 -b .openjpeg
+%patch4 -p1 -b .sfmt
+%patch5 -p1 -b .cycles-static
+%patch6 -p1
 
 %build
 %ifarch %{ix86}
 # build non-sse flavour
-%cmake -DWITH_INSTALL_PORTABLE=OFF -DWITH_PLAYER=ON \
-	-DWITH_PYTHON=ON -DWITH_PYTHON_INSTALL=OFF \
-	-DWITH_BUILTIN_GLEW=OFF \
-	-DWITH_CODEC_FFMPEG=ON -DWITH_CODEC_SNDFILE=ON \
-	-DWITH_RAYOPTIMIZATION=OFF
+%cmake -DWITH_INSTALL_PORTABLE:BOOL=OFF \
+	-DWITH_PLAYER:BOOL=ON \
+	-DWITH_PYTHON:BOOL=ON \
+	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+	-DWITH_BUILTIN_GLEW:BOOL=OFF \
+	-DWITH_CODEC_FFMPEG:BOOL=ON \
+	-DWITH_CODEC_SNDFILE:BOOL=ON \
+	-DWITH_FFTW3:BOOL=ON \
+	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
+%if %with cycles
+	-DWITH_CYCLES:BOOL=ON \
+%else
+	-DWITH_CYCLES:BOOL=OFF \
+%endif
+	-DWITH_RAYOPTIMIZATION:BOOL=OFF
 %make
 cd ..
 mv build non-sse
 %endif
 
 #build sse flavour
-%cmake -DWITH_INSTALL_PORTABLE=OFF -DWITH_PLAYER=ON \
-	-DWITH_PYTHON=ON -DWITH_PYTHON_INSTALL=OFF \
-	-DWITH_BUILTIN_GLEW=OFF \
-	-DWITH_CODEC_FFMPEG=ON -DWITH_CODEC_SNDFILE=ON \
-	-DWITH_RAYOPTIMIZATION=ON
+%cmake -DWITH_INSTALL_PORTABLE:BOOL=OFF \
+	-DWITH_PLAYER:BOOL=ON \
+	-DWITH_PYTHON:BOOL=ON \
+	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+	-DWITH_BUILTIN_GLEW:BOOL=OFF \
+	-DWITH_CODEC_FFMPEG:BOOL=ON \
+	-DWITH_CODEC_SNDFILE:BOOL=ON \
+	-DWITH_FFTW3:BOOL=ON \
+	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
+%if %with cycles
+	-DWITH_CYCLES:BOOL=ON \
+%else
+	-DWITH_CYCLES:BOOL=OFF \
+%endif
+	-DWITH_RAYOPTIMIZATION:BOOL=ON
 %make
 
 %install
-rm -rf %{buildroot}
-
 #install sse flavour
 %makeinstall_std -C build
 
@@ -131,9 +149,6 @@ chmod 0755 %{buildroot}%{_bindir}/blender
 
 %find_lang %{name}
 
-%clean
-rm -rf %{buildroot}
-
 %post
 if [ -x %{_gconftool_bin} ]; then
    %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --type boolean --set /desktop/gnome/thumbnailers/application@x-blender/enable true
@@ -147,10 +162,10 @@ if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
 fi
 
 %files -f %{name}.lang
-%defattr(-,root,root)
 %doc release/text/*
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %{_iconsdir}/hicolor/*/apps/%{name}.*
+
