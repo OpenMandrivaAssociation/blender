@@ -2,13 +2,13 @@
 
 Name:		blender
 Version:	2.64
-Release:	2
+Release:	3
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 License:	GPLv2+
 URL:		http://www.blender.org/
 Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
-Patch0:		blender-2.64-syspath.patch
+Patch0:		blender-2.64-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.64-openjpeg_stdbool.patch
