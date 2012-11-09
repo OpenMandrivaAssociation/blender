@@ -1,0 +1,13 @@
+diff -urN blender-2.64/extern/bullet2/src/LinearMath/btVector3.h blender-2.64-patched/extern/bullet2/src/LinearMath/btVector3.h
+--- blender-2.64/extern/bullet2/src/LinearMath/btVector3.h	2012-10-04 01:46:08.000000000 +1100
++++ blender-2.64-patched/extern/bullet2/src/LinearMath/btVector3.h	2012-10-05 17:49:48.769240018 +1100
+@@ -70,7 +70,8 @@
+ 	public:
+ 
+   /**@brief No initialization constructor */
+-	SIMD_FORCE_INLINE btVector3() {}
++	SIMD_FORCE_INLINE btVector3() {
++	m_floats[0]=m_floats[1]=m_floats[2]=m_floats[3]=btScalar(0.);}
+ 
+  
+ 	

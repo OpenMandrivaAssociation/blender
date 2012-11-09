@@ -1,0 +1,11 @@
+--- build_files/cmake/macros.cmake.sse	2011-10-19 17:04:27.000000000 +0200
++++ build_files/cmake/macros.cmake	2011-10-20 03:13:52.000000000 +0200
+@@ -353,7 +353,7 @@
+ 		if(SUPPORT_SSE_BUILD)
+ 			message(STATUS "SSE Support: detected.")
+ 		else()
+-			message(STATUS "SSE Support: missing.")
++			message(SEND_ERROR "SSE Support: missing.")
+ 		endif()
+ 	endif()
+ 
