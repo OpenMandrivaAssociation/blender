@@ -63,8 +63,8 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-%patch4 -p1 -b .sfmt
-%patch5 -p1 -b .cycles-static
+%patch4 -p0 -b .sfmt
+%patch5 -p0 -b .cycles-static
 %patch6 -p1
 
 %build
