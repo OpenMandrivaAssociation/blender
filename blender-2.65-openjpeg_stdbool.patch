@@ -1,0 +1,10 @@
+--- blender-2.65/source/blender/imbuf/intern/jp2.c.bool	2012-12-11 03:25:19.000000000 +0800
++++ blender-2.65/source/blender/imbuf/intern/jp2.c	2012-12-12 20:11:01.564549951 +0800
+@@ -39,6 +39,7 @@
+ #include "IMB_colormanagement.h"
+ #include "IMB_colormanagement_intern.h"
+ 
++#include <stdbool.h>
+ #include "openjpeg.h"
+ 
+ // #define JP2_FILEHEADER_SIZE 14  /* UNUSED */

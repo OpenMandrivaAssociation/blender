@@ -8,13 +8,13 @@ Group:		Graphics
 License:	GPLv2+
 URL:		http://www.blender.org/
 Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
-Patch0:		blender-2.64-localedir.patch
+Patch0:		blender-2.65-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
-Patch3:		blender-2.64-openjpeg_stdbool.patch
-Patch4:		blender-2.64-sfmt.patch
+Patch3:		blender-2.65-openjpeg_stdbool.patch
+Patch4:		blender-2.65-sfmt.patch
 # Cycles build fails with undefined reference error as libs are build as shared
-Patch5:		blender-2.64-cycles-static.patch
+Patch5:		blender-2.65-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.64-uninit-var.patch
 BuildRequires:	cmake >= 2.8

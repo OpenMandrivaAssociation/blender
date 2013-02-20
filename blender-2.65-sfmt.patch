@@ -1,0 +1,22 @@
+--- source/gameengine/Ketsji/KX_KetsjiEngine.cpp.orig	2012-12-11 03:22:27.000000000 +0800
++++ source/gameengine/Ketsji/KX_KetsjiEngine.cpp	2012-12-12 20:13:26.718176100 +0800
+@@ -1497,7 +1497,7 @@
+ 	{
+ 		for (int j = tc_first; j < tc_numCategories; j++)
+ 		{
+-			debugtxt.Format(m_profileLabels[j]);
++			debugtxt.Format("%s", m_profileLabels[j]);
+ 			m_rendertools->RenderText2D(RAS_IRenderTools::RAS_TEXT_PADDED,
+ 			                            debugtxt.Ptr(),
+ 			                            xcoord + const_xindent,
+--- source/gameengine/Expressions/InputParser.cpp.orig	2012-12-11 03:21:51.000000000 +0800
++++ source/gameengine/Expressions/InputParser.cpp	2012-12-12 20:12:48.797228208 +0800
+@@ -381,7 +381,7 @@
+ 	if (s == sym) NextSym();
+ 	else {
+ 		STR_String msg;
+-		msg.Format("Warning: " + Symbol2Str(s) + " expected\ncontinuing without it");
++		msg.Format("Warning: %s expected\ncontinuing without it", (const char *)Symbol2Str(s));
+ 
+ //		AfxMessageBox(msg,MB_ICONERROR);
+ 
