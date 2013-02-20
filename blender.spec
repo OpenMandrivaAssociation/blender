@@ -2,7 +2,7 @@
 
 Name:		blender
 Version:	2.64
-Release:	3
+Release:	4
 Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 License:	GPLv2+
@@ -36,7 +36,7 @@ BuildRequires:	openjpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	boost-devel
 %if %{mdvver} >= 201100
-BuildRequires:	python3-devel >= 3.2 %{_lib}python3.2 >= 3.2
+BuildRequires:	python3-devel >= 3.2
 Requires:	python3 >= 3.2
 %else
 BuildRequires:	python3-devel
