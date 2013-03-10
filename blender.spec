@@ -1,12 +1,12 @@
 %bcond_without	cycles
 
+Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	2.65a
 Release:	1
-Summary:	A fully functional 3D modeling/rendering/animation package
 Group:		Graphics
 License:	GPLv2+
-URL:		http://www.blender.org/
+Url:		http://www.blender.org/
 Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
 Patch0:		blender-2.65-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
@@ -17,34 +17,31 @@ Patch4:		blender-2.65-sfmt.patch
 Patch5:		blender-2.65-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.64-uninit-var.patch
+
 BuildRequires:	cmake >= 2.8
+BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
+BuildRequires:	gomp-devel
+BuildRequires:	jpeg-devel
+BuildRequires:	openjpeg-devel
+BuildRequires:	tiff-devel
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(fftw3)
+BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
+BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
-BuildRequires:	pkgconfig(freetype2)
-BuildRequires:	libgomp-devel
-BuildRequires:	jpeg-devel
-BuildRequires:	openjpeg-devel
-BuildRequires:	tiff-devel
-BuildRequires:	boost-devel
-%if %{mdvver} >= 201100
-BuildRequires:	python3-devel >= 3.3
-Requires:	python3 >= 3.3
-%else
-BuildRequires:	python3-devel
-%endif
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	OpenColorIO-devel
 %endif
+Requires:	python3 >= 3.3
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -58,7 +55,7 @@ extremely fast. All basic animation principles (curves and keys) are
 implemented.
 
 %prep
-%setup -qn %{name}-%{version}
+%setup -q
 %patch0 -p1 -b .localedir
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
@@ -70,7 +67,8 @@ implemented.
 %build
 %ifarch %{ix86}
 # build non-sse flavour
-%cmake -DWITH_INSTALL_PORTABLE:BOOL=OFF \
+%cmake \
+	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
@@ -91,7 +89,8 @@ mv build non-sse
 %endif
 
 #build sse flavour
-%cmake -DWITH_INSTALL_PORTABLE:BOOL=OFF \
+%cmake \
+	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
