@@ -1,7 +1,7 @@
-diff -p -up blender-2.65a/source/blender/blenfont/intern/blf_lang.c.localedir blender-2.65a/source/blender/blenfont/intern/blf_lang.c
---- blender-2.65a/source/blender/blenfont/intern/blf_lang.c.localedir	2012-11-11 17:54:26.000000000 +0100
-+++ blender-2.65a/source/blender/blenfont/intern/blf_lang.c	2012-12-21 11:52:28.548683204 +0100
-@@ -83,15 +83,13 @@ static void free_locales(void)
+diff -urN blender-2.66a/source/blender/blenfont/intern/blf_lang.c blender-2.66a-patched/source/blender/blenfont/intern/blf_lang.c
+--- blender-2.66a/source/blender/blenfont/intern/blf_lang.c	2013-01-21 21:46:01.000000000 +1100
++++ blender-2.66a-patched/source/blender/blenfont/intern/blf_lang.c	2013-03-15 21:03:53.855469743 +1100
+@@ -78,15 +78,13 @@
  
  static void fill_locales(void)
  {
@@ -18,19 +18,19 @@ diff -p -up blender-2.65a/source/blender/blenfont/intern/blf_lang.c.localedir bl
  
  	/* This whole "parsing" code is a bit weak, in that it expects strictly formated input file...
  	 * Should not be a problem, though, as this file is script-generated! */
-@@ -184,7 +182,7 @@ EnumPropertyItem *BLF_RNA_lang_enum_prop
- 
+@@ -185,7 +183,7 @@
  void BLF_lang_init(void)
  {
+ #ifdef WITH_INTERNATIONAL
 -	char *messagepath = BLI_get_folder(BLENDER_DATAFILES, "locale");
 +	char *messagepath = "/usr/share/locale";
  
  	if (messagepath) {
  		bl_locale_init(messagepath, TEXT_DOMAIN_NAME);
-diff -p -up blender-2.65a/source/creator/CMakeLists.txt.localedir blender-2.65a/source/creator/CMakeLists.txt
---- blender-2.65a/source/creator/CMakeLists.txt.localedir	2012-11-26 13:38:40.000000000 +0100
-+++ blender-2.65a/source/creator/CMakeLists.txt	2012-12-21 11:50:27.305900176 +0100
-@@ -295,6 +295,16 @@ if(WITH_INTERNATIONAL)
+diff -urN blender-2.66a/source/creator/CMakeLists.txt blender-2.66a-patched/source/creator/CMakeLists.txt
+--- blender-2.66a/source/creator/CMakeLists.txt	2013-02-20 23:07:27.000000000 +1100
++++ blender-2.66a-patched/source/creator/CMakeLists.txt	2013-03-15 21:02:30.500323568 +1100
+@@ -295,6 +295,16 @@
  	install(
  		DIRECTORY
  			${CMAKE_SOURCE_DIR}/release/datafiles/locale

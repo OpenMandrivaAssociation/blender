@@ -1,20 +1,24 @@
+# String format build errors are mostly avoided by gcc stupidity
+# Only few are usually fixed by patches, it makes no sense.
+# So disable check at all.
+%define Werror_cflags %{nil}
+
 %bcond_without	cycles
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.65a
+Version:	2.66a
 Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
 Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
-Patch0:		blender-2.65-localedir.patch
+Patch0:		blender-2.66-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
-Patch4:		blender-2.65-sfmt.patch
 # Cycles build fails with undefined reference error as libs are build as shared
-Patch5:		blender-2.65-cycles-static.patch
+Patch5:		blender-2.66-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.64-uninit-var.patch
 
@@ -60,8 +64,7 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-%patch4 -p0 -b .sfmt
-%patch5 -p0 -b .cycles-static
+%patch5 -p1 -b .cycles-static
 %patch6 -p1
 
 %build
@@ -145,6 +148,8 @@ fi
 EOF
 chmod 0755 %{buildroot}%{_bindir}/blender
 %endif
+
+sed -i -e 's,#!/usr/bin/python,#!/usr/bin/python3,' %{buildroot}%{_bindir}/blender-thumbnailer.py %{buildroot}%{_datadir}/%{name}/*/scripts/modules/blend_render_info.py
 
 %find_lang %{name}
 

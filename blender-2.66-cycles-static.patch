@@ -1,0 +1,68 @@
+diff -urN blender-2.66a/intern/cycles/bvh/CMakeLists.txt blender-2.66a-patched/intern/cycles/bvh/CMakeLists.txt
+--- blender-2.66a/intern/cycles/bvh/CMakeLists.txt	2012-10-17 15:13:03.000000000 +1100
++++ blender-2.66a-patched/intern/cycles/bvh/CMakeLists.txt	2013-03-15 21:09:17.224533299 +1100
+@@ -33,4 +33,4 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_bvh ${SRC} ${SRC_HEADERS})
++add_library(cycles_bvh STATIC ${SRC} ${SRC_HEADERS})
+diff -urN blender-2.66a/intern/cycles/device/CMakeLists.txt blender-2.66a-patched/intern/cycles/device/CMakeLists.txt
+--- blender-2.66a/intern/cycles/device/CMakeLists.txt	2013-02-06 15:16:28.000000000 +1100
++++ blender-2.66a-patched/intern/cycles/device/CMakeLists.txt	2013-03-15 21:09:17.225033300 +1100
+@@ -41,4 +41,4 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_device ${SRC} ${SRC_HEADERS})
++add_library(cycles_device STATIC ${SRC} ${SRC_HEADERS})
+diff -urN blender-2.66a/intern/cycles/kernel/CMakeLists.txt blender-2.66a-patched/intern/cycles/kernel/CMakeLists.txt
+--- blender-2.66a/intern/cycles/kernel/CMakeLists.txt	2013-02-05 03:12:37.000000000 +1100
++++ blender-2.66a-patched/intern/cycles/kernel/CMakeLists.txt	2013-03-15 21:09:17.225033300 +1100
+@@ -147,7 +147,7 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_kernel ${SRC} ${SRC_HEADERS} ${SRC_CLOSURE_HEADERS} ${SRC_SVM_HEADERS})
++add_library(cycles_kernel STATIC ${SRC} ${SRC_HEADERS} ${SRC_CLOSURE_HEADERS} ${SRC_SVM_HEADERS})
+ 
+ if(WITH_CYCLES_OPTIMIZED_KERNEL)
+ 	set_source_files_properties(kernel_sse2.cpp PROPERTIES COMPILE_FLAGS "${CYCLES_SSE2_KERNEL_FLAGS}")
+diff -urN blender-2.66a/intern/cycles/kernel/osl/CMakeLists.txt blender-2.66a-patched/intern/cycles/kernel/osl/CMakeLists.txt
+--- blender-2.66a/intern/cycles/kernel/osl/CMakeLists.txt	2012-12-20 08:17:16.000000000 +1100
++++ blender-2.66a-patched/intern/cycles/kernel/osl/CMakeLists.txt	2013-03-15 21:09:17.225533301 +1100
+@@ -35,5 +35,5 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_kernel_osl ${SRC} ${HEADER_SRC})
++add_library(cycles_kernel_osl STATIC ${SRC} ${HEADER_SRC})
+ 
+diff -urN blender-2.66a/intern/cycles/render/CMakeLists.txt blender-2.66a-patched/intern/cycles/render/CMakeLists.txt
+--- blender-2.66a/intern/cycles/render/CMakeLists.txt	2012-12-29 01:21:30.000000000 +1100
++++ blender-2.66a-patched/intern/cycles/render/CMakeLists.txt	2013-03-15 21:09:17.225533301 +1100
+@@ -71,5 +71,5 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_render ${SRC} ${SRC_HEADERS})
++add_library(cycles_render STATIC ${SRC} ${SRC_HEADERS})
+ 
+diff -urN blender-2.66a/intern/cycles/subd/CMakeLists.txt blender-2.66a-patched/intern/cycles/subd/CMakeLists.txt
+--- blender-2.66a/intern/cycles/subd/CMakeLists.txt	2012-10-17 15:13:03.000000000 +1100
++++ blender-2.66a-patched/intern/cycles/subd/CMakeLists.txt	2013-03-15 21:09:17.225533301 +1100
+@@ -37,4 +37,4 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_subd ${SRC} ${SRC_HEADERS})
++add_library(cycles_subd STATIC ${SRC} ${SRC_HEADERS})
+diff -urN blender-2.66a/intern/cycles/util/CMakeLists.txt blender-2.66a-patched/intern/cycles/util/CMakeLists.txt
+--- blender-2.66a/intern/cycles/util/CMakeLists.txt	2013-01-03 23:08:54.000000000 +1100
++++ blender-2.66a-patched/intern/cycles/util/CMakeLists.txt	2013-03-15 21:09:17.225533301 +1100
+@@ -68,4 +68,4 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_util ${SRC} ${SRC_HEADERS})
++add_library(cycles_util STATIC ${SRC} ${SRC_HEADERS})
