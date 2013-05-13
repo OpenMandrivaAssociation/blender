@@ -7,20 +7,20 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.66a
+Version:	2.67
 Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
 Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
-Patch0:		blender-2.66-localedir.patch
+Patch0:		blender-2.67-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
 # Cycles build fails with undefined reference error as libs are build as shared
 Patch5:		blender-2.66-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
-Patch6:		blender-2.64-uninit-var.patch
+Patch6:		blender-2.67-uninit-var.patch
 
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
@@ -79,6 +79,8 @@ implemented.
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
 	-DWITH_FFTW3:BOOL=ON \
+	-DWITH_MOD_OCEANSIM:BOOL=ON \
+	-DWITH_IMAGE_REDCODE:BOOL=ON \
 	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
@@ -101,6 +103,8 @@ mv build non-sse
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
 	-DWITH_FFTW3:BOOL=ON \
+	-DWITH_MOD_OCEANSIM:BOOL=ON \
+	-DWITH_IMAGE_REDCODE:BOOL=ON \
 	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
