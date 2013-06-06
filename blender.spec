@@ -41,6 +41,7 @@ BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
+BuildRequires:	pkgconfig(glu)
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	OpenColorIO-devel
