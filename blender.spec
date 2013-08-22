@@ -7,7 +7,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.67b
+Version:	2.68a
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -30,6 +30,7 @@ BuildRequires:	jpeg-devel
 BuildRequires:	openjpeg-devel
 BuildRequires:	tiff-devel
 BuildRequires:	pkgconfig(glew)
+BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(libpng)
@@ -41,7 +42,6 @@ BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
-BuildRequires:	pkgconfig(glu)
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	OpenColorIO-devel
