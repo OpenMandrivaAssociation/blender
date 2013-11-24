@@ -7,7 +7,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.68a
+Version:	2.69
 Release:	1
 Group:		Graphics
 License:	GPLv2+
