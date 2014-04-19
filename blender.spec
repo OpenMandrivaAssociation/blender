@@ -2,6 +2,7 @@
 # Only few are usually fixed by patches, it makes no sense.
 # So disable check at all.
 %define Werror_cflags %{nil}
+%define _disable_ld_no_undefined 1
 
 %bcond_without	cycles
 
@@ -60,12 +61,12 @@ extremely fast. All basic animation principles (curves and keys) are
 implemented.
 
 %prep
-%setup -q
-%patch0 -p1 -b .localedir
+%setup -q -n %{name}-v%{version}
+#patch0 -p1 -b .localedir
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-%patch5 -p1 -b .cycles-static
+#patch5 -p1 -b .cycles-static
 %patch6 -p1
 
 %build
