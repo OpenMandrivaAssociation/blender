@@ -14,6 +14,7 @@ Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
 Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
+Source100:	blender.rpmlintrc
 Patch0:		blender-2.67-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
