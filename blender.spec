@@ -19,7 +19,7 @@ Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
 # Cycles build fails with undefined reference error as libs are build as shared
-Patch5:		blender-2.66-cycles-static.patch
+Patch5:		blender-2.70a-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
 
@@ -66,7 +66,7 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-#patch5 -p1 -b .cycles-static
+%patch5 -p1 -b .cycles-static
 %patch6 -p1
 
 %build
