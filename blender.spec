@@ -157,8 +157,6 @@ chmod 0755 %{buildroot}%{_bindir}/blender
 
 sed -i -e 's,#!/usr/bin/python,#!/usr/bin/python3,' %{buildroot}%{_bindir}/blender-thumbnailer.py %{buildroot}%{_datadir}/%{name}/*/scripts/modules/blend_render_info.py
 
-%find_lang %{name}
-
 %post
 if [ -x %{_gconftool_bin} ]; then
    %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --type boolean --set /desktop/gnome/thumbnailers/application@x-blender/enable true
@@ -171,7 +169,7 @@ if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
    %{_gconftool_bin} --direct --config-source xml:readwrite:%{_sysconfdir}/gconf/gconf.xml.defaults --unset /desktop/gnome/thumbnailers/application@x-blender/command
 fi
 
-%files -f %{name}.lang
+%files
 %doc release/text/*
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
