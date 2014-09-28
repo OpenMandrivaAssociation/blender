@@ -23,7 +23,7 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 Patch5:		blender-2.72-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
-
+Patch7:		blender-2.71-sse2.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
@@ -69,6 +69,7 @@ implemented.
 %patch3 -p1 -b .openjpeg
 %patch5 -p1 -b .cycles-static
 %patch6 -p1
+%patch7 -p1
 
 %build
 %ifarch %{ix86}
@@ -84,6 +85,9 @@ export CXX=g++
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
+%ifarch %{ix86}
+	-DSUPPORT_SSE2_BUILD=OFF -DSUPPORT_SSE_BUILD=OFF \
+%endif\
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
@@ -108,6 +112,9 @@ mv build non-sse
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
+%ifarch %{ix86}
+	-DSUPPORT_SSE2_BUILD=OFF \
+%endif
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
