@@ -74,10 +74,11 @@ implemented.
 %patch8 -p1
 
 %build
-%ifarch %{ix86}
 #build with gcc for sse and openmp support
 export CC=gcc
 export CXX=g++
+
+%ifarch %{ix86}
 # build non-sse flavour
 %cmake \
 	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
