@@ -24,6 +24,7 @@ Patch5:		blender-2.72-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
 Patch7:		blender-2.71-sse2.patch
+Patch8:		blender-2.72-sign-conversion.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
@@ -70,6 +71,7 @@ implemented.
 %patch5 -p1 -b .cycles-static
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 %ifarch %{ix86}
