@@ -1,0 +1,67 @@
+diff -urN blender-2.74/intern/cycles/bvh/CMakeLists.txt blender-2.74-patched/intern/cycles/bvh/CMakeLists.txt
+--- blender-2.74/intern/cycles/bvh/CMakeLists.txt	2015-03-25 20:56:13.000000000 +1000
++++ blender-2.74-patched/intern/cycles/bvh/CMakeLists.txt	2015-04-01 15:50:40.276068802 +1000
+@@ -33,4 +33,4 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_bvh ${SRC} ${SRC_HEADERS})
++add_library(cycles_bvh STATIC ${SRC} ${SRC_HEADERS})
+diff -urN blender-2.74/intern/cycles/device/CMakeLists.txt blender-2.74-patched/intern/cycles/device/CMakeLists.txt
+--- blender-2.74/intern/cycles/device/CMakeLists.txt	2015-03-25 21:01:16.000000000 +1000
++++ blender-2.74-patched/intern/cycles/device/CMakeLists.txt	2015-04-01 15:50:40.277068802 +1000
+@@ -43,4 +43,4 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_device ${SRC} ${SRC_HEADERS})
++add_library(cycles_device STATIC ${SRC} ${SRC_HEADERS})
+diff -urN blender-2.74/intern/cycles/kernel/CMakeLists.txt blender-2.74-patched/intern/cycles/kernel/CMakeLists.txt
+--- blender-2.74/intern/cycles/kernel/CMakeLists.txt	2015-04-01 12:44:23.000000000 +1000
++++ blender-2.74-patched/intern/cycles/kernel/CMakeLists.txt	2015-04-01 15:50:40.277068802 +1000
+@@ -264,7 +264,7 @@
+ 	set_source_files_properties(kernel_avx2.cpp PROPERTIES COMPILE_FLAGS "${CYCLES_AVX2_KERNEL_FLAGS}")
+ endif()
+ 
+-add_library(cycles_kernel ${SRC} ${SRC_HEADERS} ${SRC_CLOSURE_HEADERS} ${SRC_SVM_HEADERS} ${SRC_GEOM_HEADERS})
++add_library(cycles_kernel STATIC ${SRC} ${SRC_HEADERS} ${SRC_CLOSURE_HEADERS} ${SRC_SVM_HEADERS} ${SRC_GEOM_HEADERS})
+ 
+ if(WITH_CYCLES_CUDA)
+ 	add_dependencies(cycles_kernel cycles_kernel_cuda)
+diff -urN blender-2.74/intern/cycles/kernel/osl/CMakeLists.txt blender-2.74-patched/intern/cycles/kernel/osl/CMakeLists.txt
+--- blender-2.74/intern/cycles/kernel/osl/CMakeLists.txt	2015-03-25 20:56:13.000000000 +1000
++++ blender-2.74-patched/intern/cycles/kernel/osl/CMakeLists.txt	2015-04-01 15:50:40.278068802 +1000
+@@ -36,5 +36,5 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_kernel_osl ${SRC} ${HEADER_SRC})
++add_library(cycles_kernel_osl STATIC ${SRC} ${HEADER_SRC})
+ 
+diff -urN blender-2.74/intern/cycles/render/CMakeLists.txt blender-2.74-patched/intern/cycles/render/CMakeLists.txt
+--- blender-2.74/intern/cycles/render/CMakeLists.txt	2015-03-25 21:01:16.000000000 +1000
++++ blender-2.74-patched/intern/cycles/render/CMakeLists.txt	2015-04-01 15:50:40.278068802 +1000
+@@ -79,4 +79,4 @@
+ 
+ add_definitions(${GL_DEFINITIONS})
+ 
+-add_library(cycles_render ${SRC} ${SRC_HEADERS})
++add_library(cycles_render STATIC ${SRC} ${SRC_HEADERS})
+diff -urN blender-2.74/intern/cycles/subd/CMakeLists.txt blender-2.74-patched/intern/cycles/subd/CMakeLists.txt
+--- blender-2.74/intern/cycles/subd/CMakeLists.txt	2015-03-25 20:56:13.000000000 +1000
++++ blender-2.74-patched/intern/cycles/subd/CMakeLists.txt	2015-04-01 15:50:40.278068802 +1000
+@@ -28,4 +28,4 @@
+ include_directories(${INC})
+ include_directories(SYSTEM ${INC_SYS})
+ 
+-add_library(cycles_subd ${SRC} ${SRC_HEADERS})
++add_library(cycles_subd STATIC ${SRC} ${SRC_HEADERS})
+diff -urN blender-2.74/intern/cycles/util/CMakeLists.txt blender-2.74-patched/intern/cycles/util/CMakeLists.txt
+--- blender-2.74/intern/cycles/util/CMakeLists.txt	2015-03-25 21:01:16.000000000 +1000
++++ blender-2.74-patched/intern/cycles/util/CMakeLists.txt	2015-04-01 15:50:40.279068802 +1000
+@@ -88,4 +88,4 @@
+ 
+ add_definitions(${GL_DEFINITIONS})
+ 
+-add_library(cycles_util ${SRC} ${SRC_HEADERS})
++add_library(cycles_util STATIC ${SRC} ${SRC_HEADERS})
