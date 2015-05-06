@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   blender-2.72.tar.gz: edc8ba7ac266224d739b6fd92d98b2dce733f3ea
+sources:
+  blender-2.74.tar.gz: 303a84ec01c358be77498983ba7be212212aa70b

@@ -8,8 +8,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.72
-Release:	3
+Version:	2.74
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -24,7 +24,6 @@ Patch5:		blender-2.72-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
 Patch7:		blender-2.71-sse2.patch
-Patch8:		blender-2.72-sign-conversion.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
@@ -68,10 +67,9 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-%patch5 -p1 -b .cycles-static
+#patch5 -p1 -b .cycles-static
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 
 %build
 #build with gcc for sse and openmp support
@@ -82,9 +80,11 @@ export CXX=g++
 # build non-sse flavour
 %cmake \
 	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
+	-DWITH_GAMEENGINE:BOOL=ON \
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
@@ -109,9 +109,11 @@ mv build non-sse
 #build sse flavour
 %cmake \
 	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
+	-DWITH_GAMEENGINE:BOOL=ON \
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+	-DPYTHON_VERSION:STRING=%{py_ver} \
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \

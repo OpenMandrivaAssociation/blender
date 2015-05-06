@@ -1,12 +1,11 @@
 --- blender-v2.70a/intern/cycles/render/CMakeLists.txt.orig	2014-04-11 15:46:41.000000000 +0100
 +++ blender-v2.70a/intern/cycles/render/CMakeLists.txt	2014-04-20 01:52:27.302437255 +0100
-@@ -74,5 +74,5 @@
- include_directories(${INC})
- include_directories(SYSTEM ${INC_SYS})
+@@ -74,4 +74,4 @@
+
+ add_definitions(${GL_DEFINITIONS})
  
 -add_library(cycles_render ${SRC} ${SRC_HEADERS})
 +add_library(cycles_render STATIC ${SRC} ${SRC_HEADERS})
- 
 --- blender-v2.70a/intern/cycles/bvh/CMakeLists.txt.orig	2014-04-11 15:46:41.000000000 +0100
 +++ blender-v2.70a/intern/cycles/bvh/CMakeLists.txt	2014-04-20 01:52:27.300437255 +0100
 @@ -33,4 +33,4 @@
@@ -18,9 +17,9 @@
 --- blender-v2.70a/intern/cycles/util/CMakeLists.txt.orig	2014-04-11 15:46:41.000000000 +0100
 +++ blender-v2.70a/intern/cycles/util/CMakeLists.txt	2014-04-20 01:52:27.302437255 +0100
 @@ -69,4 +69,4 @@
- include_directories(${INC})
- include_directories(SYSTEM ${INC_SYS})
- 
+
+ add_definitions(${GL_DEFINITIONS})
+
 -add_library(cycles_util ${SRC} ${SRC_HEADERS})
 +add_library(cycles_util STATIC ${SRC} ${SRC_HEADERS})
 --- blender-v2.70a/intern/cycles/subd/CMakeLists.txt.orig	2014-04-11 15:46:41.000000000 +0100
@@ -51,9 +50,9 @@
 --- blender-v2.70a/intern/cycles/kernel/CMakeLists.txt.orig	2014-04-11 15:50:37.000000000 +0100
 +++ blender-v2.70a/intern/cycles/kernel/CMakeLists.txt	2014-04-20 01:52:27.301437255 +0100
 @@ -238,7 +238,7 @@
+ 	set_source_files_properties(kernel_avx2.cpp PROPERTIES COMPILE_FLAGS "${CYCLES_AVX2_KERNEL_FLAGS}")
  endif()
- 
- 
+
 -add_library(cycles_kernel ${SRC} ${SRC_HEADERS} ${SRC_CLOSURE_HEADERS} ${SRC_SVM_HEADERS} ${SRC_GEOM_HEADERS})
 +add_library(cycles_kernel STATIC ${SRC} ${SRC_HEADERS} ${SRC_CLOSURE_HEADERS} ${SRC_SVM_HEADERS} ${SRC_GEOM_HEADERS})
  
