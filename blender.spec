@@ -190,6 +190,5 @@ fi
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
-%{_mandir}/man1/%{name}.1.*
 %{_iconsdir}/hicolor/*/apps/%{name}.*
 
