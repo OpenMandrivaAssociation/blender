@@ -19,8 +19,6 @@ Patch0:		blender-2.67-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
-# Cycles build fails with undefined reference error as libs are build as shared
-Patch5:		blender-2.72-cycles-static.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
 Patch7:		blender-2.71-sse2.patch
@@ -67,7 +65,6 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-#patch5 -p1 -b .cycles-static
 %patch6 -p1
 %patch7 -p1
 
@@ -79,6 +76,7 @@ export CXX=g++
 %ifarch %{ix86}
 # build non-sse flavour
 %cmake \
+	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
 	-DWITH_GAMEENGINE:BOOL=ON \
 	-DWITH_PLAYER:BOOL=ON \
@@ -108,6 +106,7 @@ mv build non-sse
 
 #build sse flavour
 %cmake \
+	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
 	-DWITH_GAMEENGINE:BOOL=ON \
 	-DWITH_PLAYER:BOOL=ON \
