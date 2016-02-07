@@ -8,8 +8,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.76
-Release:	2
+Version:	2.76b
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -27,24 +27,28 @@ BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
 BuildRequires:	jpeg-devel
-BuildRequires:	openjpeg-devel
-BuildRequires:	tiff-devel
+BuildRequires:	jemalloc-devel
+BuildRequires:	pkgconfig(libopenjpeg1)
+BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(fftw3)
 BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
-BuildRequires:	pkgconfig(sdl)
+BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
+BuildRequires:	python-numpy
+BuildRequires:	python-requests
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
-BuildRequires:	OpenColorIO-devel
+BuildRequires:	pkgconfig(OpenColorIO)
 %endif
 Requires:	python3 >= 3.3
 
@@ -83,6 +87,7 @@ export CXX=g++
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
 	-DPYTHON_VERSION:STRING=%{py3_ver} \
+	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
@@ -92,6 +97,11 @@ export CXX=g++
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
+	-DWITH_SDL:BOOL=ON \
+	-DWITH_JACK:BOOL=ON \
+	-DWITH_INPUT_NDOF:BOLL=ON \
+	-DWITH_OPENCOLORIO:BOOL=ON \
+	-DWITH_DOC_MANPAGE:BOOL=ON \
 	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
@@ -113,6 +123,7 @@ mv build non-sse
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
 	-DPYTHON_VERSION:STRING=%{py_ver} \
+	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
@@ -122,6 +133,11 @@ mv build non-sse
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
+        -DWITH_SDL:BOOL=ON \
+        -DWITH_JACK:BOOL=ON \
+        -DWITH_INPUT_NDOF:BOLL=ON \
+        -DWITH_OPENCOLORIO:BOOL=ON \
+        -DWITH_DOC_MANPAGE:BOOL=ON \
 	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
@@ -190,4 +206,4 @@ fi
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
 %{_iconsdir}/hicolor/*/apps/%{name}.*
-
+%{_mandir}/man1/%{name}.1.*

@@ -3,3 +3,4 @@ removed_sources:
   blender-2.74.tar.gz: 303a84ec01c358be77498983ba7be212212aa70b
 sources:
   blender-2.76.tar.gz: f46775bd1891fc792e0dd6f495f75d114e839def
+  blender-2.76b.tar.gz: 7be96d90296cc95e15380ad0ae56cb86f1374a65
