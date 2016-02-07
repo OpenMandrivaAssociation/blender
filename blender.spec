@@ -3,6 +3,7 @@
 # So disable check at all.
 %define Werror_cflags %{nil}
 %define _disable_ld_no_undefined 1
+%define _disable_lto 1
 
 %bcond_without	cycles
 
