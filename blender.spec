@@ -72,7 +72,6 @@ implemented.
 %patch3 -p1 -b .openjpeg
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 
 %build
 #build with gcc for sse and openmp support
