@@ -9,8 +9,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.76b
-Release:	3
+Version:	2.77a
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -23,7 +23,6 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
 Patch7:		blender-2.71-sse2.patch
-Patch8:		blender-ffmpeg3.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
