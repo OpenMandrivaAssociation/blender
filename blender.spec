@@ -78,7 +78,7 @@ implemented.
 export CC=gcc
 export CXX=g++
 
-%ifarch %{ix86}
+%ifarch %{ix86} %{armx}
 # build non-sse flavour
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
