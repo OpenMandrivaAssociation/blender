@@ -128,8 +128,8 @@ mv build non-sse
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
-%ifarch %{ix86}
-	-DSUPPORT_SSE2_BUILD=OFF \
+%ifarch %{ix86} %{armx}
+	-DSUPPORT_SSE2_BUILD=OFF -DSUPPORT_SSE_BUILD=OFF \
 %endif
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
@@ -139,7 +139,7 @@ mv build non-sse
         -DWITH_INPUT_NDOF:BOLL=ON \
         -DWITH_OPENCOLORIO:BOOL=ON \
         -DWITH_DOC_MANPAGE:BOOL=ON \
-	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
+	-DOPENJPEG_ROOT_DIR=%{_libdir}/openjpeg-1.5 \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
 %else
