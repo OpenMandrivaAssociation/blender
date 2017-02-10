@@ -9,7 +9,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.77a
+Version:	2.78b
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -22,14 +22,12 @@ Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
-Patch7:		blender-2.71-sse2.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	jemalloc-devel
-BuildRequires:	pkgconfig(libopenjpeg1)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
@@ -70,8 +68,7 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-%patch6 -p1
-%patch7 -p1
+%patch6 -p1 -b .p6~
 
 %build
 #build with gcc for sse and openmp support
