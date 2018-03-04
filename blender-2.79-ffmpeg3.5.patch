@@ -1,0 +1,39 @@
+--- ./intern/audaspace/ffmpeg/AUD_FFMPEGWriter.cpp.orig 2018-03-04 12:32:27.093618792 +0000
++++ ./intern/audaspace/ffmpeg/AUD_FFMPEGWriter.cpp      2018-03-04 12:34:27.025050698 +0000
+@@ -163,7 +163,7 @@
+                try
+                {
+                        if(m_formatCtx->oformat->flags & AVFMT_GLOBALHEADER)
+-                               m_codecCtx->flags |= CODEC_FLAG_GLOBAL_HEADER;
++                               m_codecCtx->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+ 
+                        AVCodec* codec = avcodec_find_encoder(m_codecCtx->codec_id);
+                        if(!codec)
+@@ -185,11 +185,11 @@
+                        if(avcodec_open2(m_codecCtx, codec, NULL))
+                                AUD_THROW(AUD_ERROR_FFMPEG, codec_error);
+ 
+-                       m_output_buffer.resize(FF_MIN_BUFFER_SIZE);
++                       m_output_buffer.resize(AV_INPUT_BUFFER_MIN_SIZE);
+                        int samplesize = AUD_MAX(AUD_SAMPLE_SIZE(m_specs), AUD_DEVICE_SAMPLE_SIZE(m_specs));
+ 
+                        if(m_codecCtx->frame_size <= 1) {
+-                               m_input_size = FF_MIN_BUFFER_SIZE * 8 / m_codecCtx->bits_per_coded_sample / m_codecCtx->channels;
++                               m_input_size = AV_INPUT_BUFFER_MIN_SIZE * 8 / m_codecCtx->bits_per_coded_sample / m_codecCtx->channels;
+                                m_input_buffer.resize(m_input_size * samplesize);
+                        }
+                        else
+--- ./intern/audaspace/ffmpeg/AUD_FFMPEGReader.cpp.orig 2018-03-04 12:32:35.558296331 +0000
++++ ./intern/audaspace/ffmpeg/AUD_FFMPEGReader.cpp      2018-03-04 12:37:00.091222288 +0000
+@@ -264,9 +264,9 @@
+                m_membuffer(buffer),
+                m_membufferpos(0)
+ {
+-       m_membuf = reinterpret_cast<data_t*>(av_malloc(FF_MIN_BUFFER_SIZE + FF_INPUT_BUFFER_PADDING_SIZE));
++       m_membuf = reinterpret_cast<data_t*>(av_malloc(AV_INPUT_BUFFER_MIN_SIZE + AV_INPUT_BUFFER_PADDING_SIZE));
+ 
+-       m_aviocontext = avio_alloc_context(m_membuf, FF_MIN_BUFFER_SIZE, 0, this,
++       m_aviocontext = avio_alloc_context(m_membuf, AV_INPUT_BUFFER_MIN_SIZE, 0, this,
+                                                                           read_packet, NULL, seek_packet);
+ 
+        if(!m_aviocontext)
