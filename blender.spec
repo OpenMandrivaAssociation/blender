@@ -22,6 +22,7 @@ Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
+Patch7:		blender-2.79-ffmpeg3.5.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
@@ -69,6 +70,7 @@ implemented.
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
 %patch6 -p1 -b .p6~
+%patch7 -p1 -b .ffmpeg35
 
 %build
 #build with gcc for sse and openmp support
