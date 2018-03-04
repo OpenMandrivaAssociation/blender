@@ -1,5 +1,5 @@
---- /root/rpmbuild/BUILD/blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGWriter.cpp.ffmpeg35	2018-03-04 12:38:44.821235298 +0000
-+++ /root/rpmbuild/BUILD/blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGWriter.cpp	2018-03-04 12:45:45.066391788 +0000
+--- blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGWriter.cpp.ffmpeg35	2018-03-04 12:38:44.821235298 +0000
++++ blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGWriter.cpp	2018-03-04 12:45:45.066391788 +0000
 @@ -163,7 +163,7 @@
  		try
  		{
@@ -23,8 +23,8 @@
  				m_input_buffer.resize(m_input_size * samplesize);
  			}
  			else
---- /root/rpmbuild/BUILD/blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGReader.cpp.ffmpeg35	2018-03-04 12:38:44.821235298 +0000
-+++ /root/rpmbuild/BUILD/blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGReader.cpp	2018-03-04 12:46:53.672163538 +0000
+--- blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGReader.cpp.ffmpeg35	2018-03-04 12:38:44.821235298 +0000
++++ blender-2.79a/intern/audaspace/ffmpeg/AUD_FFMPEGReader.cpp	2018-03-04 12:46:53.672163538 +0000
 @@ -264,9 +264,9 @@
  		m_membuffer(buffer),
  		m_membufferpos(0)
