@@ -1,6 +1,9 @@
 # String format build errors are mostly avoided by gcc stupidity
 # Only few are usually fixed by patches, it makes no sense.
 # So disable check at all.
+%ifarch %{ix86}
+%global optflags %{optflags} -Wno-narrowing
+%endif
 %define Werror_cflags %{nil}
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
