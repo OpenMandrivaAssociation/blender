@@ -1,0 +1,12 @@
+diff --git a/source/blender/imbuf/intern/dds/DirectDrawSurface.cpp b/source/blender/imbuf/intern/dds/DirectDrawSurface.cpp
+index 6bf8277..9511033 100644
+--- a/source/blender/imbuf/intern/dds/DirectDrawSurface.cpp
++++ b/source/blender/imbuf/intern/dds/DirectDrawSurface.cpp
+@@ -55,6 +55,7 @@
+ // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ // OTHER DEALINGS IN THE SOFTWARE.
+ 
++#include <cmath>
+ #include <DirectDrawSurface.h>
+ #include <BlockDXT.h>
+ #include <PixelFormat.h>

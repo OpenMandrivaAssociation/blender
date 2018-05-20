@@ -10,7 +10,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	2.76b
-Release:	3
+Release:	4
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -24,13 +24,16 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 Patch6:		blender-2.67-uninit-var.patch
 Patch7:		blender-2.71-sse2.patch
 Patch8:		blender-ffmpeg3.patch
+Patch9:		fix-min-max.patch
+Patch10:	fix-openjpeg2.2-version.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
-BuildRequires:	ffmpeg-devel >= 0.7
+BuildRequires:	pkgconfig(libavcodec)
+#BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	jemalloc-devel
-BuildRequires:	pkgconfig(libopenjpeg1)
+BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
@@ -74,6 +77,8 @@ implemented.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
+%patch10 -p1
 
 %build
 #build with gcc for sse and openmp support
@@ -112,7 +117,7 @@ export CXX=g++
 	-DWITH_CYCLES:BOOL=OFF \
 %endif
 	-DWITH_RAYOPTIMIZATION:BOOL=OFF
-%make
+%make LDFLAGS="$LDFLAGS -lopenjpeg2"
 cd ..
 mv build non-sse
 %endif
@@ -148,7 +153,7 @@ mv build non-sse
 	-DWITH_CYCLES:BOOL=OFF \
 %endif
 	-DWITH_RAYOPTIMIZATION:BOOL=ON
-%make
+%make LDFLAGS="$LDFLAGS -lopenjpeg2"
 
 %install
 #install sse flavour
