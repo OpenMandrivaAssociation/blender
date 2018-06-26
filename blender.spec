@@ -9,7 +9,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.79a
+Version:	2.79b
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -38,7 +38,11 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
+%if %mdvver <= 3000000
+BuildRequires:	pkgconfig(python-3.6)
+%else
 BuildRequires:	pkgconfig(python3)
+%endif
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl2)
@@ -50,7 +54,11 @@ BuildRequires:	python-requests
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
 %endif
-Requires:	python3 >= 3.3
+%if %mdvver <= 3000000
+Requires:	python3.6
+%else
+Requires:	python3 >= 3.5
+%endif
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -86,8 +94,13 @@ export CXX=g++
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+%if %mdvver <= 3000000
+        -DPYTHON_VERSION:STRING=%{py36_ver} \
+        -DPYTHON_REQUESTS_PATH:STRING=%{py36_puresitedir} \
+%else
 	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
+%endif
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
@@ -122,8 +135,13 @@ mv build non-sse
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
-	-DPYTHON_VERSION:STRING=%{py_ver} \
+%if %mdvver <= 3000000
+        -DPYTHON_VERSION:STRING=%{py36_ver} \
+        -DPYTHON_REQUESTS_PATH:STRING=%{py36_puresitedir} \
+%else
+	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
+%endif
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
