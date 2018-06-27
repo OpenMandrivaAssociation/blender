@@ -12,8 +12,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.76b
-Release:	5
+Version:	2.79b
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -25,10 +25,7 @@ Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
-Patch7:		blender-2.71-sse2.patch
-Patch8:		blender-ffmpeg3.patch
-Patch9:		fix-min-max.patch
-Patch10:	fix-openjpeg2.2-version.patch
+Patch7:		blender-2.79-ffmpeg3.5.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	boost-devel
 BuildRequires:	pkgconfig(libavcodec)
@@ -36,7 +33,6 @@ BuildRequires:	pkgconfig(libavcodec)
 BuildRequires:	gomp-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	jemalloc-devel
-BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
@@ -46,7 +42,11 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
+%if %mdvver <= 3000000
+BuildRequires:	pkgconfig(python-3.6)
+%else
 BuildRequires:	pkgconfig(python3)
+%endif
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl2)
@@ -58,7 +58,11 @@ BuildRequires:	python-requests
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
 %endif
-Requires:	python3 >= 3.3
+%if %mdvver <= 3000000
+Requires:	python3.6
+%else
+Requires:	python3 >= 3.5
+%endif
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -77,18 +81,15 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
+%patch6 -p1 -b .p6~
+%patch7 -p1 -b .ffmpeg35
 
 %build
 #build with gcc for sse and openmp support
 export CC=gcc
 export CXX=g++
 
-%ifarch %{ix86}
+%ifarch %{ix86} %{armx}
 # build non-sse flavour
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
@@ -97,12 +98,17 @@ export CXX=g++
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+%if %mdvver <= 3000000
+        -DPYTHON_VERSION:STRING=%{py36_ver} \
+        -DPYTHON_REQUESTS_PATH:STRING=%{py36_puresitedir} \
+%else
 	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
+%endif
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
-%ifarch %{ix86}
+%ifarch %{ix86} %{armx}
 	-DSUPPORT_SSE2_BUILD=OFF -DSUPPORT_SSE_BUILD=OFF \
 %endif\
 	-DWITH_FFTW3:BOOL=ON \
@@ -133,13 +139,18 @@ mv build non-sse
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
-	-DPYTHON_VERSION:STRING=%{py_ver} \
+%if %mdvver <= 3000000
+        -DPYTHON_VERSION:STRING=%{py36_ver} \
+        -DPYTHON_REQUESTS_PATH:STRING=%{py36_puresitedir} \
+%else
+	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
+%endif
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
-%ifarch %{ix86}
-	-DSUPPORT_SSE2_BUILD=OFF \
+%ifarch %{ix86} %{armx}
+	-DSUPPORT_SSE2_BUILD=OFF -DSUPPORT_SSE_BUILD=OFF \
 %endif
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
@@ -149,7 +160,7 @@ mv build non-sse
         -DWITH_INPUT_NDOF:BOLL=ON \
         -DWITH_OPENCOLORIO:BOOL=ON \
         -DWITH_DOC_MANPAGE:BOOL=ON \
-	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
+	-DOPENJPEG_ROOT_DIR=%{_libdir}/openjpeg-1.5 \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
 %else
