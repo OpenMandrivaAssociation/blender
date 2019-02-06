@@ -80,7 +80,6 @@ implemented.
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
 %patch6 -p1 -b .p6~
-#% patch7 -p1 -b .ffmpeg35
 %patch8 -p1 -b .gcc8
 %patch9 -p1 -b ffmpeg4
 
