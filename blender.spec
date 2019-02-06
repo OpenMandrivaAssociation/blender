@@ -10,7 +10,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	2.79b
-Release:	3
+Release:	4
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -22,8 +22,10 @@ Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
-Patch7:		blender-2.79-ffmpeg3.5.patch
+Patch8:		blender-2.79b-gcc-8.patch
+Patch9:		blender-2.79b-ffmpeg-4-compat.patch
 BuildRequires:	cmake >= 2.8
+BuildRequires:	cmake(pugixml)
 BuildRequires:	boost-devel
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
@@ -78,7 +80,9 @@ implemented.
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
 %patch6 -p1 -b .p6~
-%patch7 -p1 -b .ffmpeg35
+#% patch7 -p1 -b .ffmpeg35
+%patch8 -p1 -b .gcc8
+%patch9 -p1 -b ffmpeg4
 
 %build
 #build with gcc for sse and openmp support
