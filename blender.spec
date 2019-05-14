@@ -28,6 +28,7 @@ Patch10:	blender-2.79-python37.patch
 Patch11:	0001-Fix-for-GCC9-new-OpenMP-data-sharing.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
+Patch14:	blender-oiio2.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	cmake(pugixml)
 BuildRequires:	boost-devel
