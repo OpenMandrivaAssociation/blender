@@ -36,6 +36,7 @@ BuildRequires:	boost-static-devel
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
 BuildRequires:	jpeg-devel
+BuildRequires:	icu-devel
 BuildRequires:	jemalloc-devel
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(glew)
