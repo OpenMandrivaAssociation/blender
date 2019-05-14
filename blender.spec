@@ -24,6 +24,10 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 Patch6:		blender-2.67-uninit-var.patch
 Patch8:		blender-2.79b-gcc-8.patch
 Patch9:		blender-2.79b-ffmpeg-4-compat.patch
+Patch10:	blender-2.79-python37.patch
+Patch11:	0001-Fix-for-GCC9-new-OpenMP-data-sharing.patch
+Patch12:	blender-2.79-scripts.patch
+Patch13:	blender-2.79-thumbnailer.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	cmake(pugixml)
 BuildRequires:	boost-devel
