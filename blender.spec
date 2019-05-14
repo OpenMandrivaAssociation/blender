@@ -38,6 +38,7 @@ BuildRequires:	gomp-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	icu-devel
 BuildRequires:	jemalloc-devel
+BuildRequires:	cmake(Alembic)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
