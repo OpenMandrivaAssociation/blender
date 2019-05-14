@@ -87,6 +87,11 @@ implemented.
 %patch6 -p1 -b .p6~
 %patch8 -p1 -b .gcc8
 %patch9 -p1 -b ffmpeg4
+%patch10 -p1
+%patch11 -p1
+%patch12 -p1
+%patch13 -p1
+%patch14 -p1
 
 %build
 #build with gcc for sse and openmp support
