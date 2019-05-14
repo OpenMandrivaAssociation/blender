@@ -32,6 +32,7 @@ Patch14:	blender-oiio2.patch
 BuildRequires:	cmake >= 2.8
 BuildRequires:	cmake(pugixml)
 BuildRequires:	boost-devel
+BuildRequires:	boost-static-devel
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
 BuildRequires:	jpeg-devel
