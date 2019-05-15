@@ -6,6 +6,7 @@
 %define _disable_lto 1
 
 %bcond_without	cycles
+%bcond_without opensubdiv
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
@@ -29,6 +30,9 @@ Patch11:	0001-Fix-for-GCC9-new-OpenMP-data-sharing.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
 Patch14:	blender-oiio2.patch
+%if %{with opensubdiv}
+BuildRequires:  opensubdiv-devel
+%endif
 BuildRequires:	cmake >= 2.8
 BuildRequires:	cmake(pugixml)
 BuildRequires:	boost-devel
@@ -110,6 +114,9 @@ export CXX=g++
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+%if %{with opensubdiv}
+        -DWITH_OPENSUBDIV:BOOL=ON \
+%endif
 %if %mdvver <= 3000000
         -DPYTHON_VERSION:STRING=%{py36_ver} \
         -DPYTHON_REQUESTS_PATH:STRING=%{py36_puresitedir} \
