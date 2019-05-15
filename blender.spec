@@ -34,6 +34,7 @@ Patch14:	blender-oiio2.patch
 BuildRequires:  opensubdiv-devel
 %endif
 BuildRequires:	cmake >= 2.8
+BuildRequires:	pkgconfig(audaspace)
 BuildRequires:	cmake(pugixml)
 BuildRequires:	boost-devel
 BuildRequires:	boost-static-devel
