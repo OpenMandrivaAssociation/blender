@@ -93,6 +93,7 @@ implemented.
 %patch1 -p0 -b .sse
 %patch2 -p0 -b .static
 %patch3 -p1 -b .openjpeg
+%patch4 -p1 -b .linkage~
 %patch6 -p1 -b .p6~
 %patch8 -p1 -b .gcc8
 %patch9 -p1 -b ffmpeg4
