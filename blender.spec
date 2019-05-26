@@ -11,7 +11,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	2.79b
-Release:	4
+Release:	5
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -21,6 +21,7 @@ Patch0:		blender-2.67-localedir.patch
 Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
+Patch4:		blender-2.79b-icu-linkage.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
 Patch8:		blender-2.79b-gcc-8.patch
