@@ -10,27 +10,20 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.79b
-Release:	5
+Version:	2.80
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
 Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
 Source100:	blender.rpmlintrc
-Patch0:		blender-2.67-localedir.patch
-Patch1:		blender-2.60-error-when-missing-sse.patch
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
 Patch4:		blender-2.79b-icu-linkage.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
-Patch8:		blender-2.79b-gcc-8.patch
-Patch9:		blender-2.79b-ffmpeg-4-compat.patch
-Patch10:	blender-2.79-python37.patch
-Patch11:	0001-Fix-for-GCC9-new-OpenMP-data-sharing.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
-Patch14:	blender-oiio2.patch
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
 %endif
@@ -88,20 +81,7 @@ extremely fast. All basic animation principles (curves and keys) are
 implemented.
 
 %prep
-%setup -q
-#patch0 -p1 -b .localedir
-%patch1 -p0 -b .sse
-%patch2 -p0 -b .static
-%patch3 -p1 -b .openjpeg
-%patch4 -p1 -b .linkage~
-%patch6 -p1 -b .p6~
-%patch8 -p1 -b .gcc8
-%patch9 -p1 -b ffmpeg4
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
-%patch14 -p1
+%autosetup -p1
 
 %build
 #build with gcc for sse and openmp support

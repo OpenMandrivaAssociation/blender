@@ -1,20 +1,20 @@
-diff -Naur blender-2.79.old/blender.thumbnailer blender-2.79/blender.thumbnailer
---- blender-2.79.old/blender.thumbnailer	1970-01-01 01:00:00.000000000 +0100
-+++ blender-2.79/blender.thumbnailer	2017-09-12 14:14:51.034711054 +0200
+diff -up blender-2.80/blender.thumbnailer.6~ blender-2.80/blender.thumbnailer
+--- blender-2.80/blender.thumbnailer.6~	2019-07-31 15:30:00.571305028 +0200
++++ blender-2.80/blender.thumbnailer	2019-07-31 15:30:00.570305046 +0200
 @@ -0,0 +1,4 @@
 +[Thumbnailer Entry]
 +TryExec=/usr/share/blender/scripts/blender-thumbnailer.py
 +Exec=/usr/share/blender/scripts/blender-thumbnailer.py %i %o
 +MimeType=application/x-blender;
-diff -Naur blender-2.79.old/source/creator/CMakeLists.txt blender-2.79/source/creator/CMakeLists.txt
---- blender-2.79.old/source/creator/CMakeLists.txt	2017-09-12 14:15:10.335071584 +0200
-+++ blender-2.79/source/creator/CMakeLists.txt	2017-09-12 14:14:51.034711054 +0200
-@@ -514,7 +514,7 @@
- 		)
- 		install(
- 			PROGRAMS ${CMAKE_SOURCE_DIR}/release/bin/blender-thumbnailer.py
--			DESTINATION bin
-+			DESTINATION ${CMAKE_INSTALL_PREFIX}/share/blender/scripts
- 		)
- 		set(BLENDER_TEXT_FILES_DESTINATION share/doc/blender)
- 	endif()
+diff -up blender-2.80/source/creator/CMakeLists.txt.6~ blender-2.80/source/creator/CMakeLists.txt
+--- blender-2.80/source/creator/CMakeLists.txt.6~	2019-07-31 15:30:00.571305028 +0200
++++ blender-2.80/source/creator/CMakeLists.txt	2019-07-31 15:34:17.306097169 +0200
+@@ -510,7 +510,7 @@ if(UNIX AND NOT APPLE)
+     install(
+       PROGRAMS
+       ${CMAKE_SOURCE_DIR}/release/bin/blender-thumbnailer.py
+-      DESTINATION "."
++      DESTINATION ${CMAKE_INSTALL_PREFIX}/share/blender/scripts
+     )
+ 
+     set(BLENDER_TEXT_FILES_DESTINATION ".")

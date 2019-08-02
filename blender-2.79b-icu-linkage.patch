@@ -1,26 +1,12 @@
-diff -up blender-2.79b/CMakeLists.txt.omv~ blender-2.79b/CMakeLists.txt
-diff -up blender-2.79b/source/blender/CMakeLists.txt.omv~ blender-2.79b/source/blender/CMakeLists.txt
-diff -up blender-2.79b/source/blenderplayer/CMakeLists.txt.omv~ blender-2.79b/source/blenderplayer/CMakeLists.txt
---- blender-2.79b/source/blenderplayer/CMakeLists.txt.omv~	2019-05-26 20:29:03.827714788 +0200
-+++ blender-2.79b/source/blenderplayer/CMakeLists.txt	2019-05-26 20:31:26.632707859 +0200
-@@ -249,7 +249,7 @@ endif()
- 		list(SORT REM_MSG)
- 		message(STATUS "Player Skipping: (${REM_MSG})")
- 	endif()
--	target_link_libraries(blenderplayer ${BLENDER_SORTED_LIBS})
-+	target_link_libraries(blenderplayer ${BLENDER_SORTED_LIBS} icui18n icuuc)
+diff -up blender-2.80/source/creator/CMakeLists.txt.linkage~ blender-2.80/source/creator/CMakeLists.txt
+--- blender-2.80/source/creator/CMakeLists.txt.linkage~	2019-07-31 15:23:57.579568933 +0200
++++ blender-2.80/source/creator/CMakeLists.txt	2019-07-31 15:25:07.906174856 +0200
+@@ -1045,7 +1045,7 @@ install(
+ # Setup link libs
  
- 	unset(SEARCHLIB)
- 	unset(SORTLIB)
-diff -up blender-2.79b/source/creator/CMakeLists.txt.omv~ blender-2.79b/source/creator/CMakeLists.txt
---- blender-2.79b/source/creator/CMakeLists.txt.omv~	2019-05-26 20:27:01.733720711 +0200
-+++ blender-2.79b/source/creator/CMakeLists.txt	2019-05-26 20:31:59.141706282 +0200
-@@ -1054,7 +1054,7 @@ unset(BLENDER_TEXT_FILES_DESTINATION)
  add_dependencies(blender makesdna)
- 
- setup_blender_sorted_libs()
--target_link_libraries(blender ${BLENDER_SORTED_LIBS})
-+target_link_libraries(blender ${BLENDER_SORTED_LIBS} icuuc icui18n)
+-target_link_libraries(blender ${LIB})
++target_link_libraries(blender ${LIB} icuuc icui18n)
+ unset(LIB)
  
  setup_liblinks(blender)
- 

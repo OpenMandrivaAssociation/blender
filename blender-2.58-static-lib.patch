@@ -1,11 +1,12 @@
---- build_files/cmake/macros.cmake.static	2011-06-23 04:19:26.000000000 +0200
-+++ build_files/cmake/macros.cmake	2011-06-23 04:20:08.000000000 +0200
-@@ -101,7 +101,7 @@
- 	blender_include_dirs("${includes}")
- 	blender_include_dirs_sys("${includes_sys}")
+diff -up blender-2.80/build_files/cmake/macros.cmake.static blender-2.80/build_files/cmake/macros.cmake
+--- blender-2.80/build_files/cmake/macros.cmake.static	2019-07-31 15:14:53.983517787 +0200
++++ blender-2.80/build_files/cmake/macros.cmake	2019-07-31 15:21:35.758357121 +0200
+@@ -249,7 +249,7 @@ function(blender_add_lib__impl
+   blender_include_dirs("${includes}")
+   blender_include_dirs_sys("${includes_sys}")
  
--	add_library(${name} ${sources})
-+	add_library(${name} STATIC ${sources})
+-  add_library(${name} ${sources})
++  add_library(${name} STATIC ${sources})
  
- 	# works fine without having the includes
- 	# listed is helpful for IDE's (QtCreator/MSVC)
+   if(NOT "${library_deps}" STREQUAL "")
+     target_link_libraries(${name} INTERFACE "${library_deps}")
