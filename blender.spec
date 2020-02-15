@@ -10,12 +10,12 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.80
-Release:	2
+Version:	2.82
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
-Source0:	http://download.blender.org/source/%{name}-%{version}.tar.gz
+Source0:	https://download.blender.org/source/%{name}-%{version}.tar.xz
 Source100:	blender.rpmlintrc
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
@@ -47,6 +47,7 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
+BuildRequires:	cmake(TBBMake)
 %if %mdvver <= 3000000
 BuildRequires:	pkgconfig(python-3.6)
 %else
@@ -84,56 +85,6 @@ implemented.
 %autosetup -p1
 
 %build
-#build with gcc for sse and openmp support
-export CC=gcc
-export CXX=g++
-
-%ifarch %{ix86} %{armx}
-# build non-sse flavour
-%cmake \
-	-DBUILD_SHARED_LIBS:BOOL=OFF \
-	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
-	-DWITH_GAMEENGINE:BOOL=ON \
-	-DWITH_PLAYER:BOOL=ON \
-	-DWITH_PYTHON:BOOL=ON \
-	-DWITH_PYTHON_INSTALL:BOOL=OFF \
-%if %{with opensubdiv}
-        -DWITH_OPENSUBDIV:BOOL=ON \
-%endif
-%if %mdvver <= 3000000
-        -DPYTHON_VERSION:STRING=%{py36_ver} \
-        -DPYTHON_REQUESTS_PATH:STRING=%{py36_puresitedir} \
-%else
-	-DPYTHON_VERSION:STRING=%{py3_ver} \
-	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
-%endif
-	-DWITH_BUILTIN_GLEW:BOOL=OFF \
-	-DWITH_CODEC_FFMPEG:BOOL=ON \
-	-DWITH_CODEC_SNDFILE:BOOL=ON \
-%ifarch %{ix86} %{armx}
-	-DSUPPORT_SSE2_BUILD=OFF -DSUPPORT_SSE_BUILD=OFF \
-%endif\
-	-DWITH_FFTW3:BOOL=ON \
-	-DWITH_MOD_OCEANSIM:BOOL=ON \
-	-DWITH_IMAGE_REDCODE:BOOL=ON \
-	-DWITH_SDL:BOOL=ON \
-	-DWITH_JACK:BOOL=ON \
-	-DWITH_INPUT_NDOF:BOLL=ON \
-	-DWITH_OPENCOLORIO:BOOL=ON \
-	-DWITH_DOC_MANPAGE:BOOL=ON \
-	-DOPENJPEG_ROOT_DIR=/usr/include/openjpeg-1.5 \
-%if %with cycles
-	-DWITH_CYCLES:BOOL=ON \
-%else
-	-DWITH_CYCLES:BOOL=OFF \
-%endif
-	-DWITH_RAYOPTIMIZATION:BOOL=OFF
-%make
-cd ..
-mv build non-sse
-%endif
-
-#build sse flavour
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
@@ -151,9 +102,6 @@ mv build non-sse
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
-%ifarch %{ix86} %{armx}
-	-DSUPPORT_SSE2_BUILD=OFF -DSUPPORT_SSE_BUILD=OFF \
-%endif
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
@@ -163,52 +111,22 @@ mv build non-sse
         -DWITH_OPENCOLORIO:BOOL=ON \
         -DWITH_DOC_MANPAGE:BOOL=ON \
 	-DOPENJPEG_ROOT_DIR=%{_libdir}/openjpeg-1.5 \
+	-DWITH_TBB:BOOL=ON \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
 %else
 	-DWITH_CYCLES:BOOL=OFF \
 %endif
-	-DWITH_RAYOPTIMIZATION:BOOL=ON
-%make
+	-DWITH_RAYOPTIMIZATION:BOOL=ON \
+	-G Ninja
+%ninja_build
 
 %install
-#install sse flavour
-%makeinstall_std -C build
+%ninja_install -C build
 
 # Install hicolor icons.
-for i in 16x16 22x22 32x32 48x48 256x256 ; do
-  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${i}/apps
-  install -pm 0644 release/freedesktop/icons/${i}/apps/%{name}.png \
-    %{buildroot}%{_datadir}/icons/hicolor/${i}/apps/%{name}.png
-done
-
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/scalable/apps
-install -pm 0644 release/freedesktop/icons/scalable/apps/%{name}.svg \
-    %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-
-%ifarch %{ix86}
-mv %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/%{name}.sse
-
-#install non-sse flavour
-rm -fr build
-mv non-sse build
-%makeinstall_std -C build
-mv %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/%{name}.nonsse
-
-# install wrapper
-cat >> %{buildroot}%{_bindir}/blender <<EOF 
-if [ -e /proc/cpuinfo ]; then
-	SSE="\`cat /proc/cpuinfo | grep flags | grep sse\`"
-fi
-
-if [ "x\$SSE" == x ]; then
-	%{_bindir}/%{name}.nonsse "\$@"
-else
-	%{_bindir}/%{name}.sse "\$@"
-fi
-EOF
-chmod 0755 %{buildroot}%{_bindir}/blender
-%endif
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor
+cp -a release/freedesktop/icons/* %{buildroot}%{_datadir}/icons/hicolor/
 
 %post
 if [ -x %{_gconftool_bin} ]; then
@@ -227,6 +145,6 @@ fi
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
-%{_iconsdir}/hicolor/*/apps/%{name}.*
-%{_mandir}/man1/%{name}.1.*
+%{_iconsdir}/hicolor/*/*/*
+%{_mandir}/man1/%{name}.1*
 %{_datadir}/doc/%{name}/*.txt

@@ -1,6 +1,6 @@
-diff -up blender-2.80/build_files/cmake/macros.cmake.static blender-2.80/build_files/cmake/macros.cmake
---- blender-2.80/build_files/cmake/macros.cmake.static	2019-07-31 15:14:53.983517787 +0200
-+++ blender-2.80/build_files/cmake/macros.cmake	2019-07-31 15:21:35.758357121 +0200
+diff -up blender-2.82/build_files/cmake/macros.cmake.1~ blender-2.82/build_files/cmake/macros.cmake
+--- blender-2.82/build_files/cmake/macros.cmake.1~	2020-02-14 17:18:59.959173921 +0100
++++ blender-2.82/build_files/cmake/macros.cmake	2020-02-14 17:20:05.095174583 +0100
 @@ -249,7 +249,7 @@ function(blender_add_lib__impl
    blender_include_dirs("${includes}")
    blender_include_dirs_sys("${includes_sys}")
@@ -8,5 +8,5 @@ diff -up blender-2.80/build_files/cmake/macros.cmake.static blender-2.80/build_f
 -  add_library(${name} ${sources})
 +  add_library(${name} STATIC ${sources})
  
-   if(NOT "${library_deps}" STREQUAL "")
-     target_link_libraries(${name} INTERFACE "${library_deps}")
+   # On Windows certain libraries have two sets of binaries: one for debug builds and one for
+   # release builds. The root of this requirement goes into ABI, I believe, but that's outside
