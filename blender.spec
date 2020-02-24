@@ -27,6 +27,7 @@ Patch13:	blender-2.79-thumbnailer.patch
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
 %endif
+BuildRequires:	ninja
 BuildRequires:	cmake >= 2.8
 BuildRequires:	pkgconfig(audaspace)
 BuildRequires:	cmake(pugixml)
