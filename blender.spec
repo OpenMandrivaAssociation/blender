@@ -59,8 +59,12 @@ BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
+BuildRequires:	pkgconfig(xxf86vm)
+BuildRequires:	pkgconfig(xrender)
 BuildRequires:	python-numpy
 BuildRequires:	python-requests
+BuildRequires:  python-numpy-devel
+BuildRequires:	llvm-devel
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
