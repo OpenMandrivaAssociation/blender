@@ -63,6 +63,7 @@ BuildRequires:	pkgconfig(xxf86vm)
 BuildRequires:	pkgconfig(xrender)
 BuildRequires:	python-numpy
 BuildRequires:	python-requests
+BuildRequires:  python-numpy-devel
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
