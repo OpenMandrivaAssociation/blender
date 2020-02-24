@@ -59,6 +59,7 @@ BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
+BuildRequires:	pkgconfig(xxf86vm)
 BuildRequires:	python-numpy
 BuildRequires:	python-requests
 %if %with cycles
