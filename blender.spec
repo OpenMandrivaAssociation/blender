@@ -3,19 +3,21 @@
 # So disable check at all.
 %define Werror_cflags %{nil}
 %define _disable_ld_no_undefined 1
+# As of blender 2.83.0, clang 10.0.1, trying to build
+# blender with LTO takes multiple days.
 %define _disable_lto 1
 
-%bcond_without	cycles
+%bcond_without cycles
 %bcond_without opensubdiv
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.82a
-Release:	2
+Version:	2.83.0
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
-Source0:	https://download.blender.org/source/%{name}-%{version}.tar.xz
+Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source100:	blender.rpmlintrc
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
@@ -39,6 +41,8 @@ BuildRequires:	jpeg-devel
 BuildRequires:	icu-devel
 BuildRequires:	jemalloc-devel
 BuildRequires:	cmake(Alembic)
+BuildRequires:	pkgconfig(lzo2)
+BuildRequires:	pkgconfig(eigen3)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
@@ -48,12 +52,9 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
+BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	cmake(TBBMake)
-%if %mdvver <= 3000000
-BuildRequires:	pkgconfig(python-3.6)
-%else
 BuildRequires:	pkgconfig(python3)
-%endif
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl2)
@@ -69,11 +70,7 @@ BuildRequires:	llvm-devel
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
 %endif
-%if %mdvver <= 3000000
-Requires:	python3.6
-%else
-Requires:	python3 >= 3.5
-%endif
+Requires:	python >= 3.5
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -92,18 +89,16 @@ implemented.
 %build
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
+	-DWITH_SYSTEM_EIGEN3:BOOL=ON \
+	-DWITH_SYSTEM_GLEW:BOOL=ON \
+	-DWITH_SYSTEM_LZO:BOOL=ON \
 	-DWITH_INSTALL_PORTABLE:BOOL=OFF \
 	-DWITH_GAMEENGINE:BOOL=ON \
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
-%if %mdvver <= 3000000
-        -DPYTHON_VERSION:STRING=%{py36_ver} \
-        -DPYTHON_REQUESTS_PATH:STRING=%{py36_puresitedir} \
-%else
 	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
-%endif
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
 	-DWITH_CODEC_FFMPEG:BOOL=ON \
 	-DWITH_CODEC_SNDFILE:BOOL=ON \
@@ -115,7 +110,6 @@ implemented.
         -DWITH_INPUT_NDOF:BOLL=ON \
         -DWITH_OPENCOLORIO:BOOL=ON \
         -DWITH_DOC_MANPAGE:BOOL=ON \
-	-DOPENJPEG_ROOT_DIR=%{_libdir}/openjpeg-1.5 \
 	-DWITH_TBB:BOOL=ON \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
@@ -128,6 +122,12 @@ implemented.
 
 %install
 %ninja_install -C build
+# Somehow blender gets its own install paths wrong
+PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
+mv %{buildroot}%{_datadir}/blender/scripts/addons/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
+rmdir %{buildroot}%{_datadir}/blender/scripts/addons
+mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
+rmdir %{buildroot}%{_datadir}/blender/scripts
 
 # Install hicolor icons.
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor
