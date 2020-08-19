@@ -12,8 +12,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.83.4
-Release:	2
+Version:	2.83.5
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
