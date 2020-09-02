@@ -33,6 +33,7 @@ BuildRequires:	ninja
 BuildRequires:	cmake >= 2.8
 BuildRequires:	pkgconfig(audaspace)
 BuildRequires:	cmake(pugixml)
+BuildRequires:  cmake(OpenCOLLADA)
 BuildRequires:	boost-devel
 BuildRequires:	boost-static-devel
 BuildRequires:	ffmpeg-devel >= 0.7
