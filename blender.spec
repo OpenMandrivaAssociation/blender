@@ -66,6 +66,7 @@ BuildRequires:	python-numpy
 BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
 BuildRequires:	llvm-devel
+BuildRequires:  pkgconfig(libunwind-llvm)
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
