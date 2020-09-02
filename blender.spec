@@ -12,7 +12,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.83.5
+Version:	2.90.0
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -33,6 +33,7 @@ BuildRequires:	ninja
 BuildRequires:	cmake >= 2.8
 BuildRequires:	pkgconfig(audaspace)
 BuildRequires:	cmake(pugixml)
+BuildRequires:  cmake(OpenCOLLADA)
 BuildRequires:	boost-devel
 BuildRequires:	boost-static-devel
 BuildRequires:	ffmpeg-devel >= 0.7
@@ -66,6 +67,7 @@ BuildRequires:	python-numpy
 BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
 BuildRequires:	llvm-devel
+BuildRequires:  pkgconfig(libunwind-llvm)
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
@@ -111,6 +113,7 @@ implemented.
         -DWITH_OPENCOLORIO:BOOL=ON \
         -DWITH_DOC_MANPAGE:BOOL=ON \
 	-DWITH_TBB:BOOL=ON \
+	-DWITH_CYCLES_EMBREE:BOOL=OFF \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
 %else
