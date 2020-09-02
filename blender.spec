@@ -111,6 +111,7 @@ implemented.
         -DWITH_OPENCOLORIO:BOOL=ON \
         -DWITH_DOC_MANPAGE:BOOL=ON \
 	-DWITH_TBB:BOOL=ON \
+	-DWITH_CYCLES_EMBREE:BOOL=OFF \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
 %else
