@@ -21,7 +21,7 @@ Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source100:	blender.rpmlintrc
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
-Patch4:		blender-2.79b-icu-linkage.patch
+#Patch4:		blender-2.79b-icu-linkage.patch
 # Patch submitted upstream - Blender Patches item #19234,
 Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
