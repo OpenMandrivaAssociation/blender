@@ -149,7 +149,7 @@ if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
 fi
 
 %files
-%doc release/text/*
+%doc release/text/* license/*
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
