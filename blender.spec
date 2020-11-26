@@ -12,7 +12,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.90.1
+Version:	2.91.0
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -21,9 +21,9 @@ Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source100:	blender.rpmlintrc
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
-Patch4:		blender-2.79b-icu-linkage.patch
+#Patch4:		blender-2.79b-icu-linkage.patch
 # Patch submitted upstream - Blender Patches item #19234,
-Patch6:		blender-2.67-uninit-var.patch
+#Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
 %if %{with opensubdiv}
@@ -150,6 +150,7 @@ fi
 
 %files
 %doc release/text/*
+%{_datadir}/doc/blender/license/*
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
