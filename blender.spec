@@ -13,7 +13,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	2.91.0
-Release:	2
+Release:	3
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -67,7 +67,7 @@ BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
 BuildRequires:	cmake(LLVM)
 BuildRequires:  pkgconfig(libunwind-llvm)
-BuildRequires:  pkgconfig(gmp)
+BuildRequires:  pkgconfig(gmpxx)
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
