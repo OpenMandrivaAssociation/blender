@@ -13,7 +13,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	2.91.0
-Release:	1
+Release:	2
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -38,9 +38,8 @@ BuildRequires:	boost-devel
 BuildRequires:	boost-static-devel
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
-BuildRequires:	jpeg-devel
-BuildRequires:	icu-devel
-BuildRequires:	jemalloc-devel
+BuildRequires:	pkgconfig(libjpeg)
+BuildRequires:	pkgconfig(jemalloc)
 BuildRequires:	cmake(Alembic)
 BuildRequires:	pkgconfig(lzo2)
 BuildRequires:	pkgconfig(eigen3)
@@ -66,8 +65,9 @@ BuildRequires:	pkgconfig(xrender)
 BuildRequires:	python-numpy
 BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
-BuildRequires:	llvm-devel
+BuildRequires:	cmake(LLVM)
 BuildRequires:  pkgconfig(libunwind-llvm)
+BuildRequires:  pkgconfig(gmp)
 %if %with cycles
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
