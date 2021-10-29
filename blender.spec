@@ -118,6 +118,7 @@ implemented.
         -DWITH_DOC_MANPAGE:BOOL=ON \
 	-DWITH_TBB:BOOL=OFF \
 	-DWITH_CYCLES_EMBREE:BOOL=OFF \
+	-DCMAKE_CXX_STANDARD=17 \
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
 %else
