@@ -26,10 +26,13 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 #Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
+Patch14:	blender-2.93.5-openexr3.patch
+
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
 %endif
 BuildRequires:	ninja
+BuildRequires:	clang
 BuildRequires:	cmake >= 2.8
 BuildRequires:	pkgconfig(audaspace)
 BuildRequires:	cmake(pugixml)
@@ -69,6 +72,7 @@ BuildRequires:	cmake(LLVM)
 BuildRequires:  pkgconfig(libunwind-llvm)
 BuildRequires:  pkgconfig(gmpxx)
 %if %with cycles
+BuildRequires:	OpenImageIO
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
 %endif
