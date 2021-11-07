@@ -69,6 +69,9 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xxf86vm)
 BuildRequires:	pkgconfig(xrender)
+BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	potrace-devel
+BuildRequires:	libharu-devel
 BuildRequires:	python-numpy
 BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
