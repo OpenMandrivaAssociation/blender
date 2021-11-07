@@ -7,6 +7,8 @@
 # blender with LTO takes multiple days.
 %define _disable_lto 1
 
+%global optflags %{optflags} -Wno-error=float-conversion
+
 %bcond_without cycles
 %bcond_without opensubdiv
 
@@ -27,6 +29,8 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
 Patch14:	blender-2.93.5-openexr3.patch
+Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
+Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
@@ -116,7 +120,7 @@ implemented.
         -DWITH_INPUT_NDOF:BOLL=ON \
         -DWITH_OPENCOLORIO:BOOL=ON \
         -DWITH_DOC_MANPAGE:BOOL=ON \
-	-DWITH_TBB:BOOL=OFF \
+	-DWITH_TBB:BOOL=ON \
 	-DWITH_CYCLES_EMBREE:BOOL=OFF \
 	-DCMAKE_CXX_STANDARD=17 \
 %if %with cycles
