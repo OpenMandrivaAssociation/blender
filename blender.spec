@@ -73,8 +73,10 @@ BuildRequires:	python-numpy
 BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
 BuildRequires:	cmake(LLVM)
+BuildRequires:	cmake(Clang)
 BuildRequires:  pkgconfig(libunwind-llvm)
 BuildRequires:  pkgconfig(gmpxx)
+BuildRequires:	pkgconfig(libxml-2.0)
 %if %with cycles
 BuildRequires:	OpenImageIO
 BuildRequires:	OpenImageIO-devel
