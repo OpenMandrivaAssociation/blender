@@ -1,20 +1,20 @@
-diff -up blender-2.82/blender.thumbnailer.6~ blender-2.82/blender.thumbnailer
---- blender-2.82/blender.thumbnailer.6~	2020-02-14 17:20:30.989174846 +0100
-+++ blender-2.82/blender.thumbnailer	2020-02-14 17:20:30.989174846 +0100
+diff -up blender-3.0.0/blender.thumbnailer.4~ blender-3.0.0/blender.thumbnailer
+--- blender-3.0.0/blender.thumbnailer.4~	2021-12-07 18:25:08.202906276 +0100
++++ blender-3.0.0/blender.thumbnailer	2021-12-07 18:25:08.202906276 +0100
 @@ -0,0 +1,4 @@
 +[Thumbnailer Entry]
 +TryExec=/usr/share/blender/scripts/blender-thumbnailer.py
 +Exec=/usr/share/blender/scripts/blender-thumbnailer.py %i %o
 +MimeType=application/x-blender;
-diff -up blender-2.82/source/creator/CMakeLists.txt.6~ blender-2.82/source/creator/CMakeLists.txt
---- blender-2.82/source/creator/CMakeLists.txt.6~	2020-02-14 17:20:30.989174846 +0100
-+++ blender-2.82/source/creator/CMakeLists.txt	2020-02-14 17:22:34.953176106 +0100
-@@ -503,7 +503,7 @@ if(UNIX AND NOT APPLE)
-     install(
-       PROGRAMS
-       ${CMAKE_SOURCE_DIR}/release/bin/blender-thumbnailer.py
--      DESTINATION "."
-+      DESTINATION ${CMAKE_INSTALL_PREFIX}/share/blender/scripts
-     )
+diff -up blender-3.0.0/source/creator/CMakeLists.txt.4~ blender-3.0.0/source/creator/CMakeLists.txt
+--- blender-3.0.0/source/creator/CMakeLists.txt.4~	2021-12-07 18:25:08.203906279 +0100
++++ blender-3.0.0/source/creator/CMakeLists.txt	2021-12-07 18:25:57.160040398 +0100
+@@ -518,7 +518,7 @@ if(UNIX AND NOT APPLE)
+     if(WITH_BLENDER_THUMBNAILER)
+       install(
+         TARGETS blender-thumbnailer
+-        DESTINATION "."
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/blender/scripts
+       )
+     endif()
  
-     if(EXISTS ${LIBDIR}/mesa)

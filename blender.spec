@@ -14,7 +14,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	2.93.6
+Version:	3.0.0
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -141,7 +141,7 @@ implemented.
 %ninja_install -C build
 # Somehow blender gets its own install paths wrong
 PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
-mv %{buildroot}%{_datadir}/blender/scripts/addons/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
+mv %{buildroot}%{_datadir}/blender/scripts/addons/{*,.github} %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
 rmdir %{buildroot}%{_datadir}/blender/scripts/addons
 mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
 rmdir %{buildroot}%{_datadir}/blender/scripts
