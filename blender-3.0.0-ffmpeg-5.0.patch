@@ -1,0 +1,145 @@
+diff -up blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGReader.cpp.omv~ blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGReader.cpp
+--- blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGReader.cpp.omv~	2022-01-15 22:41:03.028166981 +0100
++++ blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGReader.cpp	2022-01-15 22:41:08.906182094 +0100
+@@ -177,7 +177,7 @@ void FFMPEGReader::init(int stream)
+ 
+ 	// get a decoder and open it
+ #ifndef FFMPEG_OLD_CODE
+-	AVCodec* aCodec = avcodec_find_decoder(m_formatCtx->streams[m_stream]->codecpar->codec_id);
++	const AVCodec* aCodec = avcodec_find_decoder(m_formatCtx->streams[m_stream]->codecpar->codec_id);
+ 
+ 	if(!aCodec)
+ 		AUD_THROW(FileException, "File couldn't be read, no decoder found with ffmpeg.");
+diff -up blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGWriter.cpp.omv~ blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGWriter.cpp
+--- blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGWriter.cpp.omv~	2022-01-15 22:41:30.556238470 +0100
++++ blender-3.0.0/extern/audaspace/plugins/ffmpeg/FFMPEGWriter.cpp	2022-01-15 22:44:00.561656573 +0100
+@@ -23,6 +23,7 @@
+ extern "C" {
+ #include <libavcodec/avcodec.h>
+ #include <libavformat/avio.h>
++#include <libavutil/channel_layout.h>
+ }
+ 
+ AUD_NAMESPACE_BEGIN
+@@ -171,7 +172,7 @@ FFMPEGWriter::FFMPEGWriter(std::string f
+ 	if(avformat_alloc_output_context2(&m_formatCtx, nullptr, formats[format], filename.c_str()) < 0)
+ 		AUD_THROW(FileException, "File couldn't be written, format couldn't be found with ffmpeg.");
+ 
+-	AVOutputFormat* outputFmt = m_formatCtx->oformat;
++	AVOutputFormat* outputFmt = const_cast<AVOutputFormat*>(m_formatCtx->oformat);
+ 
+ 	if(!outputFmt) {
+ 		avformat_free_context(m_formatCtx);
+@@ -271,7 +272,7 @@ FFMPEGWriter::FFMPEGWriter(std::string f
+ 		if(outputFmt->audio_codec == AV_CODEC_ID_NONE)
+ 			AUD_THROW(FileException, "File couldn't be written, audio codec not found with ffmpeg.");
+ 
+-		AVCodec* codec = avcodec_find_encoder(outputFmt->audio_codec);
++		const AVCodec* codec = avcodec_find_encoder(outputFmt->audio_codec);
+ 		if(!codec)
+ 			AUD_THROW(FileException, "File couldn't be written, audio encoder couldn't be found with ffmpeg.");
+ 
+diff -up blender-3.0.0/source/blender/blenkernel/intern/writeffmpeg.c.omv~ blender-3.0.0/source/blender/blenkernel/intern/writeffmpeg.c
+--- blender-3.0.0/source/blender/blenkernel/intern/writeffmpeg.c.omv~	2022-01-18 04:25:47.506268037 +0100
++++ blender-3.0.0/source/blender/blenkernel/intern/writeffmpeg.c	2022-01-18 04:31:37.158542182 +0100
+@@ -60,6 +60,7 @@
+ #  include <libavutil/opt.h>
+ #  include <libavutil/rational.h>
+ #  include <libavutil/samplefmt.h>
++#  include <libavutil/channel_layout.h>
+ #  include <libswscale/swscale.h>
+ 
+ #  include "ffmpeg_compat.h"
+@@ -572,7 +573,7 @@ static AVStream *alloc_video_stream(FFMp
+                                     int error_size)
+ {
+   AVStream *st;
+-  AVCodec *codec;
++  const AVCodec *codec;
+   AVDictionary *opts = NULL;
+ 
+   error[0] = '\0';
+@@ -599,7 +600,7 @@ static AVStream *alloc_video_stream(FFMp
+   }
+ 
+   /* Load codec defaults into 'c'. */
+-  avcodec_get_context_defaults3(c, codec);
++  //avcodec_get_context_defaults3(c, codec);
+ 
+   /* Get some values from the current render settings */
+ 
+@@ -815,7 +816,7 @@ static AVStream *alloc_audio_stream(FFMp
+                                     int error_size)
+ {
+   AVStream *st;
+-  AVCodec *codec;
++  const AVCodec *codec;
+   AVDictionary *opts = NULL;
+ 
+   error[0] = '\0';
+@@ -843,7 +844,7 @@ static AVStream *alloc_audio_stream(FFMp
+   }
+ 
+   /* Load codec defaults into 'c'. */
+-  avcodec_get_context_defaults3(c, codec);
++  //avcodec_get_context_defaults3(c, codec);
+ 
+   c->sample_rate = rd->ffcodecdata.audio_mixrate;
+   c->bit_rate = context->ffmpeg_audio_bitrate * 1000;
+@@ -1039,7 +1040,7 @@ static int start_ffmpeg_impl(FFMpegConte
+     BKE_report(reports, RPT_ERROR, "No valid formats found");
+     return 0;
+   }
+-  fmt = av_guess_format(NULL, exts[0], NULL);
++  fmt = (AVOutputFormat*)(av_guess_format(NULL, exts[0], NULL));
+   if (!fmt) {
+     BKE_report(reports, RPT_ERROR, "No valid formats found");
+     return 0;
+@@ -1555,7 +1556,7 @@ static IDProperty *BKE_ffmpeg_property_a
+                                            const AVOption *o,
+                                            const AVOption *parent)
+ {
+-  AVCodecContext c;
++  //AVCodecContext c;
+   IDProperty *group;
+   IDProperty *prop;
+   IDPropertyTemplate val;
+@@ -1564,7 +1565,7 @@ static IDProperty *BKE_ffmpeg_property_a
+ 
+   val.i = 0;
+ 
+-  avcodec_get_context_defaults3(&c, NULL);
++  //avcodec_get_context_defaults3(&c, NULL);
+ 
+   if (!rd->ffcodecdata.properties) {
+     rd->ffcodecdata.properties = IDP_New(IDP_GROUP, &val, "ffmpeg");
+@@ -1633,7 +1634,7 @@ int BKE_ffmpeg_property_add_string(Rende
+   char *param;
+   IDProperty *prop = NULL;
+ 
+-  avcodec_get_context_defaults3(&c, NULL);
++  //avcodec_get_context_defaults3(&c, NULL);
+ 
+   BLI_strncpy(name_, str, sizeof(name_));
+ 
+diff -up blender-3.0.0/source/blender/imbuf/intern/indexer.c.omv~ blender-3.0.0/source/blender/imbuf/intern/indexer.c
+--- blender-3.0.0/source/blender/imbuf/intern/indexer.c.omv~	2022-01-15 22:45:03.916845561 +0100
++++ blender-3.0.0/source/blender/imbuf/intern/indexer.c	2022-01-15 23:04:05.711843882 +0100
+@@ -526,7 +526,7 @@ static struct proxy_output_ctx *alloc_pr
+   rv->c->codec_type = AVMEDIA_TYPE_VIDEO;
+   rv->c->codec_id = AV_CODEC_ID_H264;
+ 
+-  rv->of->oformat->video_codec = rv->c->codec_id;
++  ((struct AVOutputFormat*)(rv->of->oformat))->video_codec = rv->c->codec_id;
+   rv->codec = avcodec_find_encoder(rv->c->codec_id);
+ 
+   if (!rv->codec) {
+@@ -539,7 +539,7 @@ static struct proxy_output_ctx *alloc_pr
+     return NULL;
+   }
+ 
+-  avcodec_get_context_defaults3(rv->c, rv->codec);
++  //avcodec_get_context_defaults3(rv->c, rv->codec);
+ 
+   rv->c->width = width;
+   rv->c->height = height;

@@ -31,6 +31,7 @@ Patch13:	blender-2.79-thumbnailer.patch
 Patch14:	blender-2.93.5-openexr3.patch
 Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
 Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
+Patch17:	blender-3.0.0-ffmpeg-5.0.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
