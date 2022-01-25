@@ -3,9 +3,6 @@
 # So disable check at all.
 %define Werror_cflags %{nil}
 %define _disable_ld_no_undefined 1
-# As of blender 2.83.0, clang 10.0.1, trying to build
-# blender with LTO takes multiple days.
-%define _disable_lto 1
 
 %global optflags %{optflags} -Wno-error=float-conversion
 
@@ -15,7 +12,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	3.0.0
-Release:	1
+Release:	2
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
