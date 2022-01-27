@@ -5,6 +5,7 @@
 %define _disable_ld_no_undefined 1
 # As of blender 3.0.1, clang 13.0.0, building with full LTO takes
 # enough RAM to bring down all builders
+%define _disable_lto 1
 %global optflags %{optflags} -Wno-error=float-conversion -flto=thin
 
 %bcond_without cycles
