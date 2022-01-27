@@ -6,7 +6,12 @@
 # As of blender 3.0.1, clang 13.0.0, building with full LTO takes
 # enough RAM to bring down all builders
 %define _disable_lto 1
+%ifarch %{armx}
+# -isystem %{_sourcedir} is for sse2neon.h
+%global optflags %{optflags} -Wno-error=float-conversion -flto=thin -isystem %{_sourcedir}
+%else
 %global optflags %{optflags} -Wno-error=float-conversion -flto=thin
+%endif
 
 %bcond_without cycles
 %bcond_without opensubdiv
@@ -19,6 +24,7 @@ Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
 Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
+Source1:	https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
 Source100:	blender.rpmlintrc
 Patch2:		blender-2.58-static-lib.patch
 Patch3:		blender-2.65-openjpeg_stdbool.patch
@@ -129,6 +135,9 @@ implemented.
 	-DWITH_TBB:BOOL=ON \
 	-DWITH_CYCLES_EMBREE:BOOL=OFF \
 	-DCMAKE_CXX_STANDARD=17 \
+%ifarch %{armx}
+	-DSSE2NEON_INCLUDE_DIR=%{_sourcedir} \
+%endif
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
 %else
