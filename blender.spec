@@ -108,6 +108,10 @@ implemented.
 %autosetup -p1
 
 %build
+# FIXME we currently turn off WITH_GL_EGL on aarch64
+# because it results in link time errors (undefined
+# references in libGLEW). This should be fixed properly
+# at some point. In the mean time, GLX is good enough.
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_SYSTEM_EIGEN3:BOOL=ON \
@@ -118,7 +122,9 @@ implemented.
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
+%ifnarch %{armx}
 	-DWITH_GL_EGL:BOOL=ON \
+%endif
 	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
