@@ -3,8 +3,9 @@
 # So disable check at all.
 %define Werror_cflags %{nil}
 %define _disable_ld_no_undefined 1
-
-%global optflags %{optflags} -Wno-error=float-conversion
+# As of blender 3.0.1, clang 13.0.0, building with full LTO takes
+# enough RAM to bring down all builders
+%global optflags %{optflags} -Wno-error=float-conversion -flto=thin
 
 %bcond_without cycles
 %bcond_without opensubdiv
