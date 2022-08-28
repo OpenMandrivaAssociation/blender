@@ -1,19 +1,19 @@
-diff -up blender-2.93.5/source/blender/blenfont/intern/blf_glyph.c.omv~ blender-2.93.5/source/blender/blenfont/intern/blf_glyph.c
---- blender-2.93.5/source/blender/blenfont/intern/blf_glyph.c.omv~	2021-11-07 16:28:17.462693060 +0100
-+++ blender-2.93.5/source/blender/blenfont/intern/blf_glyph.c	2021-11-07 16:28:26.425655065 +0100
-@@ -263,7 +263,7 @@ GlyphBLF *blf_glyph_add(FontBLF *font, G
-   }
- 
-   int load_flags;
+diff -up blender-3.2.2/source/blender/blenfont/intern/blf_glyph.c.5~ blender-3.2.2/source/blender/blenfont/intern/blf_glyph.c
+--- blender-3.2.2/source/blender/blenfont/intern/blf_glyph.c.5~	2022-08-11 02:07:38.241277996 +0200
++++ blender-3.2.2/source/blender/blenfont/intern/blf_glyph.c	2022-08-11 02:27:05.812113176 +0200
+@@ -272,7 +272,7 @@ static FT_GlyphSlot blf_glyph_load(FontB
+  */
+ static bool blf_glyph_render_bitmap(FontBLF *font, FT_GlyphSlot glyph)
+ {
 -  int render_mode;
 +  unsigned int render_mode;
  
    if (font->flags & BLF_MONOCHROME) {
-     load_flags = FT_LOAD_TARGET_MONO;
-diff -up blender-2.93.5/source/blender/blenkernel/intern/idprop_utils.c.omv~ blender-2.93.5/source/blender/blenkernel/intern/idprop_utils.c
---- blender-2.93.5/source/blender/blenkernel/intern/idprop_utils.c.omv~	2021-11-07 16:31:36.112208365 +0100
-+++ blender-2.93.5/source/blender/blenkernel/intern/idprop_utils.c	2021-11-07 16:32:08.465190833 +0100
-@@ -184,7 +184,7 @@ static void idp_repr_fn_recursive(struct
+     render_mode = FT_RENDER_MODE_MONO;
+diff -up blender-3.2.2/source/blender/blenkernel/intern/idprop_utils.c.5~ blender-3.2.2/source/blender/blenkernel/intern/idprop_utils.c
+--- blender-3.2.2/source/blender/blenkernel/intern/idprop_utils.c.5~	2022-05-02 15:58:51.000000000 +0200
++++ blender-3.2.2/source/blender/blenkernel/intern/idprop_utils.c	2022-08-11 02:07:38.241277996 +0200
+@@ -170,7 +170,7 @@ static void idp_repr_fn_recursive(struct
        const ID *id = prop->data.pointer;
        if (id != NULL) {
          STR_APPEND_STR("bpy.data.");
@@ -22,10 +22,10 @@ diff -up blender-2.93.5/source/blender/blenkernel/intern/idprop_utils.c.omv~ ble
          STR_APPEND_STR("[");
          STR_APPEND_STR_QUOTE(id->name + 2);
          STR_APPEND_STR("]");
-diff -up blender-2.93.5/source/blender/blenkernel/intern/mball_tessellate.c.omv~ blender-2.93.5/source/blender/blenkernel/intern/mball_tessellate.c
---- blender-2.93.5/source/blender/blenkernel/intern/mball_tessellate.c.omv~	2021-11-07 16:32:43.515188084 +0100
-+++ blender-2.93.5/source/blender/blenkernel/intern/mball_tessellate.c	2021-11-07 16:33:28.279207411 +0100
-@@ -52,6 +52,9 @@
+diff -up blender-3.2.2/source/blender/blenkernel/intern/mball_tessellate.c.5~ blender-3.2.2/source/blender/blenkernel/intern/mball_tessellate.c
+--- blender-3.2.2/source/blender/blenkernel/intern/mball_tessellate.c.5~	2022-05-02 15:58:52.000000000 +0200
++++ blender-3.2.2/source/blender/blenkernel/intern/mball_tessellate.c	2022-08-11 02:07:38.241277996 +0200
+@@ -36,6 +36,9 @@
  
  #include "BLI_strict_flags.h"
  
@@ -35,10 +35,10 @@ diff -up blender-2.93.5/source/blender/blenkernel/intern/mball_tessellate.c.omv~
  /* experimental (faster) normal calculation */
  // #define USE_ACCUM_NORMAL
  
-diff -up blender-2.93.5/source/blender/blenkernel/intern/mesh_remap.c.omv~ blender-2.93.5/source/blender/blenkernel/intern/mesh_remap.c
---- blender-2.93.5/source/blender/blenkernel/intern/mesh_remap.c.omv~	2021-11-07 16:32:21.283187925 +0100
-+++ blender-2.93.5/source/blender/blenkernel/intern/mesh_remap.c	2021-11-07 16:32:28.026187284 +0100
-@@ -47,6 +47,9 @@
+diff -up blender-3.2.2/source/blender/blenkernel/intern/mesh_remap.c.5~ blender-3.2.2/source/blender/blenkernel/intern/mesh_remap.c
+--- blender-3.2.2/source/blender/blenkernel/intern/mesh_remap.c.5~	2022-05-02 15:58:52.000000000 +0200
++++ blender-3.2.2/source/blender/blenkernel/intern/mesh_remap.c	2022-08-11 02:07:38.242277971 +0200
+@@ -33,6 +33,9 @@
  
  #include "BLI_strict_flags.h"
  
@@ -48,11 +48,10 @@ diff -up blender-2.93.5/source/blender/blenkernel/intern/mesh_remap.c.omv~ blend
  static CLG_LogRef LOG = {"bke.mesh"};
  
  /* -------------------------------------------------------------------- */
-diff -up blender-2.93.5/source/blender/blenlib/BLI_strict_flags.h.omv~ blender-2.93.5/source/blender/blenlib/BLI_strict_flags.h
-diff -up blender-2.93.5/source/blender/blenlib/intern/easing.c.omv~ blender-2.93.5/source/blender/blenlib/intern/easing.c
---- blender-2.93.5/source/blender/blenlib/intern/easing.c.omv~	2021-11-07 16:27:51.279814119 +0100
-+++ blender-2.93.5/source/blender/blenlib/intern/easing.c	2021-11-07 16:27:57.243785199 +0100
-@@ -38,6 +38,9 @@
+diff -up blender-3.2.2/source/blender/blenlib/intern/easing.c.5~ blender-3.2.2/source/blender/blenlib/intern/easing.c
+--- blender-3.2.2/source/blender/blenlib/intern/easing.c.5~	2022-05-02 15:58:53.000000000 +0200
++++ blender-3.2.2/source/blender/blenlib/intern/easing.c	2022-08-11 02:07:38.242277971 +0200
+@@ -11,6 +11,9 @@
  
  #include "BLI_strict_flags.h"
  
@@ -62,10 +61,10 @@ diff -up blender-2.93.5/source/blender/blenlib/intern/easing.c.omv~ blender-2.93
  /* blend if (amplitude < fabsf(change) */
  #define USE_ELASTIC_BLEND
  
-diff -up blender-2.93.5/source/blender/blenlib/intern/math_geom.c.omv~ blender-2.93.5/source/blender/blenlib/intern/math_geom.c
---- blender-2.93.5/source/blender/blenlib/intern/math_geom.c.omv~	2021-11-07 16:26:17.248383567 +0100
-+++ blender-2.93.5/source/blender/blenlib/intern/math_geom.c	2021-11-07 16:27:11.431028601 +0100
-@@ -31,6 +31,9 @@
+diff -up blender-3.2.2/source/blender/blenlib/intern/math_geom.c.5~ blender-3.2.2/source/blender/blenlib/intern/math_geom.c
+--- blender-3.2.2/source/blender/blenlib/intern/math_geom.c.5~	2022-05-02 15:58:53.000000000 +0200
++++ blender-3.2.2/source/blender/blenlib/intern/math_geom.c	2022-08-11 02:07:38.243277947 +0200
+@@ -13,6 +13,9 @@
  
  #include "BLI_strict_flags.h"
  
@@ -75,10 +74,10 @@ diff -up blender-2.93.5/source/blender/blenlib/intern/math_geom.c.omv~ blender-2
  /********************************** Polygons *********************************/
  
  void cross_tri_v3(float n[3], const float v1[3], const float v2[3], const float v3[3])
-diff -up blender-2.93.5/source/blender/blenlib/intern/math_rotation.c.omv~ blender-2.93.5/source/blender/blenlib/intern/math_rotation.c
---- blender-2.93.5/source/blender/blenlib/intern/math_rotation.c.omv~	2021-11-07 16:27:34.720898690 +0100
-+++ blender-2.93.5/source/blender/blenlib/intern/math_rotation.c	2021-11-07 16:27:41.686862339 +0100
-@@ -27,6 +27,9 @@
+diff -up blender-3.2.2/source/blender/blenlib/intern/math_rotation.c.5~ blender-3.2.2/source/blender/blenlib/intern/math_rotation.c
+--- blender-3.2.2/source/blender/blenlib/intern/math_rotation.c.5~	2022-05-02 15:58:53.000000000 +0200
++++ blender-3.2.2/source/blender/blenlib/intern/math_rotation.c	2022-08-11 02:07:38.243277947 +0200
+@@ -9,6 +9,9 @@
  
  #include "BLI_strict_flags.h"
  
@@ -88,31 +87,31 @@ diff -up blender-2.93.5/source/blender/blenlib/intern/math_rotation.c.omv~ blend
  /******************************** Quaternions ********************************/
  
  /* used to test is a quat is not normalized (only used for debug prints) */
-diff -up blender-2.93.5/source/blender/modifiers/intern/MOD_correctivesmooth.c.omv~ blender-2.93.5/source/blender/modifiers/intern/MOD_correctivesmooth.c
---- blender-2.93.5/source/blender/modifiers/intern/MOD_correctivesmooth.c.omv~	2021-11-07 16:33:58.066233487 +0100
-+++ blender-2.93.5/source/blender/modifiers/intern/MOD_correctivesmooth.c	2021-11-07 16:35:25.204364383 +0100
-@@ -212,7 +212,7 @@ static void smooth_iter__simple(Correcti
+diff -up blender-3.2.2/source/blender/modifiers/intern/MOD_correctivesmooth.c.5~ blender-3.2.2/source/blender/modifiers/intern/MOD_correctivesmooth.c
+--- blender-3.2.2/source/blender/modifiers/intern/MOD_correctivesmooth.c.5~	2022-08-11 02:07:38.243277947 +0200
++++ blender-3.2.2/source/blender/modifiers/intern/MOD_correctivesmooth.c	2022-08-11 02:28:06.680572624 +0200
+@@ -197,7 +197,7 @@ static void smooth_iter__simple(Correcti
     * here to avoid multiplying for every iteration */
    if (smooth_weights == NULL) {
-     for (i = 0; i < numVerts; i++) {
+     for (i = 0; i < verts_num; i++) {
 -      vertex_edge_count_div[i] = lambda * (vertex_edge_count_div[i] ?
 +      vertex_edge_count_div[i] = lambda * ((vertex_edge_count_div[i] != 0.0f) ?
                                                 (1.0f / vertex_edge_count_div[i]) :
                                                 1.0f);
      }
-@@ -220,7 +220,7 @@ static void smooth_iter__simple(Correcti
+@@ -205,7 +205,7 @@ static void smooth_iter__simple(Correcti
    else {
-     for (i = 0; i < numVerts; i++) {
+     for (i = 0; i < verts_num; i++) {
        vertex_edge_count_div[i] = smooth_weights[i] * lambda *
 -                                 (vertex_edge_count_div[i] ? (1.0f / vertex_edge_count_div[i]) :
 +                                 ((vertex_edge_count_div[i] != 0.0f) ? (1.0f / vertex_edge_count_div[i]) :
                                                               1.0f);
      }
    }
-diff -up blender-2.93.5/source/blender/modifiers/intern/MOD_screw.c.omv~ blender-2.93.5/source/blender/modifiers/intern/MOD_screw.c
---- blender-2.93.5/source/blender/modifiers/intern/MOD_screw.c.omv~	2021-11-07 16:34:14.923252652 +0100
-+++ blender-2.93.5/source/blender/modifiers/intern/MOD_screw.c	2021-11-07 16:36:56.575578071 +0100
-@@ -55,6 +55,9 @@
+diff -up blender-3.2.2/source/blender/modifiers/intern/MOD_screw.c.5~ blender-3.2.2/source/blender/modifiers/intern/MOD_screw.c
+--- blender-3.2.2/source/blender/modifiers/intern/MOD_screw.c.5~	2022-05-12 15:29:09.000000000 +0200
++++ blender-3.2.2/source/blender/modifiers/intern/MOD_screw.c	2022-08-11 02:07:38.244277923 +0200
+@@ -41,6 +41,9 @@
  #include "MOD_modifiertypes.h"
  #include "MOD_ui_common.h"
  
@@ -122,7 +121,7 @@ diff -up blender-2.93.5/source/blender/modifiers/intern/MOD_screw.c.omv~ blender
  static void initData(ModifierData *md)
  {
    ScrewModifierData *ltmd = (ScrewModifierData *)md;
-@@ -430,7 +433,7 @@ static Mesh *modifyMesh(ModifierData *md
+@@ -418,7 +421,7 @@ static Mesh *modifyMesh(ModifierData *md
      }
  
      uv_v_range_inv = uv_v_minmax[1] - uv_v_minmax[0];
@@ -131,7 +130,7 @@ diff -up blender-2.93.5/source/blender/modifiers/intern/MOD_screw.c.omv~ blender
    }
  
    /* Set the locations of the first set of verts */
-@@ -869,7 +872,7 @@ static Mesh *modifyMesh(ModifierData *md
+@@ -859,7 +862,7 @@ static Mesh *modifyMesh(ModifierData *md
      }
      copy_m4_m3(mat, mat3);
  

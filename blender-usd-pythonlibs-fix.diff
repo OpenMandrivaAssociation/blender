@@ -1,0 +1,20 @@
+diff -ru blender-2.93.3-original/source/blender/io/usd/CMakeLists.txt blender-2.93.3/source/blender/io/usd/CMakeLists.txt
+--- blender-2.93.3-original/source/blender/io/usd/CMakeLists.txt	2021-04-20 19:02:39.000000000 -0700
++++ blender-2.93.3/source/blender/io/usd/CMakeLists.txt	2021-08-19 22:52:43.578924282 -0700
+@@ -53,6 +53,7 @@
+   ${USD_INCLUDE_DIRS}
+   ${BOOST_INCLUDE_DIR}
+   ${TBB_INCLUDE_DIR}
++  ${PYTHON_INCLUDE_DIRS}
+ )
+ 
+ set(SRC
+@@ -86,6 +87,8 @@
+ 
+ list(APPEND LIB
+   ${BOOST_LIBRARIES}
++  ${PYTHON_LINKFLAGS}
++  ${PYTHON_LIBRARIES}
+ )
+ 
+ list(APPEND LIB

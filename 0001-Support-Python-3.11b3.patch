@@ -1,0 +1,38 @@
+From fe7e2696705aed89bf48a4ec94b8c754b18b9e14 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 6 Jul 2022 14:42:58 -0400
+Subject: [PATCH] Support Python 3.11b3
+
+Use PyCode_GetCode instead of accessing the cache field _co_code on a
+PyCodeObject, which was not added yet in 3.11b3. See also:
+https://developer.blender.org/rB780c0ea097444c3be60314dffd203c099720badb#347003
+---
+ source/blender/python/intern/bpy_driver.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/source/blender/python/intern/bpy_driver.c b/source/blender/python/intern/bpy_driver.c
+index f71cf164e8c..530e4c7c6eb 100644
+--- a/source/blender/python/intern/bpy_driver.c
++++ b/source/blender/python/intern/bpy_driver.c
+@@ -443,7 +443,7 @@ static bool bpy_driver_secure_bytecode_validate(PyObject *expr_code, PyObject *d
+     PyObject *co_code;
+ 
+ #  if PY_VERSION_HEX >= 0x030b0000 /* Python 3.11 & newer. */
+-    co_code = py_code->_co_code;
++    co_code = PyCode_GetCode(py_code);
+ #  else
+     co_code = py_code->co_code;
+ #  endif
+@@ -462,6 +462,9 @@ static bool bpy_driver_secure_bytecode_validate(PyObject *expr_code, PyObject *d
+       }
+     }
+ 
++#  if PY_VERSION_HEX >= 0x030b0000 /* Python 3.11 & newer. */
++    Py_XDECREF(co_code);
++#  endif
+ #  undef CODESIZE
+   }
+ 
+-- 
+2.36.1
+

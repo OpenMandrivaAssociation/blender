@@ -8,9 +8,9 @@
 %define _disable_lto 1
 %ifarch %{armx}
 # -isystem %{_sourcedir} is for sse2neon.h
-%global optflags %{optflags} -Wno-error=float-conversion -flto=thin -isystem %{_sourcedir}
+%global optflags %{optflags} -Wno-error=float-conversion -isystem %{_sourcedir}
 %else
-%global optflags %{optflags} -Wno-error=float-conversion -flto=thin
+%global optflags %{optflags} -Wno-error=float-conversion
 %endif
 
 %bcond_without cycles
@@ -18,8 +18,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	3.0.1
-Release:	2
+Version:	3.2.2
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -33,10 +33,16 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 #Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
-Patch14:	blender-2.93.5-openexr3.patch
 Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
-Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
-Patch17:	blender-3.0.0-ffmpeg-5.0.patch
+#Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
+#Patch17:	blender-3.0.0-ffmpeg-5.0.patch
+Patch20:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Python-remove-invalid-Py_TPFLAGS_HAVE_GC-usage.patch
+Patch21:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0002-Python-add-opcodes-for-safe-py-drivers.patch
+Patch22:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0003-Python-support-v3.11-beta-with-changes-to-PyFrameObj.patch
+Patch23:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0004-Fix-Py-driver-byte-code-access-with-Python-3.11.patch
+#Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
+#Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
+#Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
@@ -108,7 +114,12 @@ implemented.
 %autosetup -p1
 
 %build
-# FIXME we currently turn off WITH_GL_EGL on aarch64
+# FIXME workaround for clang 14.0.6 causing a compile time
+# failure
+export CC=gcc
+export CXX=g++
+
+# FIXME we currently turn off WITH_GL_EGL
 # because it results in link time errors (undefined
 # references in libGLEW). This should be fixed properly
 # at some point. In the mean time, GLX is good enough.
@@ -122,9 +133,6 @@ implemented.
 	-DWITH_PLAYER:BOOL=ON \
 	-DWITH_PYTHON:BOOL=ON \
 	-DWITH_PYTHON_INSTALL:BOOL=OFF \
-%ifnarch %{armx}
-	-DWITH_GL_EGL:BOOL=ON \
-%endif
 	-DPYTHON_VERSION:STRING=%{py3_ver} \
 	-DPYTHON_REQUESTS_PATH:STRING=%{py3_puresitedir} \
 	-DWITH_BUILTIN_GLEW:BOOL=OFF \
@@ -179,11 +187,9 @@ if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
 fi
 
 %files
-%doc release/text/*
-%{_datadir}/doc/blender/license/*
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
 %{_iconsdir}/hicolor/*/*/*
 %{_mandir}/man1/%{name}.1*
-%{_datadir}/doc/%{name}/*.txt
+%{_datadir}/doc/%{name}
