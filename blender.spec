@@ -19,7 +19,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	3.2.2
-Release:	1
+Release:	2
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -114,11 +114,6 @@ implemented.
 %autosetup -p1
 
 %build
-# FIXME workaround for clang 14.0.6 causing a compile time
-# failure
-export CC=gcc
-export CXX=g++
-
 # FIXME we currently turn off WITH_GL_EGL
 # because it results in link time errors (undefined
 # references in libGLEW). This should be fixed properly
