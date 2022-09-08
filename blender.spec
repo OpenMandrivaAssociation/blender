@@ -5,7 +5,7 @@
 %define _disable_ld_no_undefined 1
 # As of blender 3.0.1, clang 13.0.0, building with full LTO takes
 # enough RAM to bring down all builders
-%define _disable_lto 1
+#define _disable_lto 1
 %ifarch %{armx}
 # -isystem %{_sourcedir} is for sse2neon.h
 %global optflags %{optflags} -Wno-error=float-conversion -isystem %{_sourcedir}
@@ -18,8 +18,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	3.2.2
-Release:	2
+Version:	3.3.0
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -36,10 +36,6 @@ Patch13:	blender-2.79-thumbnailer.patch
 Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
 #Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
 #Patch17:	blender-3.0.0-ffmpeg-5.0.patch
-Patch20:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Python-remove-invalid-Py_TPFLAGS_HAVE_GC-usage.patch
-Patch21:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0002-Python-add-opcodes-for-safe-py-drivers.patch
-Patch22:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0003-Python-support-v3.11-beta-with-changes-to-PyFrameObj.patch
-Patch23:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0004-Fix-Py-driver-byte-code-access-with-Python-3.11.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
