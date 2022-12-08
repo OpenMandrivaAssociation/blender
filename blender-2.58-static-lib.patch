@@ -1,12 +1,12 @@
-diff -up blender-2.82/build_files/cmake/macros.cmake.1~ blender-2.82/build_files/cmake/macros.cmake
---- blender-2.82/build_files/cmake/macros.cmake.1~	2020-02-14 17:18:59.959173921 +0100
-+++ blender-2.82/build_files/cmake/macros.cmake	2020-02-14 17:20:05.095174583 +0100
-@@ -249,7 +249,7 @@ function(blender_add_lib__impl
-   blender_include_dirs("${includes}")
-   blender_include_dirs_sys("${includes_sys}")
+diff -uraN blender-3.4.0/build_files/cmake/macros.cmake omv-blender-3.4.0/build_files/cmake/macros.cmake
+--- blender-3.4.0/build_files/cmake/macros.cmake	2022-11-16 01:31:32.000000000 +0100
++++ omv-blender-3.4.0/build_files/cmake/macros.cmake	2022-12-08 17:34:46.083558435 +0100
+@@ -288,7 +288,7 @@
+ 
+   # message(STATUS "Configuring library ${name}")
  
 -  add_library(${name} ${sources})
 +  add_library(${name} STATIC ${sources})
  
-   # On Windows certain libraries have two sets of binaries: one for debug builds and one for
-   # release builds. The root of this requirement goes into ABI, I believe, but that's outside
+   blender_target_include_dirs(${name} ${includes})
+   blender_target_include_dirs_sys(${name} ${includes_sys})
