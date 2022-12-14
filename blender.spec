@@ -54,6 +54,7 @@ BuildRequires:	boost-static-devel
 BuildRequires:	ffmpeg-devel >= 0.7
 BuildRequires:	gomp-devel
 BuildRequires:	pkgconfig(libjpeg)
+BuildRequires:	pkgconfig(libwebp)
 BuildRequires:	pkgconfig(jemalloc)
 BuildRequires:	cmake(Alembic)
 BuildRequires:	pkgconfig(lzo2)
@@ -69,6 +70,7 @@ BuildRequires:	pkgconfig(jack)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
+BuildRequires:	pkgconfig(openxr)
 BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(tbb)
 BuildRequires:	pkgconfig(python3)
