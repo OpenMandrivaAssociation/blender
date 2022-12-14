@@ -18,8 +18,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	3.3.1
-Release:	2
+Version:	3.4.0
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -33,7 +33,7 @@ Patch3:		blender-2.65-openjpeg_stdbool.patch
 #Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
-Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
+#Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
 #Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
 #Patch17:	blender-3.0.0-ffmpeg-5.0.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
@@ -58,6 +58,7 @@ BuildRequires:	pkgconfig(jemalloc)
 BuildRequires:	cmake(Alembic)
 BuildRequires:	pkgconfig(lzo2)
 BuildRequires:	pkgconfig(eigen3)
+BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(glew)
@@ -157,10 +158,10 @@ implemented.
 %ninja_install -C build
 # Somehow blender gets its own install paths wrong
 PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
-mv %{buildroot}%{_datadir}/blender/scripts/addons/{*,.github} %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
-rmdir %{buildroot}%{_datadir}/blender/scripts/addons
-mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
-rmdir %{buildroot}%{_datadir}/blender/scripts
+#mv %{buildroot}%{_datadir}/blender/scripts/addons/{*,} %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
+#rmdir %{buildroot}%{_datadir}/blender/scripts/addons
+#mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
+#rmdir %{buildroot}%{_datadir}/blender/scripts
 
 # Install hicolor icons.
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor
