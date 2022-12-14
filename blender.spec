@@ -160,8 +160,8 @@ implemented.
 PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
 #mv %{buildroot}%{_datadir}/blender/scripts/addons/{*,} %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
 #rmdir %{buildroot}%{_datadir}/blender/scripts/addons
-mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
-rmdir %{buildroot}%{_datadir}/blender/scripts
+#mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
+#rmdir %{buildroot}%{_datadir}/blender/scripts
 
 # Install hicolor icons.
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor
