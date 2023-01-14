@@ -1,0 +1,13 @@
+diff --git a/intern/locale/boost_locale_wrapper.cpp b/intern/locale/boost_locale_wrapper.cpp
+index fb0e194..19ab00b 100644
+--- a/intern/locale/boost_locale_wrapper.cpp
++++ b/intern/locale/boost_locale_wrapper.cpp
+@@ -8,6 +8,8 @@
+ #include <boost/locale.hpp>
+ #include <stdio.h>
+ 
++#include <iostream>
++
+ #include "boost_locale_wrapper.h"
+ 
+ static std::string messages_path;
