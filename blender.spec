@@ -39,6 +39,7 @@ Patch13:	blender-2.79-thumbnailer.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
+Patch27:	blender-boost-missing-include.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
