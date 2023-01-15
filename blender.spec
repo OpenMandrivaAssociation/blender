@@ -18,7 +18,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	3.4.0
+Version:	3.4.1
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -39,6 +39,7 @@ Patch13:	blender-2.79-thumbnailer.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
+Patch27:	blender-boost-missing-include.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
@@ -160,10 +161,10 @@ implemented.
 %ninja_install -C build
 # Somehow blender gets its own install paths wrong
 PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
-#mv %{buildroot}%{_datadir}/blender/scripts/addons/{*,} %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
-#rmdir %{buildroot}%{_datadir}/blender/scripts/addons
-#mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
-#rmdir %{buildroot}%{_datadir}/blender/scripts
+mv %{buildroot}%{_datadir}/blender/scripts/addons/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons/
+rmdir %{buildroot}%{_datadir}/blender/scripts/addons
+mv %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
+rmdir %{buildroot}%{_datadir}/blender/scripts
 
 # Install hicolor icons.
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor
