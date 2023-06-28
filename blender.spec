@@ -18,8 +18,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	3.4.1
-Release:	4
+Version:	3.6.0
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
@@ -27,7 +27,7 @@ Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source1:	https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
 Source100:	blender.rpmlintrc
 Patch2:		blender-2.58-static-lib.patch
-Patch3:		blender-2.65-openjpeg_stdbool.patch
+#Patch3:		blender-2.65-openjpeg_stdbool.patch
 #Patch4:		blender-2.79b-icu-linkage.patch
 # Patch submitted upstream - Blender Patches item #19234,
 #Patch6:		blender-2.67-uninit-var.patch
@@ -39,7 +39,6 @@ Patch13:	blender-2.79-thumbnailer.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
-Patch27:	blender-boost-missing-include.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel

@@ -1,14 +1,12 @@
-diff -uraN blender-3.4.0/source/creator/CMakeLists.txt omv-blender-3.4.0/source/creator/CMakeLists.txt
---- blender-3.4.0/source/creator/CMakeLists.txt	2022-11-03 17:12:32.000000000 +0100
-+++ omv-blender-3.4.0/source/creator/CMakeLists.txt	2022-12-08 17:43:34.619137265 +0100
-@@ -406,8 +406,8 @@
-   endif()
+diff -up blender-3.6.0/source/creator/CMakeLists.txt.2~ blender-3.6.0/source/creator/CMakeLists.txt
+--- blender-3.6.0/source/creator/CMakeLists.txt.2~	2023-06-28 19:06:46.921894081 +0200
++++ blender-3.6.0/source/creator/CMakeLists.txt	2023-06-28 19:12:36.992177424 +0200
+@@ -438,7 +438,7 @@ if(WITH_PYTHON)
  
    install(
--    DIRECTORY ${CMAKE_SOURCE_DIR}/release/scripts
+     DIRECTORY ${CMAKE_SOURCE_DIR}/scripts
 -    DESTINATION ${TARGETDIR_VER}
-+    DIRECTORY ${CMAKE_SOURCE_DIR}/release/scripts/
-+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/blender/scripts/
++    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/blender/
      PATTERN ".git" EXCLUDE
      PATTERN ".gitignore" EXCLUDE
-     PATTERN ".github" EXCLUDE
+     PATTERN ".gitea" EXCLUDE
