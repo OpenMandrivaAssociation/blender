@@ -46,6 +46,7 @@ BuildRequires:  opensubdiv-devel
 BuildRequires:	ninja
 BuildRequires:	clang
 BuildRequires:	cmake >= 2.8
+BuildRequires:	atomic-devel
 BuildRequires:	pkgconfig(audaspace)
 BuildRequires:	cmake(pugixml)
 BuildRequires:  cmake(OpenCOLLADA)
