@@ -1,0 +1,14 @@
+diff -up blender-3.6.2/CMakeLists.txt.omv~ blender-3.6.2/CMakeLists.txt
+diff -up blender-3.6.2/source/blender/CMakeLists.txt.omv~ blender-3.6.2/source/blender/CMakeLists.txt
+diff -up blender-3.6.2/source/blender/io/alembic/CMakeLists.txt.omv~ blender-3.6.2/source/blender/io/alembic/CMakeLists.txt
+--- blender-3.6.2/source/blender/io/alembic/CMakeLists.txt.omv~	2023-08-20 20:16:10.018721533 +0200
++++ blender-3.6.2/source/blender/io/alembic/CMakeLists.txt	2023-08-20 20:16:23.778017213 +0200
+@@ -104,7 +104,7 @@ if(WITH_BOOST)
+   )
+ endif()
+ 
+-blender_add_lib(bf_alembic "${SRC}" "${INC}" "${INC_SYS}" "${LIB}")
++blender_add_lib(bf_alembic "${SRC}" "${INC}" "${INC_SYS}" "${LIB}" atomic)
+ 
+ if(WITH_GTESTS)
+   set(TEST_SRC
