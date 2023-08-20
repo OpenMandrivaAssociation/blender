@@ -12,3 +12,16 @@ diff -up blender-3.6.2/source/blender/io/alembic/CMakeLists.txt.omv~ blender-3.6
  
  if(WITH_GTESTS)
    set(TEST_SRC
+diff -up blender-3.6.2/source/blender/io/alembic/exporter/abc_writer_transform.cc.omv~ blender-3.6.2/source/blender/io/alembic/exporter/abc_writer_transform.cc
+diff -up blender-3.6.2/source/creator/CMakeLists.txt.omv~ blender-3.6.2/source/creator/CMakeLists.txt
+--- blender-3.6.2/source/creator/CMakeLists.txt.omv~	2023-08-20 23:00:46.173376949 +0200
++++ blender-3.6.2/source/creator/CMakeLists.txt	2023-08-20 23:01:28.452408983 +0200
+@@ -1538,7 +1538,7 @@ endif()
+ # Setup link libraries
+ 
+ add_dependencies(blender makesdna)
+-target_link_libraries(blender ${LIB})
++target_link_libraries(blender ${LIB} atomic)
+ unset(LIB)
+ 
+ setup_platform_linker_flags(blender)
