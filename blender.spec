@@ -18,7 +18,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	3.6.1
+Version:	3.6.2
 Release:	1
 Group:		Graphics
 License:	GPLv2+
