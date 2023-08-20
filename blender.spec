@@ -90,6 +90,7 @@ BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
 BuildRequires:	cmake(LLVM)
 BuildRequires:	cmake(Clang)
+BuildRequires:	cmake(Alembic)
 BuildRequires:  pkgconfig(libunwind-llvm)
 BuildRequires:  pkgconfig(gmpxx)
 BuildRequires:	pkgconfig(libxml-2.0)
