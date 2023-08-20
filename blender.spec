@@ -94,6 +94,7 @@ BuildRequires:	cmake(Alembic)
 BuildRequires:  pkgconfig(libunwind-llvm)
 BuildRequires:  pkgconfig(gmpxx)
 BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	atomic-devel
 %if %with cycles
 BuildRequires:	OpenImageIO
 BuildRequires:	OpenImageIO-devel
