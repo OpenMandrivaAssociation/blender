@@ -12,6 +12,7 @@
 %else
 %global optflags %{optflags} -Wno-error=float-conversion
 %endif
+%global build_ldflags %{build_ldflags} -Wl,--undefined-version
 
 %bcond_without cycles
 %bcond_without opensubdiv
