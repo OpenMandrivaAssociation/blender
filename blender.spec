@@ -19,7 +19,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	3.6.5
+Version:	4.0.0
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -159,6 +159,7 @@ implemented.
 	-DWITH_RAYOPTIMIZATION:BOOL=ON \
 	-G Ninja
 %ninja_build
+touch source/creator/blender.1
 
 %install
 %ninja_install -C build
@@ -189,6 +190,7 @@ fi
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
+%{_datadir}/metadata/org.blender.Blender.metainfo.xml
 %{_iconsdir}/hicolor/*/*/*
 %{_mandir}/man1/%{name}.1*
 %{_datadir}/doc/%{name}
