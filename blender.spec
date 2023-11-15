@@ -190,7 +190,7 @@ fi
 %{_bindir}/*
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
-%{_datadir}/metadata/org.blender.Blender.metainfo.xml
+%{_datadir}/metainfo/org.blender.Blender.metainfo.xml
 %{_iconsdir}/hicolor/*/*/*
 %{_mandir}/man1/%{name}.1*
 %{_datadir}/doc/%{name}
