@@ -84,6 +84,12 @@ BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xxf86vm)
 BuildRequires:	pkgconfig(xrender)
 BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	pkgconfig(xkbcommon)
+BuildRequires:	pkgconfig(wayland-client)
+BuildRequires:	pkgconfig(wayland-egl)
+BuildRequires:	pkgconfig(wayland-scanner)
+BuildRequires:	pkgconfig(wayland-cursor)
+BuildRequires:	pkgconfig(wayland-protocols)
 BuildRequires:	potrace-devel
 BuildRequires:	libharu-devel
 BuildRequires:	python-numpy
@@ -91,6 +97,7 @@ BuildRequires:	python-requests
 BuildRequires:  python-numpy-devel
 BuildRequires:	cmake(LLVM)
 BuildRequires:	cmake(Clang)
+BuildRequires:	llvm-static-devel
 BuildRequires:	cmake(Alembic)
 BuildRequires:  pkgconfig(libunwind-llvm)
 BuildRequires:  pkgconfig(gmpxx)
