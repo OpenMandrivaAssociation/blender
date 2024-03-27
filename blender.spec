@@ -20,7 +20,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	4.0.2
-Release:	2
+Release:	3
 Group:		Graphics
 License:	GPLv2+
 Url:		http://www.blender.org/
