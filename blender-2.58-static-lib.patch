@@ -1,12 +1,12 @@
-diff -uraN blender-3.4.0/build_files/cmake/macros.cmake omv-blender-3.4.0/build_files/cmake/macros.cmake
---- blender-3.4.0/build_files/cmake/macros.cmake	2022-11-16 01:31:32.000000000 +0100
-+++ omv-blender-3.4.0/build_files/cmake/macros.cmake	2022-12-08 17:34:46.083558435 +0100
-@@ -288,7 +288,7 @@
+diff -up blender-4.1.0/build_files/cmake/macros.cmake.2~ blender-4.1.0/build_files/cmake/macros.cmake
+--- blender-4.1.0/build_files/cmake/macros.cmake.2~	2024-04-03 22:40:40.362887103 +0200
++++ blender-4.1.0/build_files/cmake/macros.cmake	2024-04-03 22:44:59.489430920 +0200
+@@ -415,7 +415,7 @@ function(blender_add_lib__impl
  
    # message(STATUS "Configuring library ${name}")
  
 -  add_library(${name} ${sources})
 +  add_library(${name} STATIC ${sources})
  
-   blender_target_include_dirs(${name} ${includes})
-   blender_target_include_dirs_sys(${name} ${includes_sys})
+   # On windows vcpkg goes out of its way to make its libs the preferred
+   # libs, and needs to be explicitly be told not to do that.
