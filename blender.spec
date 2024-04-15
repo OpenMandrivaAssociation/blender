@@ -44,6 +44,7 @@ Patch13:	blender-2.79-thumbnailer.patch
 # the internal part of the latest audaspace update to match 1.5
 # from https://github.com/blender/blender/commit/79707c2ae835c359ef4c9b39c04a5cf810592155
 Patch27:	79707c2ae835c359ef4c9b39c04a5cf810592155.diff
+Patch28:	blender-4.1.0-ffmpeg7.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel

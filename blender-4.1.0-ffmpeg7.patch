@@ -1,0 +1,11 @@
+--- blender-4.1.0/source/blender/imbuf/intern/anim_movie.cc.orig	2024-04-15 10:20:41.082060791 +0100
++++ blender-4.1.0/source/blender/imbuf/intern/anim_movie.cc	2024-04-15 10:21:13.711848938 +0100
+@@ -1319,7 +1319,7 @@
+ 
+     AVFormatContext *format_ctx = anim->pFormatCtx;
+ 
+-    if (format_ctx->iformat->read_seek2 || format_ctx->iformat->read_seek) {
++    if (f(d->ctx->iformat->flags & AVFMT_NOTIMESTAMPS)) {
+       ret = av_seek_frame(anim->pFormatCtx, anim->videoStream, seek_pos, AVSEEK_FLAG_BACKWARD);
+     }
+     else {
