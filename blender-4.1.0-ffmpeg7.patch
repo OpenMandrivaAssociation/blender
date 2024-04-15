@@ -5,7 +5,7 @@
      AVFormatContext *format_ctx = anim->pFormatCtx;
  
 -    if (format_ctx->iformat->read_seek2 || format_ctx->iformat->read_seek) {
-+    if (f(d->ctx->iformat->flags & AVFMT_NOTIMESTAMPS)) {
++    if (!(format_ctx->iformat->flags & AVFMT_NOTIMESTAMPS)) {
        ret = av_seek_frame(anim->pFormatCtx, anim->videoStream, seek_pos, AVSEEK_FLAG_BACKWARD);
      }
      else {
