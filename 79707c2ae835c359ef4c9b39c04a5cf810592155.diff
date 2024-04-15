@@ -1,0 +1,34 @@
+diff --git a/source/blender/blenkernel/intern/sound.cc b/source/blender/blenkernel/intern/sound.cc
+index e677bca6e0e6..50ec2c9e6110 100644
+--- a/source/blender/blenkernel/intern/sound.cc
++++ b/source/blender/blenkernel/intern/sound.cc
+@@ -599,7 +599,8 @@ void BKE_sound_load(Main *bmain, bSound *sound)
+ AUD_Device *BKE_sound_mixdown(const Scene *scene, AUD_DeviceSpecs specs, int start, float volume)
+ {
+   sound_verify_evaluated_id(&scene->id);
+-  return AUD_openMixdownDevice(specs, scene->sound_scene, volume, start / FPS);
++  return AUD_openMixdownDevice(
++      specs, scene->sound_scene, volume, AUD_RESAMPLE_QUALITY_MEDIUM, start / FPS);
+ }
+ 
+ void BKE_sound_create_scene(Scene *scene)
+diff --git a/source/blender/editors/sound/sound_ops.cc b/source/blender/editors/sound/sound_ops.cc
+index 1f7d0dcbc078..b8a63271db91 100644
+--- a/source/blender/editors/sound/sound_ops.cc
++++ b/source/blender/editors/sound/sound_ops.cc
+@@ -370,6 +370,7 @@ static int sound_mixdown_exec(bContext *C, wmOperator *op)
+                                      container,
+                                      codec,
+                                      bitrate,
++                                     AUD_RESAMPLE_QUALITY_MEDIUM,
+                                      nullptr,
+                                      nullptr,
+                                      error_message,
+@@ -385,6 +386,7 @@ static int sound_mixdown_exec(bContext *C, wmOperator *op)
+                          container,
+                          codec,
+                          bitrate,
++                         AUD_RESAMPLE_QUALITY_MEDIUM,
+                          nullptr,
+                          nullptr,
+                          error_message,
