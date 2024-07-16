@@ -19,7 +19,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	4.1.1
+Version:	4.2.0
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -41,9 +41,6 @@ Patch13:	blender-2.79-thumbnailer.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
-# the internal part of the latest audaspace update to match 1.5
-# from https://github.com/blender/blender/commit/79707c2ae835c359ef4c9b39c04a5cf810592155
-Patch27:	79707c2ae835c359ef4c9b39c04a5cf810592155.diff
 Patch28:	blender-4.1.0-ffmpeg7.patch
 
 %if %{with opensubdiv}
