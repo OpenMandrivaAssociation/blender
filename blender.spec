@@ -19,11 +19,11 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	4.2.2
-Release:	4
+Version:	4.2.3
+Release:	1
 Group:		Graphics
 License:	GPLv2+
-Url:		http://www.blender.org/
+Url:		https://www.blender.org/
 Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source1:	https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
 Source100:	blender.rpmlintrc
