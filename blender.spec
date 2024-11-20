@@ -19,7 +19,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	4.2.3
+Version:	4.3.0
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -80,6 +80,7 @@ BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl2)
+BuildRequires:	pkgconfig(shaderc)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xxf86vm)
@@ -91,6 +92,7 @@ BuildRequires:	pkgconfig(wayland-egl)
 BuildRequires:	pkgconfig(wayland-scanner)
 BuildRequires:	pkgconfig(wayland-cursor)
 BuildRequires:	pkgconfig(wayland-protocols)
+BuildRequires:	pkgconfig(vulkan)
 BuildRequires:	potrace-devel
 BuildRequires:	libharu-devel
 BuildRequires:	python-numpy
