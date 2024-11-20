@@ -91,6 +91,7 @@ BuildRequires:	pkgconfig(wayland-egl)
 BuildRequires:	pkgconfig(wayland-scanner)
 BuildRequires:	pkgconfig(wayland-cursor)
 BuildRequires:	pkgconfig(wayland-protocols)
+BuildRequires:	pkgconfig(vulkan)
 BuildRequires:	potrace-devel
 BuildRequires:	libharu-devel
 BuildRequires:	python-numpy
