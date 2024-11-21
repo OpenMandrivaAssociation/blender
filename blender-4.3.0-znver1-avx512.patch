@@ -1,0 +1,23 @@
+diff -up blender-4.3.0/source/blender/blenlib/intern/math_half.cc.omv~ blender-4.3.0/source/blender/blenlib/intern/math_half.cc
+--- blender-4.3.0/source/blender/blenlib/intern/math_half.cc.omv~	2024-11-21 18:09:32.331363617 +0100
++++ blender-4.3.0/source/blender/blenlib/intern/math_half.cc	2024-11-21 18:11:12.352353874 +0100
+@@ -218,6 +218,9 @@ static inline __m128 F16_to_F32_4x(const
+ 
+ #endif  // USE_SSE2_FP16
+ 
++#if defined(__x86_64__) && defined(USE_HARDWARE_FP16_F16C)
++__attribute__((target("avx512vl")))
++#endif
+ void blender::math::float_to_half_array(const float *src, uint16_t *dst, size_t length)
+ {
+   size_t i = 0;
+@@ -254,6 +257,9 @@ void blender::math::float_to_half_array(
+   }
+ }
+ 
++#if defined(__x86_64__) && defined(USE_HARDWARE_FP16_F16C)
++__attribute__((target("avx512vl")))
++#endif
+ void blender::math::half_to_float_array(const uint16_t *src, float *dst, size_t length)
+ {
+   size_t i = 0;
