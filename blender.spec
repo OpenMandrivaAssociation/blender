@@ -42,7 +42,7 @@ Patch14:	blender-4.3.0-znver1-avx512.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
-Patch28:	blender-4.1.0-ffmpeg7.patch
+#Patch28:	blender-4.1.0-ffmpeg7.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
