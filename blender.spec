@@ -27,7 +27,7 @@ Url:		https://www.blender.org/
 Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source1:	https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
 Source100:	blender.rpmlintrc
-Patch1:		blender-3.6.2-link-libatomic.patch
+#Patch1:		blender-3.6.2-link-libatomic.patch
 Patch2:		blender-2.58-static-lib.patch
 #Patch3:		blender-2.65-openjpeg_stdbool.patch
 #Patch4:		blender-2.79b-icu-linkage.patch
