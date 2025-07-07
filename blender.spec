@@ -19,7 +19,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	4.3.2
+Version:	4.4.3
 Release:	2
 Group:		Graphics
 License:	GPLv2+
@@ -27,7 +27,7 @@ Url:		https://www.blender.org/
 Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source1:	https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
 Source100:	blender.rpmlintrc
-Patch1:		blender-3.6.2-link-libatomic.patch
+#Patch1:		blender-3.6.2-link-libatomic.patch 
 Patch2:		blender-2.58-static-lib.patch
 #Patch3:		blender-2.65-openjpeg_stdbool.patch
 #Patch4:		blender-2.79b-icu-linkage.patch
@@ -42,7 +42,7 @@ Patch14:	blender-4.3.0-znver1-avx512.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
-Patch28:	blender-4.1.0-ffmpeg7.patch
+#Patch28:	blender-4.1.0-ffmpeg7.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
