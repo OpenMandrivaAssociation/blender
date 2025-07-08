@@ -179,7 +179,7 @@ touch source/creator/blender.1
 PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
 cp -ra %{buildroot}%{_datadir}/blender/scripts/addons_core/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons_core/
 rm -rf %{buildroot}%{_datadir}/blender/scripts/addons_core
-cm -ra %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
+cp -ra %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
 rm -rf %{buildroot}%{_datadir}/blender/scripts
 
 # Install hicolor icons.
