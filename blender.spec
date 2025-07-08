@@ -178,9 +178,9 @@ touch source/creator/blender.1
 # Somehow blender gets its own install paths wrong
 PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
 cp -ra %{buildroot}%{_datadir}/blender/scripts/addons_core/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons_core/
-rmdir %{buildroot}%{_datadir}/blender/scripts/addons_core
+rm -rf %{buildroot}%{_datadir}/blender/scripts/addons_core
 cm -ra %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
-rmdir %{buildroot}%{_datadir}/blender/scripts
+rm -rf %{buildroot}%{_datadir}/blender/scripts
 
 # Install hicolor icons.
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor
