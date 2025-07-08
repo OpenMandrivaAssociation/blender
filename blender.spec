@@ -177,9 +177,9 @@ touch source/creator/blender.1
 %ninja_install -C build
 # Somehow blender gets its own install paths wrong
 PATHVER="$(basename %buildroot}%{_datadir}/blender/[0-9]*)"
-mv -v %{buildroot}%{_datadir}/blender/scripts/addons_core/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons_core/
+cp -a %{buildroot}%{_datadir}/blender/scripts/addons_core/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/addons_core/
 rmdir %{buildroot}%{_datadir}/blender/scripts/addons_core
-mv -v %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
+cm -a %{buildroot}%{_datadir}/blender/scripts/* %{buildroot}%{_datadir}/blender/${PATHVER}/scripts/
 rmdir %{buildroot}%{_datadir}/blender/scripts
 
 # Install hicolor icons.
