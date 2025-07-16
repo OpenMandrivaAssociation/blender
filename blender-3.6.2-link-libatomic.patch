@@ -1,19 +1,19 @@
-diff -up blender-4.0.0/source/blender/io/alembic/CMakeLists.txt.1~ blender-4.0.0/source/blender/io/alembic/CMakeLists.txt
---- blender-4.0.0/source/blender/io/alembic/CMakeLists.txt.1~	2023-11-14 14:44:35.165591093 +0100
-+++ blender-4.0.0/source/blender/io/alembic/CMakeLists.txt	2023-11-14 14:45:47.669504994 +0100
-@@ -104,7 +104,7 @@ if(WITH_BOOST)
-   )
- endif()
+diff -up blender-4.4.3/source/blender/io/alembic/CMakeLists.txt.1~ blender-4.4.3/source/blender/io/alembic/CMakeLists.txt
+--- blender-4.4.3/source/blender/io/alembic/CMakeLists.txt.1~	2025-02-05 18:13:04.000000000 +0100
++++ blender-4.4.3/source/blender/io/alembic/CMakeLists.txt	2025-04-30 12:01:09.204019170 +0200
+@@ -89,7 +89,7 @@ set(LIB
+   PRIVATE bf::windowmanager
+ )
  
 -blender_add_lib(bf_io_alembic "${SRC}" "${INC}" "${INC_SYS}" "${LIB}")
 +blender_add_lib(bf_io_alembic "${SRC}" "${INC}" "${INC_SYS}" "${LIB}" atomic)
  
  if(WITH_GTESTS)
    set(TEST_SRC
-diff -up blender-4.0.0/source/creator/CMakeLists.txt.1~ blender-4.0.0/source/creator/CMakeLists.txt
---- blender-4.0.0/source/creator/CMakeLists.txt.1~	2023-11-14 14:44:35.165591093 +0100
-+++ blender-4.0.0/source/creator/CMakeLists.txt	2023-11-14 14:45:27.778250942 +0100
-@@ -1598,7 +1598,7 @@ endif()
+diff -up blender-4.4.3/source/creator/CMakeLists.txt.1~ blender-4.4.3/source/creator/CMakeLists.txt
+--- blender-4.4.3/source/creator/CMakeLists.txt.1~	2025-03-28 19:43:08.000000000 +0100
++++ blender-4.4.3/source/creator/CMakeLists.txt	2025-04-30 11:54:46.640675303 +0200
+@@ -1858,7 +1858,7 @@ endif()
  # Setup link libraries
  
  add_dependencies(blender makesdna)

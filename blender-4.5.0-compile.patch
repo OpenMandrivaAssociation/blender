@@ -1,0 +1,12 @@
+diff -up blender-4.5.0/extern/fmtlib/include/fmt/format.h.omv~ blender-4.5.0/extern/fmtlib/include/fmt/format.h
+--- blender-4.5.0/extern/fmtlib/include/fmt/format.h.omv~	2025-07-16 14:24:33.547607921 +0200
++++ blender-4.5.0/extern/fmtlib/include/fmt/format.h	2025-07-16 14:24:38.750500808 +0200
+@@ -4426,7 +4426,7 @@ template <detail_exported::fixed_string
+   return detail::udl_arg<char_t, sizeof(Str.data) / sizeof(char_t), Str>();
+ }
+ #  else
+-constexpr auto operator"" _a(const char* s, size_t) -> detail::udl_arg<char> {
++constexpr auto operator""_a(const char* s, size_t) -> detail::udl_arg<char> {
+   return {s};
+ }
+ #  endif
