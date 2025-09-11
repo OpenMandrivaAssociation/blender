@@ -1,0 +1,14 @@
+diff -up blender-4.5.0/source/blender/imbuf/movie/intern/movie_write_audio.cc.omv~ blender-4.5.0/source/blender/imbuf/movie/intern/movie_write_audio.cc
+--- blender-4.5.0/source/blender/imbuf/movie/intern/movie_write_audio.cc.omv~	2025-09-10 21:51:46.293134821 +0200
++++ blender-4.5.0/source/blender/imbuf/movie/intern/movie_write_audio.cc	2025-09-10 21:52:00.284813388 +0200
+@@ -28,6 +28,10 @@
+ #  include "BKE_report.hh"
+ #  include "BKE_sound.h"
+ 
++#ifndef AV_INPUT_BUFFER_MIN_SIZE
++#define AV_INPUT_BUFFER_MIN_SIZE 16384
++#endif
++
+ /* If any of these codecs, we prefer the float sample format (if supported) */
+ static bool request_float_audio_buffer(int codec_id)
+ {
