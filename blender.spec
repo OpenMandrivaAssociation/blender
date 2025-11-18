@@ -19,8 +19,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	4.5.3
-Release:	2
+Version:	4.5.4
+Release:	1
 Group:		Graphics
 License:	GPLv2+
 Url:		https://www.blender.org/
@@ -44,8 +44,6 @@ Patch18:	blender-4.5.0-compile.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
 Patch27:	blender-4.5.0-ffmpeg-8.0.patch
-# fix build with opencolorio 2.5.0
-Patch28:	https://projects.blender.org/blender/blender/commit/98e400c3ae2fef75d2550a5fc1370d6e97ec9560.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
