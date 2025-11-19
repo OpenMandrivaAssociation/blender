@@ -43,7 +43,7 @@ Patch18:	blender-4.5.0-compile.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
-Patch27:	blender-4.5.0-ffmpeg-8.0.patch
+#Patch27:	blender-4.5.0-ffmpeg-8.0.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
