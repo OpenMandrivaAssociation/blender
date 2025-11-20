@@ -19,7 +19,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	4.5.4
+Version:	5.0.0
 Release:	1
 Group:		Graphics
 License:	GPLv2+
@@ -43,7 +43,7 @@ Patch18:	blender-4.5.0-compile.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
-Patch27:	blender-4.5.0-ffmpeg-8.0.patch
+#Patch27:	blender-4.5.0-ffmpeg-8.0.patch
 
 %if %{with opensubdiv}
 BuildRequires:  opensubdiv-devel
@@ -67,6 +67,9 @@ BuildRequires:	pkgconfig(eigen3)
 BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	pkgconfig(libpipewire-0.3)
+BuildRequires:	pkgconfig(libdecor-0)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(fftw3)
@@ -76,6 +79,7 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
 BuildRequires:	pkgconfig(openxr)
+BuildRequires:	pkgconfig(rubberband)
 BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(tbb)
 BuildRequires:	pkgconfig(python3)
@@ -87,7 +91,6 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xxf86vm)
 BuildRequires:	pkgconfig(xrender)
-BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(xkbcommon)
 BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	pkgconfig(wayland-egl)
@@ -153,6 +156,8 @@ implemented.
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
+	-DWITH_RUBBERBAND:BOOL=ON \
+	-DWITH_XR_OPENXR:BOOL=ON \
         -DWITH_SDL:BOOL=ON \
         -DWITH_JACK:BOOL=ON \
         -DWITH_INPUT_NDOF:BOLL=ON \
