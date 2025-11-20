@@ -67,6 +67,9 @@ BuildRequires:	pkgconfig(eigen3)
 BuildRequires:	pkgconfig(epoxy)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(libpulse)
+BuildRequires:	pkgconfig(libpipewire-0.3)
+BuildRequires:	pkgconfig(libdecor-0)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(fftw3)
@@ -76,6 +79,7 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
 BuildRequires:	pkgconfig(openxr)
+BuildRequires:	pkgconfig(rubberband)
 BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(tbb)
 BuildRequires:	pkgconfig(python3)
@@ -87,7 +91,6 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xxf86vm)
 BuildRequires:	pkgconfig(xrender)
-BuildRequires:	pkgconfig(libpulse)
 BuildRequires:	pkgconfig(xkbcommon)
 BuildRequires:	pkgconfig(wayland-client)
 BuildRequires:	pkgconfig(wayland-egl)
@@ -153,6 +156,8 @@ implemented.
 	-DWITH_FFTW3:BOOL=ON \
 	-DWITH_MOD_OCEANSIM:BOOL=ON \
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
+	-DWITH_RUBBERBAND:BOOL=ON \
+	-DWITH_XR_OPENXR:BOOL=ON \
         -DWITH_SDL:BOOL=ON \
         -DWITH_JACK:BOOL=ON \
         -DWITH_INPUT_NDOF:BOLL=ON \
