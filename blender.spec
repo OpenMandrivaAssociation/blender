@@ -39,7 +39,7 @@ Patch13:	blender-2.79-thumbnailer.patch
 #Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
 #Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
 #Patch17:	blender-3.0.0-ffmpeg-5.0.patch
-Patch18:	blender-4.5.0-compile.patch
+#Patch18:	blender-4.5.0-compile.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
