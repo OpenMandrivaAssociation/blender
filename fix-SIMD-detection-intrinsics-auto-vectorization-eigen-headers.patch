@@ -1,0 +1,148 @@
+From 7b19e74cadadc5db30aafe2f5539170501469c0d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C8=98tefan=20Talpalaru?= <stefantalpalaru@yahoo.com>
+Date: Sun, 14 Dec 2025 16:17:33 +0100
+Subject: [PATCH] Fix: SIMD detection/intrinsics; auto-vectorization; headers
+
+Fix: SIMD detection/intrinsics; auto-vectorization; headers
+
+Replace AVX512 instructions with SSE2 equivalents, for
+USE_HARDWARE_FP16_F16C, and refine the feature check so we cover CPUs
+with AVX and F16C but no AVX2 (like Ivy Bridge).
+
+Disable FMA auto-vectorization across different statements in Cycles,
+because GCC 15.2.1 manages to ruin the viewport's scaling and offset,
+probably due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106902
+
+Include <cassert> as needed, in order to build with a system Eigen (at
+least on Gentoo).
+
+Pull Request: https://projects.blender.org/blender/blender/pulls/150318
+---
+ intern/cycles/CMakeLists.txt               | 13 ++++++------
+ intern/libmv/libmv/numeric/numeric.h       |  2 ++
+ intern/slim/intern/edge_lengths.cpp        |  2 ++
+ intern/slim/intern/uv_initializer.cpp      |  1 +
+ source/blender/blenlib/intern/math_half.cc | 23 +++++++++++-----------
+ 5 files changed, 23 insertions(+), 18 deletions(-)
+
+diff --git a/intern/cycles/CMakeLists.txt b/intern/cycles/CMakeLists.txt
+index d214b84ff820..d073e2882123 100644
+--- a/intern/cycles/CMakeLists.txt
++++ b/intern/cycles/CMakeLists.txt
+@@ -161,8 +161,12 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+   list(APPEND CYCLES_MATH_FLAGS "-fno-math-errno")
+   # Let compiler optimize 0.0 - x without worrying about signed zeros.
+   list(APPEND CYCLES_MATH_FLAGS "-fno-signed-zeros")
+-  # Let the compiler generate fused multiply-add instructions
+-  list(APPEND CYCLES_MATH_FLAGS "-ffp-contract=fast")
++  # Disable FMA auto-vectorization across different statements,
++  # which creates havoc in "intern/cycles/blender/camera.cpp"
++  # with GCC-15.2.1, for something like:
++  #   const float2 dv = 2.0f * (aspectratio * bcam->shift + bcam->offset * aspect * 2.0f);
++  # (probably due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106902).
++  list(APPEND CYCLES_MATH_FLAGS "-ffp-contract=on")
+   # Let the compiler replace x/y with x*(1/y)
+   list(APPEND CYCLES_MATH_FLAGS "-freciprocal-math")
+   # Let the compiler reorder terms to save operations
+@@ -440,11 +444,6 @@ endif()
+ # Subdirectories
+ 
+ if(WITH_CYCLES_BLENDER)
+-  # Not needed to make cycles automated tests pass with -march=native.
+-  # However Blender itself needs this flag.
+-  # Note: the clang-cl style removal must go first, to avoid a dangling "/clang:"
+-  remove_cc_flag("/clang:-ffp-contract=off")
+-  remove_cc_flag("-ffp-contract=off")
+   add_definitions(-DWITH_BLENDER_GUARDEDALLOC)
+   add_subdirectory(blender)
+ endif()
+diff --git a/intern/libmv/libmv/numeric/numeric.h b/intern/libmv/libmv/numeric/numeric.h
+index 9ac5b89159d9..03195b4fd022 100644
+--- a/intern/libmv/libmv/numeric/numeric.h
++++ b/intern/libmv/libmv/numeric/numeric.h
+@@ -25,6 +25,8 @@
+ #ifndef LIBMV_NUMERIC_NUMERIC_H
+ #define LIBMV_NUMERIC_NUMERIC_H
+ 
++#include <cassert>
++
+ #include <Eigen/Cholesky>
+ #include <Eigen/Core>
+ #include <Eigen/Eigenvalues>
+diff --git a/intern/slim/intern/edge_lengths.cpp b/intern/slim/intern/edge_lengths.cpp
+index 95f0340185bc..51e6ae109a80 100644
+--- a/intern/slim/intern/edge_lengths.cpp
++++ b/intern/slim/intern/edge_lengths.cpp
+@@ -11,6 +11,8 @@
+ 
+ #include "edge_lengths.h"
+ 
++#include <cassert>
++
+ namespace slim {
+ 
+ template<typename DerivedV, typename DerivedF, typename DerivedL>
+diff --git a/intern/slim/intern/uv_initializer.cpp b/intern/slim/intern/uv_initializer.cpp
+index 4b8512070fe0..dc084f9472cd 100644
+--- a/intern/slim/intern/uv_initializer.cpp
++++ b/intern/slim/intern/uv_initializer.cpp
+@@ -9,6 +9,7 @@
+ #include "uv_initializer.h"
+ 
+ #include <Eigen/SparseLU>
++#include <cassert>
+ 
+ namespace slim {
+ 
+diff --git a/source/blender/blenlib/intern/math_half.cc b/source/blender/blenlib/intern/math_half.cc
+index eb78fa05ab99..19c1bd6fb248 100644
+--- a/source/blender/blenlib/intern/math_half.cc
++++ b/source/blender/blenlib/intern/math_half.cc
+@@ -14,11 +14,12 @@
+ #  include <arm_neon.h>
+ #endif
+ #if (defined(__x86_64__) || defined(_M_X64))
+-/* All AVX2 CPUs have F16C instructions, so use those if we're compiling for AVX2.
+- * Otherwise use "manual" SSE2 4x-wide conversion. */
+-#  if defined(__AVX2__)
++/* Sandy Bridge has AVX but no F16C. MSVC does not define __F16C__, but any CPU having AVX2 is sure
++ * to have it. */
++#  if (defined(__AVX__) && defined(__F16C__)) || defined(__AVX2__)
+ #    define USE_HARDWARE_FP16_F16C
+ #  else
++/* Use "manual" SSE2 4x-wide conversion. */
+ #    define USE_SSE2_FP16
+ #  endif
+ #  include <immintrin.h>
+@@ -238,11 +239,11 @@ static inline __m128 F16_to_F32_4x(const __m128i &h)
+ void blender::math::float_to_half_array(const float *src, uint16_t *dst, size_t length)
+ {
+   size_t i = 0;
+-#if defined(USE_HARDWARE_FP16_F16C) /* 8-wide loop using AVX2 F16C */
++#if defined(USE_HARDWARE_FP16_F16C) /* 8-wide loop using F16C and AVX */
+   for (; i + 7 < length; i += 8) {
+-    __m256 src8 = _mm256_loadu_ps(src);
+-    __m128i h8 = _mm256_cvtps_ph(src8, _MM_FROUND_TO_NEAREST_INT);
+-    _mm_storeu_epi32(dst, h8);
++    __m256 src8 = _mm256_loadu_ps(src);                            /* AVX */
++    __m128i h8 = _mm256_cvtps_ph(src8, _MM_FROUND_TO_NEAREST_INT); /* F16C */
++    _mm_storeu_si128((__m128i *)dst, h8);                          /* SSE2 */
+     src += 8;
+     dst += 8;
+   }
+@@ -368,11 +369,11 @@ void blender::math::float_to_half_make_finite_array(const float *src, uint16_t *
+ void blender::math::half_to_float_array(const uint16_t *src, float *dst, size_t length)
+ {
+   size_t i = 0;
+-#if defined(USE_HARDWARE_FP16_F16C) /* 8-wide loop using AVX2 F16C */
++#if defined(USE_HARDWARE_FP16_F16C) /* 8-wide loop using F16C and AVX */
+   for (; i + 7 < length; i += 8) {
+-    __m128i src8 = _mm_loadu_epi32(src);
+-    __m256 f8 = _mm256_cvtph_ps(src8);
+-    _mm256_storeu_ps(dst, f8);
++    __m128i src8 = _mm_loadu_si128((__m128i *)src); /* SSE2 */
++    __m256 f8 = _mm256_cvtph_ps(src8);              /* F16C */
++    _mm256_storeu_ps(dst, f8);                      /* AVX */
+     src += 8;
+     dst += 8;
+   }

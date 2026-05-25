@@ -7,23 +7,23 @@
 # enough RAM to bring down all builders
 #define _disable_lto 1
 %ifarch %{armx}
-# -isystem %{_sourcedir} is for sse2neon.h
+# -isystem %%{_sourcedir} is for sse2neon.h
 %global optflags %{optflags} -Wno-error=float-conversion -isystem %{_sourcedir}
 %else
 %global optflags %{optflags} -Wno-error=float-conversion
 %endif
 %global build_ldflags %{build_ldflags} -Wl,--undefined-version
 
-%bcond_without cycles
-%bcond_without opensubdiv
+%bcond cycles 1
+%bcond opensubdiv 1
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	5.0.1
-Release:	1
+Release:	2
 Group:		Graphics
-License:	GPLv2+
-Url:		https://www.blender.org/
+License:	GPL-2.0-or-later
+URL:		https://www.blender.org/
 Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source1:	https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
 Source100:	blender.rpmlintrc
@@ -44,16 +44,18 @@ Patch18:	blender-4.5.0-compile.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
 #Patch27:	blender-4.5.0-ffmpeg-8.0.patch
+# See	https://projects.blender.org/blender/blender/commit/7b19e74cadadc5db30aafe2f5539170501469c0d
+Patch19:	fix-SIMD-detection-intrinsics-auto-vectorization-eigen-headers.patch
 
 %if %{with opensubdiv}
-BuildRequires:  opensubdiv-devel
+BuildRequires:	opensubdiv-devel
 %endif
 BuildRequires:	ninja
 BuildRequires:	clang
 BuildRequires:	cmake >= 2.8
 BuildRequires:	pkgconfig(audaspace)
 BuildRequires:	cmake(pugixml)
-BuildRequires:  cmake(OpenCOLLADA)
+BuildRequires:	cmake(OpenCOLLADA)
 BuildRequires:	boost-devel
 BuildRequires:	boost-static-devel
 BuildRequires:	ffmpeg-devel >= 0.7
@@ -87,6 +89,7 @@ BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
 BuildRequires:	pkgconfig(sdl2)
 BuildRequires:	pkgconfig(shaderc)
+BuildRequires:	pkgconfig(spnav)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xi)
 BuildRequires:	pkgconfig(xxf86vm)
@@ -100,15 +103,15 @@ BuildRequires:	pkgconfig(wayland-protocols)
 BuildRequires:	pkgconfig(vulkan)
 BuildRequires:	potrace-devel
 BuildRequires:	libharu-devel
-BuildRequires:	python-numpy
-BuildRequires:	python-requests
-BuildRequires:  python-numpy-devel
+BuildRequires:	python%{pyver}dist(numpy)
+BuildRequires:	python%{pyver}dist(requests)
+BuildRequires:	python-numpy-devel
 BuildRequires:	cmake(LLVM)
 BuildRequires:	cmake(Clang)
 BuildRequires:	llvm-static-devel
 BuildRequires:	cmake(Alembic)
-BuildRequires:  pkgconfig(libunwind-llvm)
-BuildRequires:  pkgconfig(gmpxx)
+BuildRequires:	pkgconfig(libunwind-llvm)
+BuildRequires:	pkgconfig(gmpxx)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	atomic-devel
 %if %with cycles
@@ -158,11 +161,11 @@ implemented.
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
 	-DWITH_RUBBERBAND:BOOL=ON \
 	-DWITH_XR_OPENXR:BOOL=ON \
-        -DWITH_SDL:BOOL=ON \
-        -DWITH_JACK:BOOL=ON \
-        -DWITH_INPUT_NDOF:BOLL=ON \
-        -DWITH_OPENCOLORIO:BOOL=ON \
-        -DWITH_DOC_MANPAGE:BOOL=ON \
+	-DWITH_SDL:BOOL=ON \
+	-DWITH_JACK:BOOL=ON \
+	-DWITH_INPUT_NDOF:BOLL=ON \
+	-DWITH_OPENCOLORIO:BOOL=ON \
+	-DWITH_DOC_MANPAGE:BOOL=ON \
 	-DWITH_TBB:BOOL=ON \
 	-DWITH_CYCLES_EMBREE:BOOL=OFF \
 	-DCMAKE_CXX_STANDARD=17 \
@@ -205,7 +208,7 @@ if [ "$1" = "0" -a -x %{_gconftool_bin} ]; then
 fi
 
 %files
-%{_bindir}/*
+%{_bindir}/blender{,-thumbnailer}
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
 %{_datadir}/metainfo/org.blender.Blender.metainfo.xml
