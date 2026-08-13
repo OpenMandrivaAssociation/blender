@@ -20,7 +20,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	5.0.1
-Release:	6
+Release:	7
 Group:		Graphics
 License:	GPL-2.0-or-later
 URL:		https://www.blender.org/
