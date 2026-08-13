@@ -20,7 +20,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	5.0.1
-Release:	4
+Release:	5
 Group:		Graphics
 License:	GPL-2.0-or-later
 URL:		https://www.blender.org/
@@ -136,6 +136,9 @@ implemented.
 %autosetup -p1
 
 %build
+# Linking blender + cycles is RAM-heavy; OOM-killer hit parallel links
+# ("unable to execute command: Killed" / linker exit -2).
+%limit_build -m 4096
 # FIXME we currently turn off WITH_GL_EGL
 # because it results in link time errors (undefined
 # references in libGLEW). This should be fixed properly
@@ -179,6 +182,7 @@ implemented.
 %endif
 	-DWITH_RAYOPTIMIZATION:BOOL=ON \
 	-G Ninja
+%limit_build -m 4096
 %ninja_build
 touch source/creator/blender.1
 
