@@ -19,8 +19,8 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	5.0.1
-Release:	7
+Version:	5.2.1
+Release:	1
 Group:		Graphics
 License:	GPL-2.0-or-later
 URL:		https://www.blender.org/
@@ -35,17 +35,19 @@ Patch2:		blender-2.58-static-lib.patch
 #Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
-Patch14:	blender-4.3.0-znver1-avx512.patch
+#Patch14:	blender-4.3.0-znver1-avx512.patch
 #Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
 #Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
 #Patch17:	blender-3.0.0-ffmpeg-5.0.patch
-Patch18:	blender-4.5.0-compile.patch
+# fmtlib is no longer bundled; 5.2 uses system fmt
+#Patch18:	blender-4.5.0-compile.patch
 #Patch24:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/0001-Support-Python-3.11b3.patch
 #Patch25:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-usd-pythonlibs-fix.diff
 #Patch26:	https://src.fedoraproject.org/rpms/blender/raw/rawhide/f/blender-python310.patch
 #Patch27:	blender-4.5.0-ffmpeg-8.0.patch
+# Upstream in 5.1+
 # See	https://projects.blender.org/blender/blender/commit/7b19e74cadadc5db30aafe2f5539170501469c0d
-Patch19:	fix-SIMD-detection-intrinsics-auto-vectorization-eigen-headers.patch
+#Patch19:	fix-SIMD-detection-intrinsics-auto-vectorization-eigen-headers.patch
 
 %if %{with opensubdiv}
 BuildRequires:	opensubdiv-devel
@@ -87,7 +89,8 @@ BuildRequires:	pkgconfig(tbb)
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	pkgconfig(samplerate)
 BuildRequires:	pkgconfig(sndfile)
-BuildRequires:	pkgconfig(sdl2)
+BuildRequires:	pkgconfig(sdl3)
+BuildRequires:	cmake(fmt)
 BuildRequires:	pkgconfig(shaderc)
 BuildRequires:	pkgconfig(spnav)
 BuildRequires:	pkgconfig(x11)
@@ -114,11 +117,9 @@ BuildRequires:	pkgconfig(libunwind-llvm)
 BuildRequires:	pkgconfig(gmpxx)
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	atomic-devel
-%if %with cycles
 BuildRequires:	OpenImageIO
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
-%endif
 Requires:	python >= 3.5
 
 %description
@@ -163,14 +164,13 @@ implemented.
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
 	-DWITH_RUBBERBAND:BOOL=ON \
 	-DWITH_XR_OPENXR:BOOL=ON \
-	-DWITH_SDL:BOOL=ON \
+	-DWITH_SDL_AUDIO:BOOL=ON \
 	-DWITH_JACK:BOOL=ON \
-	-DWITH_INPUT_NDOF:BOLL=ON \
-	-DWITH_OPENCOLORIO:BOOL=ON \
+	-DWITH_INPUT_NDOF:BOOL=ON \
 	-DWITH_DOC_MANPAGE:BOOL=ON \
 	-DWITH_TBB:BOOL=ON \
 	-DWITH_CYCLES_EMBREE:BOOL=OFF \
-	-DCMAKE_CXX_STANDARD=17 \
+	-DCMAKE_CXX_STANDARD=20 \
 %ifarch %{armx}
 	-DSSE2NEON_INCLUDE_DIR=%{_sourcedir} \
 %endif
