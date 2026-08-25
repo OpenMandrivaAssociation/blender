@@ -120,6 +120,7 @@ BuildRequires:	atomic-devel
 BuildRequires:	OpenImageIO
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
+BuildRequires:	cmake(Ceres)
 Requires:	python >= 3.5
 
 %description
@@ -143,8 +144,7 @@ implemented.
 # because it results in link time errors (undefined
 # references in libGLEW). This should be fixed properly
 # at some point. In the mean time, GLX is good enough.
-# 5.2 unbundled Ceres (required by libmv/motion tracking);
-# OMV has no ceres-solver package yet.
+# 5.2 unbundled Ceres; system ceres-solver backs libmv/motion tracking.
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_SYSTEM_EIGEN3:BOOL=ON \
@@ -173,7 +173,7 @@ implemented.
 	-DWITH_TBB:BOOL=ON \
 	-DWITH_CYCLES_EMBREE:BOOL=OFF \
 	-DWITH_LIBS_PRECOMPILED:BOOL=OFF \
-	-DWITH_LIBMV:BOOL=OFF \
+	-DWITH_LIBMV:BOOL=ON \
 	-DCMAKE_CXX_STANDARD=20 \
 %ifarch %{armx}
 	-DSSE2NEON_INCLUDE_DIR=%{_sourcedir} \
