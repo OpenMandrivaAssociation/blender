@@ -5,13 +5,14 @@
 %define _disable_ld_no_undefined 1
 # As of blender 3.0.1, clang 13.0.0, building with full LTO takes
 # enough RAM to bring down all builders. x86_64 generic builders
-# OOM on the final blender+USD link. aarch64 LTO makesdna hits
-# SIGILL (Illegal instruction) when that host tool is run.
-%ifarch x86_64 %{armx}
+# OOM on the final blender+USD link.
+%ifarch x86_64
 %define _disable_lto 1
 %endif
 %ifarch %{armx}
 # -isystem %%{_sourcedir} is for sse2neon.h
+# WITH_COMPILER_SIMD is off below: blender's default
+# -march=armv8.2-a+dotprod+fp16+lse SIGILLs makesdna on v8.0 builders.
 %global optflags %{optflags} -Wno-error=float-conversion -isystem %{_sourcedir}
 %else
 %global optflags %{optflags} -Wno-error=float-conversion
@@ -191,6 +192,7 @@ implemented.
 	-DCMAKE_CXX_STANDARD=20 \
 %ifarch %{armx}
 	-DSSE2NEON_INCLUDE_DIR=%{_sourcedir} \
+	-DWITH_COMPILER_SIMD:BOOL=OFF \
 %endif
 %if %with cycles
 	-DWITH_CYCLES:BOOL=ON \
