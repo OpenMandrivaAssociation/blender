@@ -227,9 +227,10 @@ implemented.
 %endif
 	-DWITH_RAYOPTIMIZATION:BOOL=ON \
 	-G Ninja
-# Cap parallelism: OpenVDB volume.cc plus a few neighbours OOMs at -j4.
-export NINJAFLAGS="${NINJAFLAGS:--j2}"
-export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-2}"
+# Cap parallelism: OpenVDB volume.cc / gpu_shader_create_info still
+# OOM at -j2 on generic x86_64 builders (SIGKILL 137).
+export NINJAFLAGS="${NINJAFLAGS:--j1}"
+export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-1}"
 %ninja_build
 touch source/creator/blender.1
 
