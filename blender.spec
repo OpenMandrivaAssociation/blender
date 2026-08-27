@@ -3,12 +3,8 @@
 # So disable check at all.
 %define Werror_cflags %{nil}
 %define _disable_ld_no_undefined 1
-# As of blender 3.0.1, clang 13.0.0, building with full LTO takes
-# enough RAM to bring down all builders. x86_64 generic builders
-# OOM on the final blender+USD link.
-%ifarch x86_64
+# OpenVDB volume.cc (and the blender+USD link) OOMs builders under LTO.
 %define _disable_lto 1
-%endif
 %ifarch %{armx}
 # -isystem %%{_sourcedir} is for sse2neon.h
 # WITH_COMPILER_SIMD is off below: blender's default
@@ -231,9 +227,9 @@ implemented.
 %endif
 	-DWITH_RAYOPTIMIZATION:BOOL=ON \
 	-G Ninja
-# Cap parallelism: full -j on many cores OOMs during LTO/link
-export NINJAFLAGS="${NINJAFLAGS:--j4}"
-export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-4}"
+# Cap parallelism: OpenVDB volume.cc plus a few neighbours OOMs at -j4.
+export NINJAFLAGS="${NINJAFLAGS:--j2}"
+export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-2}"
 %ninja_build
 touch source/creator/blender.1
 
