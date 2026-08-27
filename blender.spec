@@ -5,8 +5,9 @@
 %define _disable_ld_no_undefined 1
 # As of blender 3.0.1, clang 13.0.0, building with full LTO takes
 # enough RAM to bring down all builders. x86_64 generic builders
-# still OOM on the final blender link once USD is in the mix.
-%ifarch x86_64
+# OOM on the final blender+USD link. aarch64 LTO makesdna hits
+# SIGILL (Illegal instruction) when that host tool is run.
+%ifarch x86_64 %{armx}
 %define _disable_lto 1
 %endif
 %ifarch %{armx}
