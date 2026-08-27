@@ -4,8 +4,11 @@
 %define Werror_cflags %{nil}
 %define _disable_ld_no_undefined 1
 # As of blender 3.0.1, clang 13.0.0, building with full LTO takes
-# enough RAM to bring down all builders
-#define _disable_lto 1
+# enough RAM to bring down all builders. x86_64 generic builders
+# still OOM on the final blender link once USD is in the mix.
+%ifarch x86_64
+%define _disable_lto 1
+%endif
 %ifarch %{armx}
 # -isystem %%{_sourcedir} is for sse2neon.h
 %global optflags %{optflags} -Wno-error=float-conversion -isystem %{_sourcedir}
