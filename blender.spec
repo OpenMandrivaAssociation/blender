@@ -121,6 +121,10 @@ BuildRequires:	OpenImageIO
 BuildRequires:	OpenImageIO-devel
 BuildRequires:	pkgconfig(OpenColorIO)
 BuildRequires:	cmake(Ceres)
+BuildRequires:	cmake(pxr)
+BuildRequires:	cmake(openpgl)
+BuildRequires:	cmake(manifold)
+BuildRequires:	cmake(meshoptimizer)
 Requires:	python >= 3.5
 
 %description
@@ -145,6 +149,7 @@ implemented.
 # references in libGLEW). This should be fixed properly
 # at some point. In the mean time, GLX is good enough.
 # 5.2 unbundled Ceres; system ceres-solver backs libmv/motion tracking.
+# USD/Hydra, OpenPGL, Manifold and meshoptimizer are now system packages.
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_SYSTEM_EIGEN3:BOOL=ON \
@@ -174,6 +179,11 @@ implemented.
 	-DWITH_CYCLES_EMBREE:BOOL=OFF \
 	-DWITH_LIBS_PRECOMPILED:BOOL=OFF \
 	-DWITH_LIBMV:BOOL=ON \
+	-DWITH_USD:BOOL=ON \
+	-DWITH_HYDRA:BOOL=ON \
+	-DWITH_CYCLES_PATH_GUIDING:BOOL=ON \
+	-DWITH_MANIFOLD:BOOL=ON \
+	-DWITH_MESHOPTIMIZER:BOOL=ON \
 	-DCMAKE_CXX_STANDARD=20 \
 %ifarch %{armx}
 	-DSSE2NEON_INCLUDE_DIR=%{_sourcedir} \
