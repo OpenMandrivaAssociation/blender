@@ -138,8 +138,10 @@ BuildRequires:	cmake(OpenVDB)
 BuildRequires:	openvdb-nanovdb-devel
 BuildRequires:	pkgconfig(blosc)
 BuildRequires:	cmake(MaterialX)
-# MaterialXConfig.cmake errors if MATERIALX_STDLIB_DIR is missing.
+# MaterialXConfig.cmake set_and_check()s these paths at find_package time.
 BuildRequires:	materialx-data
+BuildRequires:	python-materialx
+BuildRequires:	materialx
 BuildRequires:	cmake(OpenImageDenoise)
 BuildRequires:	cmake(draco)
 BuildRequires:	cmake(embree)
