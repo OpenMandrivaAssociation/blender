@@ -25,7 +25,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	5.2.1
-Release:	1
+Release:	2
 Group:		Graphics
 License:	GPL-2.0-or-later
 URL:		https://www.blender.org/
@@ -130,7 +130,20 @@ BuildRequires:	cmake(pxr)
 BuildRequires:	cmake(openpgl)
 BuildRequires:	cmake(manifold)
 BuildRequires:	cmake(meshoptimizer)
+BuildRequires:	cmake(OSL)
+BuildRequires:	cmake(OpenVDB)
+BuildRequires:	openvdb-nanovdb-devel
+BuildRequires:	pkgconfig(blosc)
+BuildRequires:	cmake(MaterialX)
+BuildRequires:	cmake(OpenImageDenoise)
+BuildRequires:	cmake(draco)
+BuildRequires:	cmake(embree)
+BuildRequires:	pkgconfig(fribidi)
+BuildRequires:	pkgconfig(harfbuzz)
 Requires:	python >= 3.5
+# MaterialX stdlib / OSL headers are opened by path, not ELF-linked.
+Requires:	materialx-data
+Requires:	openshadinglanguage-common-headers
 
 %description
 Blender is the in-house software of a high quality animation studio.
@@ -154,7 +167,8 @@ implemented.
 # references in libGLEW). This should be fixed properly
 # at some point. In the mean time, GLX is good enough.
 # 5.2 unbundled Ceres; system ceres-solver backs libmv/motion tracking.
-# USD/Hydra, OpenPGL, Manifold and meshoptimizer are now system packages.
+# USD/Hydra, OpenPGL, Manifold, meshoptimizer, OSL, OpenVDB/NanoVDB,
+# MaterialX, OpenImageDenoise, Draco and Embree are system packages.
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_SYSTEM_EIGEN3:BOOL=ON \
@@ -181,7 +195,16 @@ implemented.
 	-DWITH_INPUT_NDOF:BOOL=ON \
 	-DWITH_DOC_MANPAGE:BOOL=ON \
 	-DWITH_TBB:BOOL=ON \
-	-DWITH_CYCLES_EMBREE:BOOL=OFF \
+	-DWITH_CYCLES_EMBREE:BOOL=ON \
+	-DWITH_CYCLES_OSL:BOOL=ON \
+	-DWITH_OPENVDB:BOOL=ON \
+	-DWITH_OPENVDB_BLOSC:BOOL=ON \
+	-DWITH_NANOVDB:BOOL=ON \
+	-DWITH_MATERIALX:BOOL=ON \
+	-DWITH_OPENIMAGEDENOISE:BOOL=ON \
+	-DWITH_DRACO:BOOL=ON \
+	-DWITH_FRIBIDI:BOOL=ON \
+	-DWITH_HARFBUZZ:BOOL=ON \
 	-DWITH_LIBS_PRECOMPILED:BOOL=OFF \
 	-DWITH_LIBMV:BOOL=ON \
 	-DWITH_USD:BOOL=ON \
