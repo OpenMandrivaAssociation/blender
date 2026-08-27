@@ -131,10 +131,15 @@ BuildRequires:	cmake(openpgl)
 BuildRequires:	cmake(manifold)
 BuildRequires:	cmake(meshoptimizer)
 BuildRequires:	cmake(OSL)
+# oslc compiles Cycles .osl → .oso; stdosl.h is in the common-headers subpackage.
+BuildRequires:	openshadinglanguage
+BuildRequires:	openshadinglanguage-common-headers
 BuildRequires:	cmake(OpenVDB)
 BuildRequires:	openvdb-nanovdb-devel
 BuildRequires:	pkgconfig(blosc)
 BuildRequires:	cmake(MaterialX)
+# MaterialXConfig.cmake errors if MATERIALX_STDLIB_DIR is missing.
+BuildRequires:	materialx-data
 BuildRequires:	cmake(OpenImageDenoise)
 BuildRequires:	cmake(draco)
 BuildRequires:	cmake(embree)
