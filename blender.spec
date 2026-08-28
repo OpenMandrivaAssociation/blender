@@ -36,6 +36,7 @@ Patch2:		blender-2.58-static-lib.patch
 #Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
+Patch20:	blender-5.2.1-hipcc-no-arm-rbit.patch
 #Patch14:	blender-4.3.0-znver1-avx512.patch
 #Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
 #Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
