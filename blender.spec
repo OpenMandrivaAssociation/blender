@@ -21,7 +21,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	5.2.1
-Release:	2
+Release:	3
 Group:		Graphics
 License:	GPL-2.0-or-later
 URL:		https://www.blender.org/
@@ -84,6 +84,9 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(openal)
 BuildRequires:	pkgconfig(openxr)
+BuildRequires:	cmake(OpenXR)
+# FindXR_OpenXR_SDK looks for libopenxr_loader.so (unversioned).
+BuildRequires:	openxr
 BuildRequires:	pkgconfig(rubberband)
 BuildRequires:	pkgconfig(libopenjp2)
 BuildRequires:	pkgconfig(tbb)
@@ -143,6 +146,9 @@ BuildRequires:	cmake(draco)
 BuildRequires:	cmake(embree)
 BuildRequires:	pkgconfig(fribidi)
 BuildRequires:	pkgconfig(harfbuzz)
+BuildRequires:	hipcc
+BuildRequires:	cmake(HIP)
+BuildRequires:	rocm-device-libs
 Requires:	python >= 3.5
 # MaterialX stdlib / OSL headers are opened by path, not ELF-linked.
 Requires:	materialx-data
@@ -171,7 +177,8 @@ implemented.
 # at some point. In the mean time, GLX is good enough.
 # 5.2 unbundled Ceres; system ceres-solver backs libmv/motion tracking.
 # USD/Hydra, OpenPGL, Manifold, meshoptimizer, OSL, OpenVDB/NanoVDB,
-# MaterialX, OpenImageDenoise, Draco and Embree are system packages.
+# MaterialX, OpenImageDenoise, Draco, Embree and OpenXR are system packages.
+# HIP fatbins are compiled with system hipcc (ROCm).
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_SYSTEM_EIGEN3:BOOL=ON \
@@ -193,6 +200,9 @@ implemented.
 	-DWITH_IMAGE_REDCODE:BOOL=ON \
 	-DWITH_RUBBERBAND:BOOL=ON \
 	-DWITH_XR_OPENXR:BOOL=ON \
+	-DXR_OPENXR_SDK_ROOT_DIR:PATH=%{_prefix} \
+	-DWITH_CYCLES_DEVICE_HIP:BOOL=ON \
+	-DWITH_CYCLES_HIP_BINARIES:BOOL=ON \
 	-DWITH_SDL_AUDIO:BOOL=ON \
 	-DWITH_JACK:BOOL=ON \
 	-DWITH_INPUT_NDOF:BOOL=ON \
