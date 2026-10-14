@@ -21,7 +21,7 @@
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
 Version:	5.2.2
-Release:	1
+Release:	2
 Group:		Graphics
 License:	GPL-2.0-or-later
 URL:		https://www.blender.org/
@@ -37,6 +37,7 @@ Patch2:		blender-2.58-static-lib.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
 Patch20:	blender-5.2.1-hipcc-no-arm-rbit.patch
+Patch28:	blender-5.2.2-usd-26.08.patch
 #Patch14:	blender-4.3.0-znver1-avx512.patch
 #Patch15:	blender-2.93.5-fix-and-workaround-warnings.patch
 #Patch16:	https://raw.githubusercontent.com/UnitedRPMs/blender/master/blender-oiio-2.3.patch
