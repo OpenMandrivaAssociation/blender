@@ -6,10 +6,10 @@
 # OpenVDB volume.cc (and the blender+USD link) OOMs builders under LTO.
 %define _disable_lto 1
 %ifarch %{armx}
-# -isystem %%{_sourcedir} is for sse2neon.h
+# sse2neon.h is copied into the source tree in %%prep. Point -isystem there.
 # WITH_COMPILER_SIMD is off below: blender's default
 # -march=armv8.2-a+dotprod+fp16+lse SIGILLs makesdna on v8.0 builders.
-%global optflags %{optflags} -Wno-error=float-conversion -isystem %{_sourcedir}
+%global optflags %{optflags} -Wno-error=float-conversion -isystem %{_builddir}/%{name}-%{version}
 %else
 %global optflags %{optflags} -Wno-error=float-conversion
 %endif
@@ -169,6 +169,9 @@ implemented.
 
 %prep
 %autosetup -p1
+# Header-only SSE2NEON is not in the tarball. ARM compiles include it
+# from the source tree (optflags -isystem and SSE2NEON_INCLUDE_DIR).
+cp -f %{SOURCE1} sse2neon.h
 
 %build
 # Linking blender + cycles is RAM-heavy; OOM-killer hit parallel links
@@ -229,7 +232,7 @@ implemented.
 	-DWITH_MESHOPTIMIZER:BOOL=ON \
 	-DCMAKE_CXX_STANDARD=20 \
 %ifarch %{armx}
-	-DSSE2NEON_INCLUDE_DIR=%{_sourcedir} \
+	-DSSE2NEON_INCLUDE_DIR=%{_builddir}/%{name}-%{version} \
 	-DWITH_COMPILER_SIMD:BOOL=OFF \
 %endif
 %if %with cycles
@@ -238,11 +241,17 @@ implemented.
 	-DWITH_CYCLES:BOOL=OFF \
 %endif
 	-DWITH_RAYOPTIMIZATION:BOOL=ON \
+	-DWITH_NINJA_POOL_JOBS:BOOL=ON \
+	-DNINJA_MAX_NUM_PARALLEL_LINK_JOBS:STRING=1 \
+	-DNINJA_MAX_NUM_PARALLEL_COMPILE_HEAVY_JOBS:STRING=1 \
+	-DNINJA_MAX_NUM_PARALLEL_COMPILE_JOBS:STRING=4 \
 	-G Ninja
-# Cap parallelism: OpenVDB volume.cc / gpu_shader_create_info still
-# OOM at -j2 on generic x86_64 builders (SIGKILL 137).
-export NINJAFLAGS="${NINJAFLAGS:--j1}"
-export CMAKE_BUILD_PARALLEL_LEVEL="${CMAKE_BUILD_PARALLEL_LEVEL:-1}"
+# %%ninja_build is "ninja -j${RPM_BUILD_NCPUS}". It does not read NINJAFLAGS,
+# so earlier exports never capped the build (677078 ran ninja -j32).
+# Blender's ninja pools did: on that builder, link=2, heavy=25, regular=27.
+# volume.cc is in the regular pool and instantiates OpenVDB (several GB).
+# gpu_shader_create_info is in the heavy pool. Those widths SIGKILL (137)
+# with LTO already off. Pin the pools. A value of 0 is "auto" and is ignored.
 %ninja_build
 touch source/creator/blender.1
 
