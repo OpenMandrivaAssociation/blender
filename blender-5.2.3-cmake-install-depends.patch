@@ -1,0 +1,14 @@
+CMake 4.5 renamed install(CODE) DEPENDS to BUILD_DEPENDS.
+The old keyword makes configuration fail.
+
+--- a/source/creator/CMakeLists.txt
++++ b/source/creator/CMakeLists.txt
+@@ -2159,7 +2159,7 @@ if(UNIX AND NOT APPLE)
+   )\n\
+ endif()\n\
+ "
+-        DEPENDS blender
++        BUILD_DEPENDS blender
+       )
+ 
+       if(WITH_INSTALL_PORTABLE)
