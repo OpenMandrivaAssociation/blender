@@ -5,6 +5,9 @@
 %define _disable_ld_no_undefined 1
 # OpenVDB volume.cc (and the blender+USD link) OOMs builders under LTO.
 %define _disable_lto 1
+# fmt 12.2 makes <fmt/core.h> the same as <fmt/base.h>. Blender 5.3 still
+# calls fmt::format through core.h. The define pulls format.h back in.
+%global optflags %{optflags} -DFMT_DEPRECATED_HEAVY_CORE
 %ifarch %{armx}
 # sse2neon.h is copied into the source tree in %%prep. Point -isystem there.
 # WITH_COMPILER_SIMD is off below: blender's default
