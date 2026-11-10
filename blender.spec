@@ -20,7 +20,7 @@
 
 Summary:	A fully functional 3D modeling/rendering/animation package
 Name:		blender
-Version:	5.2.3
+Version:	5.3.0
 Release:	1
 Group:		Graphics
 License:	GPL-2.0-or-later
@@ -29,15 +29,19 @@ Source0:	https://download.blender.org/source/blender-%{version}.tar.xz
 Source1:	https://raw.githubusercontent.com/DLTcollab/sse2neon/master/sse2neon.h
 Source100:	blender.rpmlintrc
 #Patch1:		blender-3.6.2-link-libatomic.patch 
-Patch2:		blender-2.58-static-lib.patch
+# 5.3 add_library() is untyped. BUILD_SHARED_LIBS=OFF makes it static.
+# Forcing STATIC breaks the header-only INTERFACE branch.
+#Patch2:		blender-2.58-static-lib.patch
 #Patch3:		blender-2.65-openjpeg_stdbool.patch
 #Patch4:		blender-2.79b-icu-linkage.patch
 # Patch submitted upstream - Blender Patches item #19234,
 #Patch6:		blender-2.67-uninit-var.patch
 Patch12:	blender-2.79-scripts.patch
 Patch13:	blender-2.79-thumbnailer.patch
-Patch20:	blender-5.2.1-hipcc-no-arm-rbit.patch
-Patch28:	blender-5.2.2-usd-26.08.patch
+# hipcc on an ARM host still defines __aarch64__ while targeting gfx*.
+Patch20:	blender-5.3.0-hipcc-no-arm-rbit.patch
+# USD 26.08 IsSupported(bool) is guarded upstream in 5.3.
+#Patch28:	blender-5.2.2-usd-26.08.patch
 # CMake 4.5 rejects install(CODE ... DEPENDS). The keyword is BUILD_DEPENDS.
 Patch29:	blender-5.2.3-cmake-install-depends.patch
 #Patch14:	blender-4.3.0-znver1-avx512.patch
@@ -186,6 +190,10 @@ cp -f %{SOURCE1} sse2neon.h
 # USD/Hydra, OpenPGL, Manifold, meshoptimizer, OSL, OpenVDB/NanoVDB,
 # MaterialX, OpenImageDenoise, Draco, Embree and OpenXR are system packages.
 # HIP fatbins are compiled with system hipcc (ROCm).
+# System OpenTimelineIO is 0.18.1. 5.3 uses OPENTIMELINEIO_VERSION_NS
+# from a newer snapshot, so finding 0.18 would fail the compile.
+# Jolt and KTX are not packaged; with precompiled libs off they disable
+# themselves when the system package is missing.
 %cmake \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
 	-DWITH_SYSTEM_EIGEN3:BOOL=ON \
@@ -224,6 +232,7 @@ cp -f %{SOURCE1} sse2neon.h
 	-DWITH_OPENIMAGEDENOISE:BOOL=ON \
 	-DWITH_DRACO:BOOL=ON \
 	-DWITH_FRIBIDI:BOOL=ON \
+	-DWITH_OPENTIMELINEIO:BOOL=OFF \
 	-DWITH_HARFBUZZ:BOOL=ON \
 	-DWITH_LIBS_PRECOMPILED:BOOL=OFF \
 	-DWITH_LIBMV:BOOL=ON \
